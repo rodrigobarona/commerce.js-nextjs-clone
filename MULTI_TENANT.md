@@ -109,13 +109,47 @@ into the provider factory at runtime:
 Webhook signature verification stays **platform-level** (single secret) for now
 — per-tenant webhook routing is the natural next step.
 
-## Known follow-ups
+## Package security audit (secure-by-design)
+
+Every package was reviewed for cross-tenant leakage. Posture by package:
+
+| Package | Touches tenant data? | Status |
+|---------|----------------------|--------|
+| `platform` | Yes — owns commerce schema | Isolated by forced RLS + `withTenant()` |
+| `commerce` | Yes — wraps platform | Tenant threaded; per-tenant cache tags; per-tenant payments |
+| `checkout-host` | Yes — checkout sessions | `tenantId` stored on session; provider rebuilt per tenant |
+| `checkout` | Per-session state machine | New instance per session; no module-level mutable state |
+| `payment-stripe` / `-easypay` / `-ifthenpay` | Credentials only | Stateless; config injected per tenant via the factory |
+| `webhook-verifier` | Signature secrets | Platform-level (see follow-ups) |
+| `storage-vercel-blob` / `storage-s3` | File uploads | **Not yet wired** — must namespace keys per tenant when wired |
+| `types`, `ui`, `eslint-config`, `typescript-config` | No | Safe |
+| `core` | Legacy engine | Not in the Next runtime path (not imported by apps) |
+
+### Secure-by-design gaps to close
+
+1. **Secrets at rest.** `integration_config.config` stores provider credentials
+   as plaintext JSONB. They are never sent to the client, but should be
+   encrypted at rest (app-level encryption or a secrets manager) before
+   production.
+2. **Storage key namespacing.** `getStorage()` is a process-wide, env-credential
+   singleton and upload keys are caller-controlled (`directory/filename`). It is
+   not wired into any app yet. When you add product-image uploads, namespace
+   keys per tenant (e.g. `org/<orgId>/products/...`) and prefer
+   `addRandomSuffix`/unguessable paths — otherwise tenants can collide or
+   enumerate each other's public blobs.
+3. **Per-tenant webhooks.** Provider webhooks verify against a single
+   platform-level secret. Route them per tenant (e.g.
+   `/api/webhooks/:provider/:org`) so each verifies with the merchant's secret.
+4. **Unknown-host fallback.** `resolveTenantId()` falls back to
+   `DEFAULT_TENANT_ORG_ID` for unmatched hosts (convenient in dev). In
+   production, return 404/`notFound()` for unrecognized hosts instead of
+   serving the demo store.
+
+## Maintenance follow-ups
 
 - **Notifications** (Resend/SMTP) have no runtime factory in the Next stack yet;
   when one is added, read credentials from `integration_config` the same way
   payments do.
-- **Per-tenant webhooks**: route provider webhooks per tenant (e.g.
-  `/api/webhooks/:provider/:org`) so signatures verify against the tenant secret.
 - When adding a new tenant-owned table, add it to `TENANT_TABLES` in
   `packages/platform/src/database/drizzle/migrate.ts`; if its natural key repeats
   across tenants, include `organization_id` in the primary key (see `store_info`
