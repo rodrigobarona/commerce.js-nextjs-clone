@@ -9,9 +9,11 @@ import {
 export function PlaceholderPage({
   title,
   description,
+  children,
 }: {
   title: string
   description: string
+  children?: React.ReactNode
 }) {
   return (
     <Card>
@@ -20,9 +22,9 @@ export function PlaceholderPage({
         <CardDescription>{description}</CardDescription>
       </CardHeader>
       <CardContent>
-        <p className="text-sm text-muted-foreground">
-          This section is coming soon.
-        </p>
+        {children ?? (
+          <p className="text-sm text-muted-foreground">This section is coming soon.</p>
+        )}
       </CardContent>
     </Card>
   )

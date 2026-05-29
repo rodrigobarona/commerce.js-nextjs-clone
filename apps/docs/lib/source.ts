@@ -1,6 +1,6 @@
 import { docs } from 'collections/server';
 import { loader } from 'fumadocs-core/source';
-import { lucideIconsPlugin } from 'fumadocs-core/source/lucide-icons';
+import { phosphorIconsPlugin } from '@/lib/phosphor-icons';
 import { openapiPlugin } from 'fumadocs-openapi/server';
 import { docsContentRoute, docsImageRoute, docsRoute } from './shared';
 import { openapi } from './openapi';
@@ -15,7 +15,7 @@ export const source = loader(
   },
   {
     baseUrl: docsRoute,
-    plugins: [lucideIconsPlugin(), openapiPlugin()],
+    plugins: [phosphorIconsPlugin(), openapiPlugin()],
   },
 );
 

@@ -1,27 +1,36 @@
 ---
 title: Introduction
-description: Prood is a multi-tenant, commerce-agnostic platform built with Next.js 16, Neon Postgres, and pluggable payment providers.
+description: Launch and run online stores on Prood—subdomain storefront, merchant dashboard, payments, and APIs for humans and AI.
 ---
 
-Welcome to the **Prood** documentation. This monorepo ships a complete white-label commerce platform: a customer storefront, merchant dashboard, standalone checkout app, REST API, and shared packages for catalog, payments, and storage.
+Welcome to the **Prood** documentation. Prood helps you **sell your products online**: create a store, go live on `yourname.prood.app`, manage catalog and orders in the dashboard, and accept payments through Stripe and regional providers.
+
+Under the hood, Prood is a multi-tenant commerce platform (Next.js 16, Neon Postgres, pluggable payments). Each merchant is a Better Auth **organization** with isolated data via **row-level security (RLS)**.
+
+<Cards>
+  <Card title="For merchants" href="/docs/guides/for-merchants" description="What you can do today and how to launch your first store." />
+  <Card title="For agencies" href="/docs/guides/for-agencies" description="Run many client stores with isolated tenants and domains." />
+  <Card title="Getting started" href="/docs/getting-started" description="Install, configure env vars, and run locally." />
+  <Card title="Merchant onboarding" href="/docs/guides/merchant-onboarding" description="Register to go-live in about an hour." />
+</Cards>
 
 ## What is Prood?
 
-Prood is a **commerce-agnostic**, **multi-tenant** toolkit. Each merchant runs as a Better Auth **organization**; all commerce data is isolated by Postgres **row-level security (RLS)**. You can swap payment providers, storage backends, and (in the future) commerce adapters without rewriting your apps.
+Prood is a **commerce platform** for creators, brands, and agencies—not just a code template. You get:
 
-<Cards>
-  <Card title="Getting started" href="/docs/getting-started" description="Install dependencies, configure env vars, and run the monorepo locally." />
-  <Card title="Architecture" href="/docs/architecture/overview" description="How apps, packages, and the API fit together." />
-  <Card title="Commerce API" href="/docs/api" description="Interactive OpenAPI reference for the REST API (v1)." />
-  <Card title="Multi-tenancy" href="/docs/architecture/multi-tenant" description="Tenant resolution, RLS, and per-merchant integrations." />
-</Cards>
+- A **customer storefront** (catalog, cart, checkout, accounts)
+- A **merchant dashboard** (products, orders, integrations, domains, team)
+- A **hosted checkout** app (Stripe, Easypay, Ifthenpay)
+- A **Commerce API** with OpenAPI, MCP, and Agent Auth for automation
+
+You can swap payment providers and storage backends per store without rewriting your apps.
 
 ## Monorepo applications
 
 | App | Port | Purpose |
 | --- | --- | --- |
-| `storefront` | 3000 | Customer-facing storefront — catalog, cart, checkout redirect, account |
-| `web` | 3001 | Marketing landing page |
+| `storefront` | 3000 | Customer-facing store — catalog, cart, checkout redirect, account |
+| `web` | 3001 | Marketing site (prood.app) |
 | `dashboard` | 3002 | Merchant admin — products, orders, integrations, domains, team |
 | `docs` | 3003 | This documentation site (Fumadocs + OpenAPI) |
 | `checkout` | 3004 | Hosted payment app — Stripe, Easypay, Ifthenpay |
@@ -61,31 +70,27 @@ flowchart TB
   API --> COM --> PLAT --> DBN
 ```
 
-The **storefront** and **dashboard** never talk to the database for commerce data directly. They call the **Commerce API** via `@prood/api-client`. Only `apps/api` (and dashboard integration helpers) invoke `@prood/commerce`, which scopes every query to the active tenant with `withTenant()`.
+The **storefront** and **dashboard** call the **Commerce API** via `@prood/api-client`. Only `apps/api` (and dashboard integration helpers) invoke `@prood/commerce`, which scopes every query to the active tenant with `withTenant()`.
 
 ## Key concepts
 
 ### Multi-tenancy
 
-Each merchant store is a Better Auth organization. The storefront resolves the tenant from the request **Host** header (custom domain or `{slug}.{platform}` subdomain). The dashboard uses the session's **active organization**. See [Multi-tenant platform](/docs/architecture/multi-tenant).
+Each store is a Better Auth organization. The storefront resolves the tenant from the request **Host** header (custom domain or `{slug}.prood.app` subdomain). See [Multi-tenant platform](/docs/architecture/multi-tenant).
 
 ### API-centric architecture
 
-Unlike the upstream [Commerce.js Nuxt reference](https://github.com/commerce-js/commerce.js) (where apps imported `@prood/core` directly), this Next.js stack routes all commerce operations through `apps/api`. See [Upstream comparison](/docs/architecture/upstream-comparison). Benefits:
-
-- Single auth and tenant resolution layer
-- OpenAPI contract for humans, agents, and MCP tools
-- Storefront stays thin — BFF routes only for cart cookies and client-side search
+All commerce operations go through `apps/api` for consistent auth, OpenAPI contracts, and agent tooling. See [Upstream comparison](/docs/architecture/upstream-comparison).
 
 ### Checkout separation
 
-Order placement happens on the storefront (via the API). Payment UI lives in `apps/checkout`, with sessions persisted in **Upstash Redis**. After payment, webhooks reconcile order status through the API.
+Order placement happens on the storefront (via the API). Payment UI lives in `apps/checkout`, with sessions in **Upstash Redis**. Webhooks reconcile order status through the API.
 
 ## Next steps
 
 <Cards>
   <Card title="Installation" href="/docs/getting-started/installation" description="Clone, install, migrate the database, and start dev servers." />
-  <Card title="Quick start" href="/docs/getting-started/quick-start" description="Browse products, add to cart, and complete a checkout in 5 minutes." />
-  <Card title="Environment variables" href="/docs/getting-started/environment" description="Every env var explained — database, auth, payments, Redis, Vercel." />
-  <Card title="Storefront guide" href="/docs/apps/storefront" description="Pages, cart BFF, tenant resolution, and checkout redirect." />
+  <Card title="Quick start" href="/docs/getting-started/quick-start" description="Browse products, add to cart, and complete checkout." />
+  <Card title="Pricing (marketing)" href="https://prood.app/pricing" description="Free, Grow, Scale, and Agency plans." />
+  <Card title="Storefront guide" href="/docs/apps/storefront" description="Pages, cart BFF, tenant resolution, checkout." />
 </Cards>

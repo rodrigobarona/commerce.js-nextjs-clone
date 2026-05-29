@@ -1,25 +1,30 @@
-import { AudiencesSection } from "@/components/marketing/audiences-section"
+import { AgenciesTeaserSection } from "@/components/marketing/agencies-teaser-section"
+import { AgentsSection } from "@/components/marketing/agents-section"
 import { CtaSection } from "@/components/marketing/cta-section"
+import { DashboardSection } from "@/components/marketing/dashboard-section"
 import { HeroSection } from "@/components/marketing/hero-section"
-import { PlatformSection } from "@/components/marketing/platform-section"
-import { PrinciplesSection } from "@/components/marketing/principles-section"
-import { ProblemSection } from "@/components/marketing/problem-section"
-import { SiteFooter } from "@/components/site-footer"
-import { SiteHeader } from "@/components/site-header"
+import { HowItWorksSection } from "@/components/marketing/how-it-works-section"
+import { IntegrationsSection } from "@/components/marketing/integrations-section"
+import { MerchantPainSection } from "@/components/marketing/merchant-pain-section"
+import { PillarsSection } from "@/components/marketing/pillars-section"
+import { PricingPreviewSection } from "@/components/marketing/pricing-preview-section"
+import { StorefrontSection } from "@/components/marketing/storefront-section"
+import { MarketingPageShell } from "@/components/marketing-page-shell"
 
 export default function Page() {
   return (
-    <div className="flex min-h-svh flex-col">
-      <SiteHeader />
-      <main className="flex-1">
-        <HeroSection />
-        <ProblemSection />
-        <PrinciplesSection />
-        <PlatformSection />
-        <AudiencesSection />
-        <CtaSection />
-      </main>
-      <SiteFooter />
-    </div>
+    <MarketingPageShell>
+      <HeroSection />
+      <HowItWorksSection />
+      <MerchantPainSection />
+      <PillarsSection />
+      <StorefrontSection />
+      <DashboardSection />
+      <IntegrationsSection compact />
+      <AgentsSection compact />
+      <PricingPreviewSection />
+      <AgenciesTeaserSection />
+      <CtaSection />
+    </MarketingPageShell>
   )
 }

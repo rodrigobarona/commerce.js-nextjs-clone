@@ -1,4 +1,5 @@
 {
   "title": "Checkout",
+  "icon": "CreditCard",
   "pages": ["index", "sessions", "payments", "webhooks"]
 }

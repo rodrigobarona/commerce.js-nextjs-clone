@@ -1,4 +1,13 @@
 {
   "title": "Guides",
-  "pages": ["index", "deployment", "payment-integration", "webhook-setup", "merchant-onboarding"]
+  "icon": "BookOpen",
+  "pages": [
+    "index",
+    "for-merchants",
+    "for-agencies",
+    "merchant-onboarding",
+    "deployment",
+    "payment-integration",
+    "webhook-setup"
+  ]
 }

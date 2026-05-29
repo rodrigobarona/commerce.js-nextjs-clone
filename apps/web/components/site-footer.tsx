@@ -5,18 +5,23 @@ import { siteConfig } from "@/lib/site"
 
 const footerLinks = {
   Product: [
-    { label: "Platform", href: "#platform" },
-    { label: "Principles", href: "#principles" },
-    { label: "Storefront demo", href: siteConfig.storefrontUrl, external: true },
-    { label: "Dashboard", href: siteConfig.dashboardUrl, external: true },
+    { label: "How it works", href: "/#how-it-works" },
+    { label: "Pricing", href: "/pricing" },
+    { label: "Integrations", href: "/integrations" },
+    { label: "For agencies", href: "/agencies" },
   ],
-  Developers: [
+  Resources: [
     { label: "Documentation", href: `${siteConfig.docsUrl}/docs`, external: true },
-    { label: "API reference", href: `${siteConfig.docsUrl}/docs/api`, external: true },
+    { label: "For merchants", href: `${siteConfig.docsUrl}/docs/guides/for-merchants`, external: true },
     { label: "Quick start", href: `${siteConfig.docsUrl}/docs/getting-started/quick-start`, external: true },
-    { label: "Architecture", href: `${siteConfig.docsUrl}/docs/architecture/overview`, external: true },
+    { label: "Demo storefront", href: siteConfig.storefrontUrl, external: true },
   ],
-  Company: [{ label: "prood.com", href: "https://prood.com", external: true }],
+  Company: [
+    { label: "AI & agents", href: "/ai" },
+    { label: "Start free", href: siteConfig.registerUrl },
+    { label: "Privacy", href: "/privacy" },
+    { label: "Terms", href: "/terms" },
+  ],
 } as const
 
 export function SiteFooter() {
@@ -26,8 +31,9 @@ export function SiteFooter() {
         <div className="grid gap-12 md:grid-cols-[minmax(0,1.35fr)_repeat(3,minmax(0,1fr))] md:gap-10">
           <div className="space-y-5">
             <Logo />
-            <p className="max-w-[18rem] text-[15px] leading-7 text-muted-foreground">
-              {siteConfig.tagline} Built for humans and intelligent agents.
+            <p className="max-w-[20rem] text-[15px] leading-7 text-muted-foreground">
+              {siteConfig.tagline}. Launch on a subdomain, grow to your own domain, and sell with a
+              modern dashboard humans and AI can run together.
             </p>
           </div>
 
@@ -63,9 +69,9 @@ export function SiteFooter() {
         </div>
 
         <div className="mt-16 flex flex-col gap-3 border-t border-border/50 pt-8 text-[13px] text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
-          <p>© 2026 Prood. Commerce infrastructure for the next decade.</p>
+          <p>© 2026 Prood. Sell your products online.</p>
           <p className="font-mono text-[11px] tracking-[0.08em] uppercase">
-            Next.js · Neon · OpenAPI · Agent-ready
+            Next.js · Neon · Vercel · Stripe
           </p>
         </div>
       </div>

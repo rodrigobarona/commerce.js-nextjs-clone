@@ -20,6 +20,7 @@
     "fumadocs-mdx": "catalog:",
     "fumadocs-openapi": "catalog:",
     "fumadocs-ui": "catalog:",
+    "@phosphor-icons/react": "catalog:",
     "lucide-react": "catalog:",
     "next": "catalog:",
     "react": "catalog:",

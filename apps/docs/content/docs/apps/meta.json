@@ -1,10 +1,5 @@
 {
   "title": "Applications",
-  "pages": [
-    "overview",
-    "storefront",
-    "dashboard",
-    "checkout",
-    "api"
-  ]
+  "icon": "AppWindow",
+  "pages": ["overview", "storefront", "dashboard", "checkout", "api"]
 }

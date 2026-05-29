@@ -2,17 +2,11 @@
   "title": "Documentation",
   "pages": [
     "index",
-    "---Getting Started---",
     "getting-started",
-    "---Architecture---",
     "architecture",
-    "---Applications---",
     "apps",
-    "---Packages---",
     "packages",
-    "---Guides---",
     "guides",
-    "---API Reference---",
     "api-reference",
     "...(openapi)"
   ]

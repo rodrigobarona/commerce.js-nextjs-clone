@@ -1,4 +1,5 @@
 {
   "title": "Commerce API",
+  "icon": "PlugsConnected",
   "pages": ["index", "authentication", "endpoints", "mcp", "agent-auth"]
 }

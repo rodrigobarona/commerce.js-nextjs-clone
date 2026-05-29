@@ -1,4 +1,5 @@
 {
   "title": "Dashboard",
+  "icon": "Gauge",
   "pages": ["index", "products", "orders", "integrations", "domains", "team"]
 }

@@ -33,7 +33,10 @@ export default function RootLayout({
         "font-sans"
       )}
     >
-      <body className="min-h-svh bg-background">
+      <body
+        className="min-h-svh bg-background"
+        suppressHydrationWarning
+      >
         <Suspense fallback={null}>
           <AppProviders>{children}</AppProviders>
         </Suspense>

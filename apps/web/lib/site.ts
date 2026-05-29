@@ -1,91 +1,136 @@
 export const siteConfig = {
   name: "Prood",
-  tagline: "Commerce infrastructure for the AI era.",
+  tagline: "Sell your products online",
   description:
-    "Multi-tenant commerce platform for agencies, brands, and creators. Launch scalable stores with headless APIs, agent-ready architecture, and modern infrastructure.",
+    "Launch your store on a Prood subdomain in minutes, manage products and orders in a modern dashboard, accept payments with Stripe and more—and let your team or AI assistants help you run the store.",
+  platformDomainExample: "prood.app",
   url: process.env.NEXT_PUBLIC_WEB_URL ?? "http://localhost:3001",
   docsUrl: process.env.NEXT_PUBLIC_DOCS_URL ?? "http://localhost:3003",
   storefrontUrl: process.env.NEXT_PUBLIC_STOREFRONT_URL ?? "http://localhost:3000",
   dashboardUrl: process.env.NEXT_PUBLIC_DASHBOARD_URL ?? "http://localhost:3002",
   apiUrl: process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:3005",
+  registerUrl:
+    `${process.env.NEXT_PUBLIC_DASHBOARD_URL ?? "http://localhost:3002"}/register`,
 } as const
 
 export const navLinks = [
-  { label: "Platform", href: "#platform" },
-  { label: "Principles", href: "#principles" },
-  { label: "Developers", href: "#developers" },
-  { label: "Customers", href: "#customers" },
+  { label: "Product", href: "/#product" },
+  { label: "Pricing", href: "/pricing" },
+  { label: "Agencies", href: "/agencies" },
+  { label: "Integrations", href: "/integrations" },
+  { label: "AI", href: "/ai" },
 ] as const
 
-export const principles = [
+export const pillars = [
   {
-    title: "Multi-tenant by design",
+    title: "Launch fast",
     description:
-      "Every merchant runs independently on shared infrastructure. Agencies manage many clients, franchises many stores — one platform, infinite brands.",
+      "Sign up, add products, and your store is live on yourname.prood.app. Connect Stripe or regional payment providers and start selling in under an hour.",
   },
   {
-    title: "AI-first architecture",
+    title: "Run simply",
     description:
-      "Built for assistants, workflows, and autonomous agents. Every layer exposes APIs and actions that humans and AI can operate safely.",
+      "A clean dashboard for products, orders, customers, team invites, and per-store integrations—no plugins maze or legacy admin panels.",
   },
   {
-    title: "Headless & modular",
+    title: "Grow without limits",
     description:
-      "Frontend and backend fully decoupled. Use Prood storefronts, custom frontends, or unique experiences across web, mobile, and retail.",
-  },
-  {
-    title: "Fast by default",
-    description:
-      "Edge rendering, CDN distribution, streaming, and server components. Performance is part of the product — not an afterthought.",
-  },
-  {
-    title: "Hybrid by nature",
-    description:
-      "No-code for creators, APIs for developers, dashboards for operators. One platform that meets every team where they work.",
+      "Add your custom domain, invite your team, and automate operations with APIs, MCP tools, and agent authentication when you are ready to scale.",
   },
 ] as const
 
-export const platformLayers = [
+export const howItWorksSteps = [
   {
-    label: "Client surfaces",
-    items: ["Storefront", "Dashboard", "Checkout", "Agents & MCP"],
+    step: "01",
+    title: "Create your store",
+    description: "Register with email and store name. Your organization and subdomain are ready immediately.",
   },
   {
-    label: "Commerce API",
-    items: ["REST /v1", "OpenAPI", "MCP server", "Agent Auth"],
+    step: "02",
+    title: "Add products",
+    description: "Upload images, set prices and inventory, publish to your catalog—all from the dashboard.",
   },
   {
-    label: "Engine",
-    items: ["Catalog & cart", "Orders & checkout", "Payments & webhooks", "Per-tenant RLS"],
+    step: "03",
+    title: "Connect payments",
+    description: "Configure Stripe, Easypay, or Ifthenpay per store. Credentials are encrypted and scoped to your tenant.",
+  },
+  {
+    step: "04",
+    title: "Share your URL",
+    description: "Send customers to yourname.prood.app or connect a custom domain when you upgrade.",
   },
 ] as const
 
-export const audiences = [
+export const dashboardFeatures = [
   {
-    title: "Agencies",
-    description: "Launch and manage multiple client stores from one infrastructure layer.",
+    title: "Products & catalog",
+    description: "Variants, options, images, categories, and inventory in one place.",
   },
   {
-    title: "Creators",
-    description: "Monetize audiences quickly without wrestling with legacy commerce stacks.",
+    title: "Orders & customers",
+    description: "Fulfill orders, process refunds, and view customer history.",
   },
   {
-    title: "Modern brands",
-    description: "Operate fast, scalable, AI-enabled commerce experiences globally.",
+    title: "Integrations",
+    description: "Payment providers per store—no shared keys across merchants.",
   },
   {
-    title: "Enterprise teams",
-    description: "Centralize multi-brand commerce operations with tenant isolation built in.",
+    title: "Domains & team",
+    description: "Subdomain on day one; custom domain and team roles when you grow.",
   },
+] as const
+
+export const agentExamples = [
+  {
+    title: "List and fulfill orders",
+    description: "Agents query orders and update status through the same API as your dashboard.",
+  },
+  {
+    title: "Manage catalog",
+    description: "Create or update products and inventory with merchant-approved capabilities.",
+  },
+  {
+    title: "Safe by design",
+    description: "Row-level security per store; mutating actions require explicit approval in Agent Auth.",
+  },
+] as const
+
+export const agencyHighlights = [
+  {
+    title: "Many stores, one platform",
+    description: "Each client is an isolated organization with its own catalog, payments, and domain.",
+  },
+  {
+    title: "Per-client domains",
+    description: "Automatic subdomains plus custom domains and SSL for every brand you launch.",
+  },
+  {
+    title: "Team per store",
+    description: "Invite client stakeholders as admins or members without sharing credentials.",
+  },
+] as const
+
+export const merchantPainPoints = [
+  "Weeks of setup before your first sale",
+  "Plugin sprawl and fragile checkout",
+  "No way for AI tools to help run the store safely",
+] as const
+
+export const merchantSolutions = [
+  "Live subdomain store in minutes",
+  "Unified dashboard, checkout, and payments",
+  "Optional agents and MCP on paid plans",
 ] as const
 
 export const techStack = [
   "Next.js",
-  "React",
   "Neon",
   "Vercel",
   "Stripe",
   "PostgreSQL",
   "Upstash",
-  "OpenAPI",
 ] as const
+
+export const pricingDisclaimer =
+  "Payment processing fees go to your provider (Stripe, etc.). Prood does not take a cut of your sales at launch. Subscription billing is coming soon—plans below reflect intended pricing."

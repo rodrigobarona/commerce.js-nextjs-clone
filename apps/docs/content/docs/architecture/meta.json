@@ -1,4 +1,5 @@
 {
   "title": "Architecture",
-  "pages": ["overview", "upstream-comparison", "multi-tenant", "checkout-flow", "unified-types", "api-centric"]
+  "icon": "Stack",
+  "pages": ["overview", "multi-tenant", "checkout-flow", "unified-types", "api-centric"]
 }
