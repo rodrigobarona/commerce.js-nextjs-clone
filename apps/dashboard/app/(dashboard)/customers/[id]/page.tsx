@@ -6,7 +6,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@prood/ui/components/card"
-import { withActiveOrg } from "@/lib/admin"
+import { getCustomer } from "@/lib/admin-api"
 
 export const metadata = { title: "Customer" }
 
@@ -23,7 +23,7 @@ export default async function CustomerDetailPage({
 
   let customer: Customer
   try {
-    customer = await withActiveOrg((admin) => admin.getCustomer(id))
+    customer = await getCustomer(id)
   } catch {
     notFound()
   }

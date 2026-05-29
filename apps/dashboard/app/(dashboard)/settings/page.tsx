@@ -3,7 +3,7 @@ import {
   SettingsForm,
   type SettingsFormValues,
 } from "@/components/store/settings-form"
-import { withActiveOrg } from "@/lib/admin"
+import { getStoreSettings } from "@/lib/admin-api"
 
 export const metadata = { title: "Settings" }
 
@@ -34,7 +34,7 @@ function toFormValues(settings: StoreSettings): SettingsFormValues {
 export default async function SettingsPage() {
   let initial = EMPTY
   try {
-    const settings = await withActiveOrg((admin) => admin.getStoreSettings())
+    const settings = await getStoreSettings()
     initial = toFormValues(settings)
   } catch {
     /* DB unavailable — render empty form */

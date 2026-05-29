@@ -12,16 +12,14 @@ import {
   TableRow,
 } from "@prood/ui/components/table"
 import { formatPrice } from "@prood/ui/lib/commerce"
-import { withActiveOrg } from "@/lib/admin"
+import { listOrders } from "@/lib/admin-api"
 
 export const metadata = { title: "Orders" }
 
 export default async function OrdersPage() {
   let orders: Order[] = []
   try {
-    const result = await withActiveOrg((admin) =>
-      admin.listOrders({ page: 1, perPage: 50 })
-    )
+    const result = await listOrders({ page: 1, perPage: 50 })
     orders = result.items
   } catch {
     /* DB unavailable */

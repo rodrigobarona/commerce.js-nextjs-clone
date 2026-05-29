@@ -19,7 +19,7 @@ import {
   TableRow,
 } from "@prood/ui/components/table"
 import { localized, formatPrice } from "@prood/ui/lib/commerce"
-import { withActiveOrg } from "@/lib/admin"
+import { listProducts } from "@/lib/admin-api"
 
 export const metadata = { title: "Products" }
 
@@ -28,9 +28,7 @@ export default async function ProductsPage() {
   let total = 0
   let failed = false
   try {
-    const result = await withActiveOrg((admin) =>
-      admin.listProducts({ page: 1, perPage: 50 })
-    )
+    const result = await listProducts({ page: 1, perPage: 50 })
     products = result.items
     total = result.total
   } catch {

@@ -3,7 +3,7 @@ import type { Product } from "@prood/commerce"
 import { localized } from "@prood/ui/lib/commerce"
 import { ProductForm } from "@/components/store/product-form"
 import { DeleteProductButton } from "@/components/store/delete-product-button"
-import { withActiveOrg } from "@/lib/admin"
+import { getProduct } from "@/lib/admin-api"
 
 export const metadata = { title: "Edit product" }
 
@@ -16,7 +16,7 @@ export default async function EditProductPage({
 
   let product: Product
   try {
-    product = await withActiveOrg((admin) => admin.getProduct(id))
+    product = await getProduct(id)
   } catch {
     notFound()
   }

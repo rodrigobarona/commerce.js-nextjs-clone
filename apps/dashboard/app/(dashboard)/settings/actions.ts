@@ -2,11 +2,11 @@
 
 import { revalidatePath } from "next/cache"
 import type { UpdateStoreInput } from "@prood/commerce"
-import { withActiveOrg } from "@/lib/admin"
+import { updateStoreSettings } from "@/lib/admin-api"
 
 export async function updateStoreSettingsAction(
   input: UpdateStoreInput
 ): Promise<void> {
-  await withActiveOrg((admin) => admin.updateStoreSettings(input))
+  await updateStoreSettings(input)
   revalidatePath("/settings")
 }

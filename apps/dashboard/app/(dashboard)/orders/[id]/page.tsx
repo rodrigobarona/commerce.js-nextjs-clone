@@ -10,7 +10,7 @@ import {
 import { Separator } from "@prood/ui/components/separator"
 import { localized, formatPrice } from "@prood/ui/lib/commerce"
 import { OrderActions } from "@/components/store/order-actions"
-import { withActiveOrg } from "@/lib/admin"
+import { getOrder } from "@/lib/admin-api"
 
 export const metadata = { title: "Order" }
 
@@ -26,7 +26,7 @@ export default async function OrderDetailPage({
 
   let order: Order
   try {
-    order = await withActiveOrg((admin) => admin.getOrder(id))
+    order = await getOrder(id)
   } catch {
     notFound()
   }

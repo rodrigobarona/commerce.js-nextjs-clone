@@ -7,7 +7,7 @@ import {
 } from "@prood/ui/components/card"
 import { Badge } from "@prood/ui/components/badge"
 import type { DashboardStats } from "@prood/commerce"
-import { withActiveOrg } from "@/lib/admin"
+import { getDashboardStats, getStoreSettings } from "@/lib/admin-api"
 
 export const metadata = { title: "Overview" }
 
@@ -26,15 +26,12 @@ export default async function OverviewPage() {
   let stats: DashboardStats | null = null
   let currency = "EUR"
   try {
-    const result = await withActiveOrg(async (admin) => {
-      const [dashboard, settings] = await Promise.all([
-        admin.getDashboardStats(),
-        admin.getStoreSettings(),
-      ])
-      return { dashboard, settings }
-    })
-    stats = result.dashboard
-    currency = result.settings.currency
+    const [dashboard, settings] = await Promise.all([
+      getDashboardStats(),
+      getStoreSettings(),
+    ])
+    stats = dashboard
+    currency = settings.currency
   } catch {
     /* DB unavailable or store not yet provisioned */
   }

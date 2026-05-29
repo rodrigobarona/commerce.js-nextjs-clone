@@ -10,7 +10,7 @@ import {
   TableHeader,
   TableRow,
 } from "@prood/ui/components/table"
-import { withActiveOrg } from "@/lib/admin"
+import { listCustomers } from "@/lib/admin-api"
 
 export const metadata = { title: "Customers" }
 
@@ -22,9 +22,7 @@ function fullName(customer: Customer): string {
 export default async function CustomersPage() {
   let customers: Customer[] = []
   try {
-    const result = await withActiveOrg((admin) =>
-      admin.listCustomers({ page: 1, perPage: 50 })
-    )
+    const result = await listCustomers({ page: 1, perPage: 50 })
     customers = result.items
   } catch {
     /* DB unavailable */
