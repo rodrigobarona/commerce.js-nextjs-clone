@@ -1,9 +1,7 @@
 import { NextResponse } from "next/server"
 import { verifyPaymentWebhook } from "@workspace/commerce"
-import { reconcilePayment } from "@/lib/payments"
+import { reconcilePayment } from "@workspace/checkout-host"
 
-// Ifthenpay confirms payments by calling this URL with the anti-phishing key
-// in the query string (GET).
 export async function GET(request: Request) {
   const query = new URL(request.url).search.replace(/^\?/, "")
   try {

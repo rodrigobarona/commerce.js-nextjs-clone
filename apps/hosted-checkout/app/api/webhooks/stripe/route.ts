@@ -1,8 +1,7 @@
 import { NextResponse } from "next/server"
 import { verifyPaymentWebhook } from "@workspace/commerce"
-import { reconcilePayment } from "@/lib/payments"
+import { reconcilePayment } from "@workspace/checkout-host"
 
-// Stripe requires the raw request body for signature verification.
 export async function POST(request: Request) {
   const signature = request.headers.get("stripe-signature") ?? ""
   const payload = await request.text()
