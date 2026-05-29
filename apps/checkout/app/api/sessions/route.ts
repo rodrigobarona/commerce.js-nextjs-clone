@@ -29,10 +29,10 @@ export async function POST(request: Request) {
     const body = createSchema.parse(await request.json())
     const result = await createCheckoutSession(body)
 
-    const hostedUrl = process.env.HOSTED_CHECKOUT_URL ?? "http://localhost:3100"
+    const checkoutUrl = process.env.CHECKOUT_URL ?? "http://localhost:3100"
     return NextResponse.json({
       ...result,
-      checkoutUrl: `${hostedUrl}/pay/${result.sessionId}`,
+      checkoutUrl: `${checkoutUrl}/pay/${result.sessionId}`,
     })
   } catch (err) {
     return errorResponse(err)

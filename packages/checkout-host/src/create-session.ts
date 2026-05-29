@@ -39,7 +39,7 @@ export async function createCheckoutSession(input: CreateSessionInput): Promise<
   const provider = getPaymentProvider(providerId)
   const kind = 'cs'
   const sessionId = generateId(kind)
-  const hostedUrl = process.env.HOSTED_CHECKOUT_URL ?? 'http://localhost:3100'
+  const checkoutUrl = process.env.CHECKOUT_URL ?? 'http://localhost:3100'
 
   const session = new CheckoutSession({
     paymentProvider: provider,
@@ -48,7 +48,7 @@ export async function createCheckoutSession(input: CreateSessionInput): Promise<
     returnUrl: input.returnUrl,
     cancelUrl: input.cancelUrl,
     orderId: input.orderId,
-    webhookUrl: `${hostedUrl}/api/webhooks/${providerId}`,
+    webhookUrl: `${checkoutUrl}/api/webhooks/${providerId}`,
     channel: input.channel ?? 'web',
     fulfillment: input.fulfillment ?? 'none',
     expiresIn: input.expiresIn,
@@ -68,7 +68,7 @@ export async function createCheckoutSession(input: CreateSessionInput): Promise<
     kind,
     returnUrl: input.returnUrl ?? null,
     cancelUrl: input.cancelUrl ?? null,
-    webhookUrl: `${hostedUrl}/api/webhooks/${providerId}`,
+    webhookUrl: `${checkoutUrl}/api/webhooks/${providerId}`,
   }
 
   const snapshot = session.toSnapshot()
@@ -82,7 +82,7 @@ export async function createPaymentLink(input: CreateSessionInput): Promise<Crea
   const provider = getPaymentProvider(providerId)
   const kind = 'pl'
   const sessionId = generateId(kind)
-  const hostedUrl = process.env.HOSTED_CHECKOUT_URL ?? 'http://localhost:3100'
+  const checkoutUrl = process.env.CHECKOUT_URL ?? 'http://localhost:3100'
 
   const session = new CheckoutSession({
     paymentProvider: provider,
@@ -91,7 +91,7 @@ export async function createPaymentLink(input: CreateSessionInput): Promise<Crea
     returnUrl: input.returnUrl,
     cancelUrl: input.cancelUrl,
     orderId: input.orderId,
-    webhookUrl: `${hostedUrl}/api/webhooks/${providerId}`,
+    webhookUrl: `${checkoutUrl}/api/webhooks/${providerId}`,
     channel: 'link',
     fulfillment: 'none',
     expiresIn: input.expiresIn ?? 30 * 60 * 1000,
@@ -111,12 +111,12 @@ export async function createPaymentLink(input: CreateSessionInput): Promise<Crea
     kind,
     returnUrl: input.returnUrl ?? null,
     cancelUrl: input.cancelUrl ?? null,
-    webhookUrl: `${hostedUrl}/api/webhooks/${providerId}`,
+    webhookUrl: `${checkoutUrl}/api/webhooks/${providerId}`,
   }
 
   const snapshot = session.toSnapshot()
   await saveSession(sessionId, snapshot, meta)
 
-  const url = `${hostedUrl}/pay/${sessionId}`
+  const url = `${checkoutUrl}/pay/${sessionId}`
   return { sessionId, providerId, publishableKey, snapshot, url }
 }

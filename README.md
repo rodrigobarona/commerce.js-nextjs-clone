@@ -9,7 +9,7 @@ deployed on Vercel + Neon Postgres.
 ```
 apps/
   storefront/              # Next.js 16 storefront (App Router) — port of apps/storefront
-  hosted-checkout/         # Standalone hosted checkout (Stripe / Easypay / Ifthenpay)
+  checkout/                # Standalone checkout (Stripe / Easypay / Ifthenpay)
 packages/
   commerce/                # @workspace/commerce — server-only data layer
   checkout-host/           # @workspace/checkout-host — session store (Upstash Redis)
@@ -25,10 +25,10 @@ packages/
   is swappable via `COMMERCE_ADAPTER` (medusa/salla seams included).
 - **Payments** are gateway-agnostic (`PaymentProvider`): **Stripe** (embedded
   Payment Element) is the default; **Easypay** and **Ifthenpay** cover Portugal
-  (Multibanco, MB WAY, card). Payment UI lives in `apps/hosted-checkout`.
-- **Hosted checkout** (`apps/hosted-checkout`) is a standalone Next.js app. The
-  storefront places an order then redirects to the checkout app for payment via
-  a `CheckoutSession` persisted in **Upstash Redis**. Supports web checkout
+  (Multibanco, MB WAY, card). Payment UI lives in `apps/checkout`.
+- **Checkout** (`apps/checkout`) is a standalone Next.js app. The storefront
+  places an order then redirects to the checkout app for payment via a
+  `CheckoutSession` persisted in **Upstash Redis**. Supports web checkout
   sessions and payment links.
 - **Storage** is pluggable via `STORAGE_PROVIDER`: **Vercel Blob** (default) or
   S3-compatible (**Cloudflare R2**, AWS, MinIO).
@@ -41,17 +41,17 @@ packages/
 pnpm install
 # Copy env for both apps:
 cp .env.example apps/storefront/.env.local
-cp .env.example apps/hosted-checkout/.env.local
+cp .env.example apps/checkout/.env.local
 # Fill in DATABASE_URL, UPSTASH_REDIS_REST_*, STRIPE keys, etc.
 pnpm db:setup                         # migrate + seed commerce, create auth tables
-pnpm dev                              # starts storefront :3000 + hosted-checkout :3100
+pnpm dev                              # starts storefront :3000 + checkout :3100
 ```
 
 Requires Node >= 24 and pnpm 10.
 
 ## Scripts
 
-- `pnpm dev` — run both apps (storefront on :3000, hosted-checkout on :3100)
+- `pnpm dev` — run both apps (storefront on :3000, checkout on :3100)
 - `pnpm build` / `pnpm typecheck` / `pnpm lint` — Turbo pipelines
 - `pnpm db:migrate` — migrate + seed the commerce (platform) schema
 - `pnpm db:auth` — push the Better Auth schema
@@ -65,23 +65,23 @@ Both apps deploy as separate Vercel projects sharing the same Neon database.
 
 1. Provision **Neon Postgres** via the Vercel marketplace integration → sets `DATABASE_URL`.
 2. Set the env vars from `.env.example` in the Vercel project.
-3. Set `HOSTED_CHECKOUT_URL` to the production URL of the hosted-checkout project.
+3. Set `CHECKOUT_URL` to the production URL of the checkout project.
 4. Run `pnpm db:setup` once (locally against the prod DB, or as a deploy step).
 5. Deploy (`turbo build`). Catalog data uses Cache Components (`cacheComponents: true`)
    with `'use cache'` + `cacheTag`/`cacheLife` on `@workspace/commerce` catalog
    queries (SWR: home/store 3600s, products/categories 600s). Cart/checkout/
    account stay dynamic via cookies/session.
 
-### Hosted checkout
+### Checkout
 
 1. Share the same **Neon** `DATABASE_URL` (for order lookups).
 2. Provision **Upstash Redis** via the Vercel marketplace → sets
    `UPSTASH_REDIS_REST_URL` and `UPSTASH_REDIS_REST_TOKEN`.
 3. Set `CHECKOUT_API_SECRET` (same value on both projects).
 4. Set `STOREFRONT_URL` to the production storefront URL.
-5. Configure payment webhooks to the hosted-checkout domain:
+5. Configure payment webhooks to the checkout domain:
    `/api/webhooks/{stripe,easypay,ifthenpay}`.
-6. Deploy (`turbo build --filter=hosted-checkout`).
+6. Deploy (`turbo build --filter=checkout`).
 
 ## Adding UI components
 
@@ -99,7 +99,7 @@ Commerce components live in `packages/ui/src/components/*` and are imported as
 | Upstream app                            | Status in this repo                                                         |
 | --------------------------------------- | --------------------------------------------------------------------------- |
 | **`storefront`**                        | **Ported** → `apps/storefront` (Next.js 16 / React 19)                      |
-| **`hosted-checkout`**                   | **Ported** → `apps/hosted-checkout` (CheckoutSession + Upstash Redis)       |
+| **`hosted-checkout`**                   | **Ported** → `apps/checkout` (CheckoutSession + Upstash Redis)              |
 | `dashboard`                             | Not ported — planned (commercejs.cloud admin)                               |
 | `docs`                                  | Not ported — planned                                                        |
 | `landing-page`, `pitch-deck`, `cloud-*` | Not ported — static marketing sites                                         |

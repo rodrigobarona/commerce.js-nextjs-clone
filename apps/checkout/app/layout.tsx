@@ -14,7 +14,7 @@ export const metadata: Metadata = {
     default: "Checkout",
     template: "%s · Checkout",
   },
-  description: "Secure hosted checkout powered by CommerceJS.",
+  description: "Secure checkout powered by CommerceJS.",
 }
 
 export default function RootLayout({

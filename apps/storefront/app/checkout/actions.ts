@@ -43,10 +43,10 @@ export async function startCheckout(input: StartCheckoutInput): Promise<Checkout
     revalidateProducts()
 
     const providerId = input.providerId ?? process.env.DEFAULT_PAYMENT_PROVIDER ?? "stripe"
-    const hostedCheckoutUrl = process.env.HOSTED_CHECKOUT_URL ?? "http://localhost:3100"
+    const checkoutUrl = process.env.CHECKOUT_URL ?? "http://localhost:3100"
     const storefrontUrl = process.env.BETTER_AUTH_URL ?? "http://localhost:3000"
 
-    const sessionRes = await fetch(`${hostedCheckoutUrl}/api/sessions`, {
+    const sessionRes = await fetch(`${checkoutUrl}/api/sessions`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

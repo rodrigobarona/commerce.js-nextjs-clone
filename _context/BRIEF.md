@@ -59,7 +59,7 @@ Commerce.js abstracts over eCommerce backends (Salla, Medusa, its own Neon Postg
 | App | Description |
 |-----|-------------|
 | `storefront` | Reference storefront (Nuxt) — **primary port target** |
-| `hosted-checkout` | Deployable checkout app with Tap card elements |
+| `checkout` | Deployable checkout app with Tap card elements |
 | `dashboard` | Cloud dashboard ([commercejs.cloud](https://commercejs.cloud)) |
 | `docs` | Documentation site ([commerce.js.org](https://commerce.js.org)) |
 
@@ -134,7 +134,7 @@ Shared pieces to port alongside:
 ## Open Questions / Next Steps
 
 1. **Data layer strategy** — Port `@commercejs/platform` (Neon Postgres + Drizzle) into this monorepo, or start with mock data / a simpler adapter? The `platform` package is self-contained but pulls in Drizzle migrations and a full Admin API.
-2. **Payment flow** — Tap Payments uses a redirect-based flow. The `@commercejs/checkout` state machine is framework-agnostic and can be consumed directly, but the hosted-checkout app is Nuxt-specific.
+2. **Payment flow** — Tap Payments uses a redirect-based flow. The `@commercejs/checkout` state machine is framework-agnostic and can be consumed directly, but the checkout app is Nuxt-specific.
 3. **Auth** — The source uses `nuxt-auth-utils`. Pick an equivalent for Next.js (NextAuth, WorkOS AuthKit, Clerk, or custom middleware).
 4. **UI component parity** — `@commercejs/ui` ships 33 Vue components across 13 domains (product, cart, checkout, auction, rental, etc.). Decide whether to port all of them upfront or build incrementally as pages require them.
 5. **Deploy target** — Source targets Cloudflare Pages via Nitro. This repo defaults to Vercel. Confirm target and adjust caching / middleware strategy accordingly.
