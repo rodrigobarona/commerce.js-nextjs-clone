@@ -17,7 +17,12 @@
     "EASYPAY_*",
     "IFTHENPAY_*",
     "S3_*",
-    "NEXT_PUBLIC_*"
+    "NEXT_PUBLIC_*",
+    "HOSTED_CHECKOUT_URL",
+    "STOREFRONT_URL",
+    "CHECKOUT_API_SECRET",
+    "UPSTASH_REDIS_REST_URL",
+    "UPSTASH_REDIS_REST_TOKEN"
   ],
   "tasks": {
     "build": {
