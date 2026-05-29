@@ -8,7 +8,7 @@ deployed on Vercel + Neon Postgres.
 
 ```
 apps/
-  web/                     # Next.js 16 storefront (App Router)
+  storefront/              # Next.js 16 storefront (App Router) — port of apps/storefront
 packages/
   commerce/                # @workspace/commerce — server-only data layer
   ui/                      # @workspace/ui — shadcn/Radix + 33 commerce components
@@ -33,7 +33,7 @@ packages/
 
 ```bash
 pnpm install
-cp .env.example apps/web/.env.local   # fill in DATABASE_URL etc.
+cp .env.example apps/storefront/.env.local   # fill in DATABASE_URL etc.
 pnpm db:setup                         # migrate + seed commerce, create auth tables
 pnpm dev
 ```
@@ -69,6 +69,16 @@ Commerce components live in `packages/ui/src/components/*` and are imported as
 `@workspace/ui/components/<name>`.
 
 ## Roadmap
+
+### Apps (vs upstream `_context/repo-clone/apps`)
+
+| Upstream app | Status in this repo |
+|---|---|
+| **`storefront`** | **Ported** → `apps/storefront` (Next.js 16 / React 19) |
+| `hosted-checkout` | Not ported — checkout lives inside `apps/storefront` (`/checkout`, embedded Stripe + PT gateways) |
+| `dashboard` | Not ported — planned (commercejs.cloud admin) |
+| `docs` | Not ported — planned |
+| `landing-page`, `pitch-deck`, `cloud-*` | Not ported — static marketing sites |
 
 - CMS integration (Sanity / Payload) for marketing content — the data layer and
   page structure are designed to compose CMS content alongside commerce data.

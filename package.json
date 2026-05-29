@@ -9,7 +9,7 @@
     "format": "turbo format",
     "typecheck": "turbo typecheck",
     "db:migrate": "turbo db:migrate:seed --filter=@commercejs/platform",
-    "db:auth": "pnpm --filter web db:push",
+    "db:auth": "pnpm --filter storefront db:push",
     "db:setup": "pnpm db:migrate && pnpm db:auth"
   },
   "devDependencies": {

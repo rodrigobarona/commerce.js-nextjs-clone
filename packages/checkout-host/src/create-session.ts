@@ -1,0 +1,122 @@
+import 'server-only'
+import { CheckoutSession, type CheckoutChannel, type CheckoutFulfillment } from '@commercejs/checkout'
+import { getPaymentProvider } from '@workspace/commerce'
+import { saveSession, type SessionMeta } from './session-store'
+
+let counter = 0
+
+function generateId(kind: 'cs' | 'pl'): string {
+  return `${kind}_${Date.now()}_${++counter}`
+}
+
+export interface CreateSessionInput {
+  orderId?: string
+  amount: number
+  currency: string
+  returnUrl?: string
+  cancelUrl?: string
+  providerId?: string
+  customerInfo?: {
+    email: string
+    firstName?: string
+    lastName?: string
+    phone?: string
+  }
+  channel?: CheckoutChannel
+  fulfillment?: CheckoutFulfillment
+  expiresIn?: number
+}
+
+export interface CreatedSession {
+  sessionId: string
+  providerId: string
+  publishableKey?: string
+  snapshot: ReturnType<CheckoutSession['toSnapshot']>
+}
+
+export async function createCheckoutSession(input: CreateSessionInput): Promise<CreatedSession> {
+  const providerId = input.providerId ?? process.env.DEFAULT_PAYMENT_PROVIDER ?? 'stripe'
+  const provider = getPaymentProvider(providerId)
+  const kind = 'cs'
+  const sessionId = generateId(kind)
+  const hostedUrl = process.env.HOSTED_CHECKOUT_URL ?? 'http://localhost:3100'
+
+  const session = new CheckoutSession({
+    paymentProvider: provider,
+    currency: input.currency,
+    amount: input.amount,
+    returnUrl: input.returnUrl,
+    cancelUrl: input.cancelUrl,
+    orderId: input.orderId,
+    webhookUrl: `${hostedUrl}/api/webhooks/${providerId}`,
+    channel: input.channel ?? 'web',
+    fulfillment: input.fulfillment ?? 'none',
+    expiresIn: input.expiresIn,
+  })
+
+  if (input.customerInfo) {
+    session.setCustomerInfo(input.customerInfo)
+  }
+
+  const publishableKey = providerId === 'stripe'
+    ? process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
+    : undefined
+
+  const meta: SessionMeta = {
+    providerId,
+    publishableKey,
+    kind,
+    returnUrl: input.returnUrl ?? null,
+    cancelUrl: input.cancelUrl ?? null,
+    webhookUrl: `${hostedUrl}/api/webhooks/${providerId}`,
+  }
+
+  const snapshot = session.toSnapshot()
+  await saveSession(sessionId, snapshot, meta)
+
+  return { sessionId, providerId, publishableKey, snapshot }
+}
+
+export async function createPaymentLink(input: CreateSessionInput): Promise<CreatedSession & { url: string }> {
+  const providerId = input.providerId ?? process.env.DEFAULT_PAYMENT_PROVIDER ?? 'stripe'
+  const provider = getPaymentProvider(providerId)
+  const kind = 'pl'
+  const sessionId = generateId(kind)
+  const hostedUrl = process.env.HOSTED_CHECKOUT_URL ?? 'http://localhost:3100'
+
+  const session = new CheckoutSession({
+    paymentProvider: provider,
+    currency: input.currency,
+    amount: input.amount,
+    returnUrl: input.returnUrl,
+    cancelUrl: input.cancelUrl,
+    orderId: input.orderId,
+    webhookUrl: `${hostedUrl}/api/webhooks/${providerId}`,
+    channel: 'link',
+    fulfillment: 'none',
+    expiresIn: input.expiresIn ?? 30 * 60 * 1000,
+  })
+
+  if (input.customerInfo) {
+    session.setCustomerInfo(input.customerInfo)
+  }
+
+  const publishableKey = providerId === 'stripe'
+    ? process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
+    : undefined
+
+  const meta: SessionMeta = {
+    providerId,
+    publishableKey,
+    kind,
+    returnUrl: input.returnUrl ?? null,
+    cancelUrl: input.cancelUrl ?? null,
+    webhookUrl: `${hostedUrl}/api/webhooks/${providerId}`,
+  }
+
+  const snapshot = session.toSnapshot()
+  await saveSession(sessionId, snapshot, meta)
+
+  const url = `${hostedUrl}/pay/${sessionId}`
+  return { sessionId, providerId, publishableKey, snapshot, url }
+}

@@ -1,7 +1,7 @@
 import { defineConfig } from "drizzle-kit"
 
 // Schema for the Better Auth tables (user/session/account/verification).
-// Run `pnpm --filter web db:push` to create them in the Neon database.
+// Run `pnpm --filter storefront db:push` to create them in the Neon database.
 export default defineConfig({
   schema: "./lib/auth/schema.ts",
   out: "./drizzle",
