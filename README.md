@@ -8,8 +8,11 @@ deployed on Vercel + Neon Postgres.
 
 ```
 apps/
-  storefront/              # Next.js 16 storefront (App Router) — port of apps/storefront
-  checkout/                # Standalone checkout (Stripe / Easypay / Ifthenpay)
+  web/                     # Marketing site (shadcn preset) — :3001
+  storefront/              # Next.js 16 storefront (App Router) — :3000
+  dashboard/               # Admin dashboard — :3002
+  docs/                    # Fumadocs documentation — :3003
+  checkout/                # Standalone checkout (Stripe / Easypay / Ifthenpay) — :3004
 packages/
   commerce/                # @workspace/commerce — server-only data layer
   checkout-host/           # @workspace/checkout-host — session store (Upstash Redis)
@@ -39,19 +42,19 @@ packages/
 
 ```bash
 pnpm install
-# Copy env for both apps:
-cp .env.example apps/storefront/.env.local
-cp .env.example apps/checkout/.env.local
-# Fill in DATABASE_URL, UPSTASH_REDIS_REST_*, STRIPE keys, etc.
+cp .env.example .env.local   # fill in DATABASE_URL, keys, etc.
+pnpm env:link                # symlink apps/*/.env.local -> root .env.local
 pnpm db:setup                         # migrate + seed commerce, create auth tables
-pnpm dev                              # starts storefront :3000 + checkout :3100
+pnpm dev                              # starts all apps via Turbo
 ```
+
+Dev ports: storefront `:3000`, web `:3001`, dashboard `:3002`, docs `:3003`, checkout `:3004`.
 
 Requires Node >= 24 and pnpm 10.
 
 ## Scripts
 
-- `pnpm dev` — run both apps (storefront on :3000, checkout on :3100)
+- `pnpm dev` — run all apps (see dev ports above)
 - `pnpm build` / `pnpm typecheck` / `pnpm lint` — Turbo pipelines
 - `pnpm db:migrate` — migrate + seed the commerce (platform) schema
 - `pnpm db:auth` — push the Better Auth schema
@@ -100,9 +103,10 @@ Commerce components live in `packages/ui/src/components/*` and are imported as
 | --------------------------------------- | --------------------------------------------------------------------------- |
 | **`storefront`**                        | **Ported** → `apps/storefront` (Next.js 16 / React 19)                      |
 | **`hosted-checkout`**                   | **Ported** → `apps/checkout` (CheckoutSession + Upstash Redis)              |
+| **`docs`**                              | **Ported** → `apps/docs` (Fumadocs MDX)                                     |
+| **`landing-page`**                      | **Ported** → `apps/web` (marketing site, shadcn preset)                     |
 | `dashboard`                             | Not ported — planned (commercejs.cloud admin)                               |
-| `docs`                                  | Not ported — planned                                                        |
-| `landing-page`, `pitch-deck`, `cloud-*` | Not ported — static marketing sites                                         |
+| `pitch-deck`, `cloud-*`                 | Not ported — static marketing sites                                         |
 
 - CMS integration (Sanity / Payload) for marketing content — the data layer and
   page structure are designed to compose CMS content alongside commerce data.

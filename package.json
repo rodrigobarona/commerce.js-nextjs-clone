@@ -10,7 +10,8 @@
     "typecheck": "turbo typecheck",
     "db:migrate": "turbo db:migrate:seed --filter=@commercejs/platform",
     "db:auth": "pnpm --filter storefront db:push",
-    "db:setup": "pnpm db:migrate && pnpm db:auth"
+    "db:setup": "pnpm db:migrate && pnpm db:auth",
+    "env:link": "bash scripts/link-env.sh"
   },
   "devDependencies": {
     "@workspace/eslint-config": "workspace:*",
