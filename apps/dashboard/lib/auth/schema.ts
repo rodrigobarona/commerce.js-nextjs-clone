@@ -95,3 +95,16 @@ export const invitation = pgTable("invitation", {
     .references(() => user.id, { onDelete: "cascade" }),
   createdAt: timestamp("created_at").notNull().defaultNow(),
 })
+
+// ---- Tenant domains (maps a host to an organization for storefront routing) ----
+
+export const tenantDomain = pgTable("tenant_domain", {
+  id: text("id").primaryKey(),
+  organizationId: text("organization_id")
+    .notNull()
+    .references(() => organization.id, { onDelete: "cascade" }),
+  domain: text("domain").notNull().unique(),
+  verified: boolean("verified").notNull().default(false),
+  isPrimary: boolean("is_primary").notNull().default(false),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+})

@@ -29,5 +29,18 @@ export async function listOrganizations() {
   return auth.api.listOrganizations({ headers: await headers() })
 }
 
+/**
+ * The active organization with its members and pending invitations, or null if
+ * no organization is active.
+ */
+export async function getFullActiveOrganization() {
+  const orgId = await getActiveOrganizationId()
+  if (!orgId) return null
+  return auth.api.getFullOrganization({
+    headers: await headers(),
+    query: { organizationId: orgId },
+  })
+}
+
 export { auth } from "./server"
 export type { Session, SessionUser } from "./server"
