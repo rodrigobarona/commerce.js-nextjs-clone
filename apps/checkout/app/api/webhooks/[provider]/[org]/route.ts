@@ -23,7 +23,7 @@ export async function POST(request: Request, { params }: Ctx) {
       provider,
       tenantFrom(org),
     )
-    await reconcilePayment(event)
+    await reconcilePayment(event, tenantFrom(org))
     return NextResponse.json({ received: true })
   } catch (err) {
     console.error(`[webhooks/${provider}]`, err)
@@ -38,7 +38,7 @@ export async function GET(request: Request, { params }: Ctx) {
 
   try {
     const event = await verifyPaymentWebhook(query, "", provider, tenantFrom(org))
-    await reconcilePayment(event)
+    await reconcilePayment(event, tenantFrom(org))
     return NextResponse.json({ received: true })
   } catch (err) {
     console.error(`[webhooks/${provider}]`, err)
