@@ -1,0 +1,203 @@
+---
+title: Unified Types
+description: The shared data model in @prood/types — domain entities, adapter interfaces, and provider contracts.
+---
+
+`@prood/types` defines the **shared vocabulary** for all Prood packages. Every adapter, payment provider, and application uses these types — ensuring a product in the platform adapter looks the same as one from an external adapter.
+
+The package contains **interfaces only** — no runtime code, no database dependencies.
+
+## Core domain types
+
+### Catalog
+
+| Type | Description |
+| --- | --- |
+| `Product` | Full product with variants, options, images, categories, pricing |
+| `ProductVariant` | SKU-level variant with price, inventory, options |
+| `ProductOption` | Configurable option (size, color) with values |
+| `Category` | Hierarchical category with localized name/slug |
+| `Brand` | Product brand with logo and metadata |
+| `SearchResult<T>` | Paginated result wrapper with `data`, `total`, `page`, `limit` |
+| `SearchParams` | Query filters — `query`, `categoryId`, `sort`, pagination |
+
+### Cart & checkout
+
+| Type | Description |
+| --- | --- |
+| `Cart` | Active cart with items, totals, shipping/payment method selections |
+| `CartItem` | Line item with product reference, quantity, unit price |
+| `CartTotals` | Subtotal, tax, shipping, discount, grand total (minor units) |
+| `ShippingMethod` | Available shipping option with price and ETA |
+| `PaymentMethod` | Available payment option (card, Multibanco, etc.) |
+| `Address` | Structured address — street, city, country, postal code |
+| `CustomerInfo` | Email, name, phone for checkout |
+
+### Orders
+
+| Type | Description |
+| --- | --- |
+| `Order` | Placed order with items, status, payment info, addresses |
+| `OrderItem` | Order line item snapshot |
+| `OrderStatus` | `pending`, `confirmed`, `processing`, `shipped`, `delivered`, `cancelled`, `refunded` |
+| `FulfillmentStatus` | Per-line fulfillment tracking |
+
+### Store & customers
+
+| Type | Description |
+| --- | --- |
+| `StoreInfo` | Store name, logo, currency, locales, contact info |
+| `Customer` | Registered customer profile |
+| `Country` | ISO country with name and phone prefix |
+
+### Promotions & reviews
+
+| Type | Description |
+| --- | --- |
+| `Coupon` | Discount code with type (percentage/fixed) and constraints |
+| `Review` | Product review with rating, text, author |
+| `Promotion` | Store-wide or product-specific promotion |
+
+## Adapter interfaces
+
+The `CommerceAdapter` interface is the contract every backend must implement:
+
+```ts
+interface CommerceAdapter {
+  // Universal domains
+  getProducts(params: SearchParams): Promise<SearchResult<Product>>
+  getProduct(id: string): Promise<Product | null>
+  getCategories(): Promise<Category[]>
+  getStoreInfo(): Promise<StoreInfo>
+
+  // Common domains (optional — checked via supports())
+  createCart?(): Promise<Cart>
+  getCart?(id: string): Promise<Cart | null>
+  addCartItem?(cartId: string, input: AddCartItemInput): Promise<Cart>
+  // ... cart, checkout, orders, customers, wishlist, reviews, etc.
+}
+```
+
+Domain-specific sub-interfaces exist for granular adapter composition:
+
+| Interface | Domain |
+| --- | --- |
+| `CatalogAdapter` | Products, categories, brands |
+| `CartAdapter` | Cart CRUD, coupons, shipping/payment methods |
+| `CheckoutAdapter` | Place order, order confirmation |
+| `OrdersAdapter` | Order listing, detail, status updates |
+| `CustomersAdapter` | Customer profiles and addresses |
+| `StoreAdapter` | Store settings and info |
+
+## Provider interfaces
+
+Providers handle **side-effect services** (payments, notifications, analytics) — distinct from data domains:
+
+### PaymentProvider
+
+```ts
+interface PaymentProvider {
+  readonly id: string
+  createSession(input: CreatePaymentSessionInput): Promise<PaymentSession>
+  confirmSession(sessionId: string): Promise<PaymentSession>
+  refund(input: RefundInput): Promise<PaymentSession>
+  verifyWebhook(event: PaymentWebhookEvent): Promise<boolean>
+}
+```
+
+Supporting types:
+
+| Type | Description |
+| --- | --- |
+| `PaymentSession` | Provider charge/intent with status, amount, redirect URL |
+| `CreatePaymentSessionInput` | Amount, currency, customer, metadata, return URL |
+| `RefundInput` | Session ID, amount, reason |
+| `PaymentWebhookEvent` | Raw webhook payload for verification |
+
+### StorageProvider
+
+```ts
+interface StorageProvider {
+  upload(input: UploadInput): Promise<UploadResult>
+  delete(key: string): Promise<void>
+  getUrl(key: string): Promise<string>
+}
+```
+
+## Error handling
+
+```ts
+class CommerceError extends Error {
+  code: string       // machine-readable error code
+  status: number     // HTTP status code
+  details?: unknown  // optional structured details
+}
+
+function toErrorResponse(error: unknown): { error: string; code: string; status: number }
+```
+
+All API routes use `toErrorResponse()` for consistent error JSON.
+
+## Price utilities
+
+Amounts are stored in **minor units** (cents) throughout the system:
+
+```ts
+function priceToMajorAmount(minor: number, currency: string): number
+// 9999 cents → 99.99 EUR
+```
+
+Display formatting lives in `@prood/ui/lib/commerce` (`formatPrice`, `localized`).
+
+## Admin types
+
+Admin-specific input/output types for dashboard operations:
+
+| Type | Description |
+| --- | --- |
+| `CreateProductInput` | Product creation payload |
+| `UpdateProductInput` | Partial product update |
+| `DashboardStats` | Revenue, order count, customer count aggregates |
+| `InventoryUpdate` | Stock level adjustment |
+| `FulfillOrderInput` | Shipping tracking info |
+| `RefundOrderInput` | Refund amount and reason |
+
+These are re-exported from `@prood/commerce` for convenience.
+
+## Specialized domain types
+
+Types exist for advanced commerce patterns (partial platform implementation):
+
+| Domain | Key types |
+| --- | --- |
+| **Auctions** | `Auction`, `Bid`, `AuctionStatus` |
+| **Rentals** | `Rental`, `RentalBooking`, `RentalPeriod` |
+| **Wholesale** | `PriceTier`, `QuoteRequest` |
+| **Gift cards** | `GiftCard`, `GiftCardBalance` |
+| **Subscriptions** | `Subscription`, `SubscriptionPlan` |
+| **Returns** | `ReturnRequest`, `ReturnStatus` |
+| **Events** | `Event`, `EventTicket` |
+
+## Using types in your code
+
+```ts
+// Import domain types
+import type { Product, Cart, Order } from '@prood/types'
+
+// Import adapter interface (for custom adapters)
+import type { CommerceAdapter, SearchParams } from '@prood/types'
+
+// Import payment provider interface
+import type { PaymentProvider, CreatePaymentSessionInput } from '@prood/types'
+
+// Import error utilities
+import { CommerceError, toErrorResponse } from '@prood/types'
+```
+
+## Related pages
+
+<Cards>
+  <Card title="@prood/types package" href="/docs/packages/types" description="Package exports and usage." />
+  <Card title="@prood/platform" href="/docs/packages/platform" description="Built-in adapter implementing these interfaces." />
+  <Card title="Commerce API" href="/docs/api" description="OpenAPI schemas generated from these types." />
+</Cards>

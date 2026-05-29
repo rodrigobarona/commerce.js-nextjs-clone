@@ -1,0 +1,149 @@
+---
+title: Architecture Overview
+description: How Prood applications, packages, and the Commerce API fit together in the Next.js monorepo.
+---
+
+Prood is organized as a **layered architecture** where each package has a single responsibility and applications communicate through a well-defined HTTP API.
+
+## System diagram
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│                           Client surfaces                                │
+├──────────────┬──────────────┬──────────────┬────────────────────────────┤
+│  Storefront  │  Dashboard   │   Checkout   │  Agents / MCP / API keys   │
+│   :3000      │   :3002      │   :3004      │                            │
+└──────┬───────┴──────┬───────┴──────┬───────┴──────────────┬─────────────┘
+       │              │              │                      │
+       │ @prood/      │ @prood/      │ @prood/              │ Bearer JWT /
+       │ api-client   │ api-client   │ checkout-host        │ x-api-key /
+       │              │ + commerce*  │                      │ session cookie
+       ▼              ▼              ▼                      ▼
+┌─────────────────────────────────────────────────────────────────────────┐
+│                         apps/api  (:3005)                                │
+│  REST /v1/*  ·  OpenAPI  ·  MCP  ·  Agent Auth  ·  Webhook ingress    │
+│  resolveCaller() → orgId + scopes → commerce-service.ts                 │
+└──────────────────────────────┬──────────────────────────────────────────┘
+                               │
+                               ▼
+┌─────────────────────────────────────────────────────────────────────────┐
+│                      @prood/commerce (server-only)                       │
+│  catalog · cart · checkout · orders · admin · payments · integrations   │
+│  withTenant(orgId) → adapter + provider factory + cache tags            │
+└──────────────────────────────┬──────────────────────────────────────────┘
+                               │
+                               ▼
+┌─────────────────────────────────────────────────────────────────────────┐
+│                      @prood/platform (Drizzle + Neon)                   │
+│  CommerceAdapter · AdminAPI · RLS · seed · migrate                      │
+└──────────────────────────────┬──────────────────────────────────────────┘
+                               │
+                               ▼
+                        Neon Postgres
+                   (forced RLS per organization_id)
+```
+
+\* Dashboard uses `@prood/commerce` directly only for integration config encryption and domain management helpers — all catalog/order CRUD goes through the API.
+
+## Design principles
+
+### Commerce-agnostic adapters
+
+The `CommerceAdapter` interface (from `@prood/types`) defines how applications talk to commerce backends. The default **platform** adapter provides a full Neon Postgres engine. Seams exist for external adapters (Medusa, Salla) via `COMMERCE_ADAPTER`.
+
+```ts
+// @prood/platform exports
+const { adapter, admin } = await createPlatformAdapter()
+const products = await adapter.getProducts({ page: 1, limit: 20 })
+```
+
+### Pluggable payment providers
+
+Payment providers implement the `PaymentProvider` interface. The checkout engine does not know which gateway it uses:
+
+```ts
+interface PaymentProvider {
+  createSession(input: CreatePaymentSessionInput): Promise<PaymentSession>
+  confirmSession(sessionId: string): Promise<PaymentSession>
+  refund(input: RefundInput): Promise<PaymentSession>
+  verifyWebhook(event: PaymentWebhookEvent): Promise<boolean>
+}
+```
+
+Swapping Stripe for Easypay requires changing the provider instantiation — not the checkout state machine.
+
+### API-centric data access
+
+In the upstream Nuxt reference, storefronts imported `@prood/core` directly. This Next.js stack routes **all commerce operations through `apps/api`**:
+
+| Benefit | Explanation |
+| --- | --- |
+| Single auth layer | One place to resolve tenant, scopes, and caller type |
+| OpenAPI contract | Humans, `@prood/api-client`, MCP tools, and Agent Auth share the same schema |
+| Thin storefront | BFF routes only where cookies or client-side UX require them (cart, search) |
+| Agent-ready | Every `operationId` becomes an agent capability |
+
+See [API-centric architecture](/docs/architecture/api-centric) for details.
+
+### Multi-tenant by default
+
+Every merchant is a Better Auth **organization**. Postgres **row-level security** filters all commerce rows by `organization_id`. Any code path that forgets `withTenant()` fails closed — zero rows returned, writes blocked.
+
+See [Multi-tenant platform](/docs/architecture/multi-tenant).
+
+## Domain tiers
+
+The platform adapter organizes commerce domains by how commonly they are needed:
+
+| Tier | Domains | Status |
+| --- | --- | --- |
+| **Universal** | `catalog`, `store` | Always present |
+| **Common** | `cart`, `checkout`, `orders`, `customers`, `wishlist`, `reviews`, `promotions`, `brands`, `countries` | Implemented in platform |
+| **Specialized** | `returns`, `wholesale`, `auctions`, `rentals`, `giftCards` | Schema/types exist; partial implementation |
+
+## Layer responsibilities
+
+| Layer | Packages / Apps | Role |
+| --- | --- | --- |
+| **Types** | `@prood/types` | Shared vocabulary — interfaces only, no runtime |
+| **Engine** | `@prood/platform` | Neon Postgres commerce backend + Admin API |
+| **Data layer** | `@prood/commerce` | Server-only wrapper — caching, tenant scope, providers |
+| **Checkout** | `@prood/checkout`, `@prood/checkout-host` | State machine + Redis session host |
+| **Payments** | `@prood/payment-*` | Gateway-specific provider implementations |
+| **Storage** | `@prood/storage-*` | Tenant-namespaced file uploads |
+| **UI** | `@prood/ui` | Shared React components |
+| **Client** | `@prood/api-client` | Typed HTTP client from OpenAPI |
+| **API** | `apps/api` | REST, MCP, Agent Auth, webhook ingress |
+| **Apps** | storefront, dashboard, checkout | End-user surfaces |
+
+## Checkout separation
+
+Payment UI is intentionally separated from the storefront:
+
+1. **Storefront** collects customer info and places the order via the API
+2. **Checkout app** handles payment provider interaction (Stripe Element, Multibanco references)
+3. **Redis** persists checkout sessions between redirect hops
+4. **Webhooks** reconcile async payment results back to order status
+
+This mirrors the upstream `hosted-checkout` pattern but uses Next.js + Upstash instead of Nuxt + in-memory sessions.
+
+## Caching strategy
+
+Catalog reads in `@prood/commerce` use Next.js Cache Components with **per-tenant cache tags**:
+
+| Tag pattern | TTL (SWR) | Data |
+| --- | --- | --- |
+| `products-{orgId}` | 600s | Product listings |
+| `categories-{orgId}` | 600s | Category tree |
+| `store-{orgId}` | 3600s | Store info |
+
+Cart, checkout, and account routes stay dynamic — they depend on cookies and session state.
+
+## Related pages
+
+<Cards>
+  <Card title="Multi-tenancy" href="/docs/architecture/multi-tenant" description="Organizations, host resolution, RLS, and per-tenant payments." />
+  <Card title="Checkout flow" href="/docs/architecture/checkout-flow" description="CheckoutSession state machine and payment lifecycle." />
+  <Card title="Unified types" href="/docs/architecture/unified-types" description="The shared data model across all packages." />
+  <Card title="API-centric design" href="/docs/architecture/api-centric" description="Why commerce goes through apps/api." />
+</Cards>

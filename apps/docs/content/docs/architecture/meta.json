@@ -1,0 +1,4 @@
+{
+  "title": "Architecture",
+  "pages": ["overview", "multi-tenant", "checkout-flow", "unified-types", "api-centric"]
+}
