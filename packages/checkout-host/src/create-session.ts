@@ -1,6 +1,6 @@
 import 'server-only'
-import { CheckoutSession, type CheckoutChannel, type CheckoutFulfillment } from '@commercejs/checkout'
-import { getPaymentProvider, getTenantPaymentConfig } from '@workspace/commerce'
+import { CheckoutSession, type CheckoutChannel, type CheckoutFulfillment } from '@prood/checkout'
+import { getPaymentProvider, getTenantPaymentConfig } from '@prood/commerce'
 import { saveSession, type SessionMeta } from './session-store'
 
 let counter = 0

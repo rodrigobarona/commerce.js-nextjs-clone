@@ -3,7 +3,7 @@
 import { useTransition } from "react"
 import { useRouter } from "next/navigation"
 import { toast } from "sonner"
-import { Button } from "@workspace/ui/components/button"
+import { Button } from "@prood/ui/components/button"
 import { organization } from "@/lib/auth/client"
 
 export function RemoveMemberButton({

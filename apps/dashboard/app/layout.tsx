@@ -2,8 +2,8 @@ import type { Metadata } from "next"
 import { Geist_Mono, Inter } from "next/font/google"
 import { Suspense } from "react"
 
-import "@workspace/ui/globals.css"
-import { cn } from "@workspace/ui/lib/utils"
+import "@prood/ui/globals.css"
+import { cn } from "@prood/ui/lib/utils"
 import { AppProviders } from "@/components/providers/app-providers"
 
 const fontSans = Inter({ subsets: ["latin"], variable: "--font-sans" })

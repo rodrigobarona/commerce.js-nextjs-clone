@@ -1,9 +1,9 @@
 import Link from "next/link"
-import type { Cart } from "@commercejs/types"
-import { Button } from "@workspace/ui/components/button"
-import { Separator } from "@workspace/ui/components/separator"
-import { formatPrice, type Locale } from "@workspace/ui/lib/commerce"
-import { cn } from "@workspace/ui/lib/utils"
+import type { Cart } from "@prood/types"
+import { Button } from "@prood/ui/components/button"
+import { Separator } from "@prood/ui/components/separator"
+import { formatPrice, type Locale } from "@prood/ui/lib/commerce"
+import { cn } from "@prood/ui/lib/utils"
 
 export interface CartSummaryProps {
   cart: Cart

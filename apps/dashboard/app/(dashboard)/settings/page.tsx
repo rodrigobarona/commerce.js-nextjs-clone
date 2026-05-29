@@ -1,4 +1,4 @@
-import type { StoreSettings } from "@workspace/commerce"
+import type { StoreSettings } from "@prood/commerce"
 import {
   SettingsForm,
   type SettingsFormValues,

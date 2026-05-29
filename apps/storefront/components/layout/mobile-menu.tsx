@@ -3,14 +3,14 @@
 import { useState } from "react"
 import Link from "next/link"
 import { ListIcon } from "@phosphor-icons/react"
-import { Button } from "@workspace/ui/components/button"
+import { Button } from "@prood/ui/components/button"
 import {
   Sheet,
   SheetContent,
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-} from "@workspace/ui/components/sheet"
+} from "@prood/ui/components/sheet"
 
 export interface NavLink {
   href: string

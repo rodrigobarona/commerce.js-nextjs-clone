@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import { MagnifyingGlassIcon } from "@phosphor-icons/react"
-import type { Product } from "@commercejs/types"
+import type { Product } from "@prood/types"
 import {
   CommandDialog,
   CommandEmpty,
@@ -11,9 +11,9 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-} from "@workspace/ui/components/command"
-import { formatPrice, localized, resolveProductUrl, type Locale } from "@workspace/ui/lib/commerce"
-import { cn } from "@workspace/ui/lib/utils"
+} from "@prood/ui/components/command"
+import { formatPrice, localized, resolveProductUrl, type Locale } from "@prood/ui/lib/commerce"
+import { cn } from "@prood/ui/lib/utils"
 
 export interface SearchPaletteProps {
   /** Async search callback returning matching products. */

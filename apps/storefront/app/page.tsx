@@ -1,9 +1,9 @@
 import Image from "next/image"
 import Link from "next/link"
-import type { Category, Product } from "@workspace/commerce/types"
-import { getCategories, getProducts, getStoreInfo } from "@workspace/commerce"
-import { HeroBanner } from "@workspace/ui/components/hero-banner"
-import { localized } from "@workspace/ui/lib/commerce"
+import type { Category, Product } from "@prood/commerce/types"
+import { getCategories, getProducts, getStoreInfo } from "@prood/commerce"
+import { HeroBanner } from "@prood/ui/components/hero-banner"
+import { localized } from "@prood/ui/lib/commerce"
 import { ConnectedProductGrid } from "@/components/commerce/connected-product-grid"
 import { resolveTenantId } from "@/lib/tenant"
 

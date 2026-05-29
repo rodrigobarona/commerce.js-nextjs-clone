@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation"
-import type { Order } from "@workspace/commerce/types"
-import { getCustomerOrders } from "@workspace/commerce"
-import { OrderCard } from "@workspace/ui/components/order-card"
+import type { Order } from "@prood/commerce/types"
+import { getCustomerOrders } from "@prood/commerce"
+import { OrderCard } from "@prood/ui/components/order-card"
 import { getCurrentUser } from "@/lib/auth"
 import { resolveTenantId } from "@/lib/tenant"
 

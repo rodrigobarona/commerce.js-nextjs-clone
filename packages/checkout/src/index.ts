@@ -1,5 +1,5 @@
 // ---------------------------------------------------------------------------
-// @commercejs/checkout — Universal checkout engine
+// @prood/checkout — Universal checkout engine
 // ---------------------------------------------------------------------------
 
 export { CheckoutSession } from './checkout-session.js'

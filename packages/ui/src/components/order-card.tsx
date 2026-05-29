@@ -1,8 +1,8 @@
 import Link from "next/link"
-import type { Order, OrderStatus } from "@commercejs/types"
-import { Badge } from "@workspace/ui/components/badge"
-import { formatPrice, type Locale } from "@workspace/ui/lib/commerce"
-import { cn } from "@workspace/ui/lib/utils"
+import type { Order, OrderStatus } from "@prood/types"
+import { Badge } from "@prood/ui/components/badge"
+import { formatPrice, type Locale } from "@prood/ui/lib/commerce"
+import { cn } from "@prood/ui/lib/utils"
 
 const STATUS_VARIANT: Record<
   OrderStatus,

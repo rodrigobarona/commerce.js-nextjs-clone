@@ -15,7 +15,7 @@
 //                            failed → payment (retry)
 // ---------------------------------------------------------------------------
 
-import type { Address, PaymentProvider, PaymentSession } from '@commercejs/types'
+import type { Address, PaymentProvider, PaymentSession } from '@prood/types'
 import { EventEmitter } from './events.js'
 import type {
   CheckoutState,

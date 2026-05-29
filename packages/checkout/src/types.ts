@@ -2,7 +2,7 @@
 // Checkout engine types
 // ---------------------------------------------------------------------------
 
-import type { Address, FulfillmentType, PaymentProvider, PaymentSession } from '@commercejs/types'
+import type { Address, FulfillmentType, PaymentProvider, PaymentSession } from '@prood/types'
 
 // ---- Channel & fulfillment ------------------------------------------------
 

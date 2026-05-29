@@ -2,7 +2,7 @@
 // Admin: Customer management
 // ---------------------------------------------------------------------------
 
-import type { Customer, Address, PaginatedResult } from '@commercejs/types'
+import type { Customer, Address, PaginatedResult } from '@prood/types'
 import type { AdminListParams } from './types.js'
 import {
   findCustomerById,

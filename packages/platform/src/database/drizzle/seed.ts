@@ -33,9 +33,9 @@ async function seedTenantData(): Promise<void> {
   // ---- Store ----
   await database.insert(schema.storeInfo).values({
     id: 'default',
-    name: 'CommerceJS Demo Store',
+    name: 'Prood Demo Store',
     nameAr: 'متجر كوميرس جي إس',
-    description: 'A demo store powered by @commercejs/platform',
+    description: 'A demo store powered by @prood/platform',
     descriptionAr: 'متجر تجريبي يعمل بواسطة كوميرس جي إس',
     currency: 'SAR',
     locale: 'en',
@@ -150,7 +150,7 @@ async function seedTenantData(): Promise<void> {
 
   // ---- Brands ----
   const brands = [
-    { id: 'brand-1', name: 'CommerceJS Essentials', nameAr: 'أساسيات كوميرس', slug: 'commercejs-essentials', isActive: true },
+    { id: 'brand-1', name: 'Prood Essentials', nameAr: 'أساسيات كوميرس', slug: 'prood-essentials', isActive: true },
     { id: 'brand-2', name: 'TechWave', nameAr: 'تك ويف', slug: 'techwave', isActive: true },
     { id: 'brand-3', name: 'Artisan Leather', nameAr: 'الجلود الحرفية', slug: 'artisan-leather', isActive: true },
   ]

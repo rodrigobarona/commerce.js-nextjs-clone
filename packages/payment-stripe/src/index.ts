@@ -1,5 +1,5 @@
 // ---------------------------------------------------------------------------
-// @commercejs/payment-stripe — Stripe provider (embedded Payment Element)
+// @prood/payment-stripe — Stripe provider (embedded Payment Element)
 // ---------------------------------------------------------------------------
 
 export { StripePaymentProvider } from './stripe-provider.js'

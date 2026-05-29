@@ -1,7 +1,7 @@
 "use client"
 
 import type { ReactNode } from "react"
-import { Toaster } from "@workspace/ui/components/sonner"
+import { Toaster } from "@prood/ui/components/sonner"
 import { ThemeProvider } from "@/components/theme-provider"
 
 export function AppProviders({ children }: { children: ReactNode }) {

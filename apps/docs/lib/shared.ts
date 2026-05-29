@@ -1,10 +1,10 @@
-export const appName = "Commerce.js"
+export const appName = "Prood"
 export const docsRoute = "/docs"
 export const docsImageRoute = "/og/docs"
 export const docsContentRoute = "/llms.mdx/docs"
 
 export const gitConfig = {
-  user: "commercejs",
-  repo: "commerce.js",
+  user: "prood",
+  repo: "prood",
   branch: "main",
 }

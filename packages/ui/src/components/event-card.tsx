@@ -1,11 +1,11 @@
 import Image from "next/image"
 import Link from "next/link"
 import { CalendarBlankIcon, MapPinIcon } from "@phosphor-icons/react/dist/ssr"
-import type { Product } from "@commercejs/types"
-import { Badge } from "@workspace/ui/components/badge"
-import { ProductPrice } from "@workspace/ui/components/product-price"
-import { localized, resolveProductUrl, type Locale } from "@workspace/ui/lib/commerce"
-import { cn } from "@workspace/ui/lib/utils"
+import type { Product } from "@prood/types"
+import { Badge } from "@prood/ui/components/badge"
+import { ProductPrice } from "@prood/ui/components/product-price"
+import { localized, resolveProductUrl, type Locale } from "@prood/ui/lib/commerce"
+import { cn } from "@prood/ui/lib/utils"
 
 export interface EventCardProps {
   product: Product

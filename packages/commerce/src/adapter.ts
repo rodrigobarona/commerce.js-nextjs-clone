@@ -3,12 +3,12 @@ import {
   createPlatformAdapter,
   withTenant,
   type AdminAPI,
-} from '@commercejs/platform'
-import type { CommerceAdapter } from '@commercejs/types'
+} from '@prood/platform'
+import type { CommerceAdapter } from '@prood/types'
 import { getCommerceConfig } from './env'
 
 // Re-export the admin API surface so apps (e.g. the dashboard) can type
-// merchant operations without depending on @commercejs/platform directly.
+// merchant operations without depending on @prood/platform directly.
 export type {
   AdminAPI,
   AdminUserSafe,
@@ -23,7 +23,7 @@ export type {
   StoreSettings,
   UpdateInventoryInput,
   DashboardStats,
-} from '@commercejs/platform'
+} from '@prood/platform'
 
 /**
  * Run commerce/admin operations scoped to a tenant (organization).
@@ -74,7 +74,7 @@ function create(): Promise<CommerceInstance> {
       })
     case 'medusa':
     case 'salla':
-      // The registry is intentionally pluggable: drop in @commercejs/adapter-*
+      // The registry is intentionally pluggable: drop in @prood/adapter-*
       // here to swap the backing platform without touching the data layer.
       throw new Error(
         `COMMERCE_ADAPTER='${config.adapter}' is not wired in this app yet. ` +

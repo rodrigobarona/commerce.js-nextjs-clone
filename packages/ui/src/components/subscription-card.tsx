@@ -1,7 +1,7 @@
-import type { Product } from "@commercejs/types"
-import { Badge } from "@workspace/ui/components/badge"
-import { formatPrice, localized, type Locale } from "@workspace/ui/lib/commerce"
-import { cn } from "@workspace/ui/lib/utils"
+import type { Product } from "@prood/types"
+import { Badge } from "@prood/ui/components/badge"
+import { formatPrice, localized, type Locale } from "@prood/ui/lib/commerce"
+import { cn } from "@prood/ui/lib/utils"
 
 export interface SubscriptionCardProps {
   product: Product

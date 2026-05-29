@@ -3,19 +3,19 @@
 import Image from "next/image"
 import Link from "next/link"
 import { ShoppingCartIcon } from "@phosphor-icons/react"
-import type { Product } from "@commercejs/types"
-import { Badge } from "@workspace/ui/components/badge"
-import { Button } from "@workspace/ui/components/button"
-import { ProductPrice } from "@workspace/ui/components/product-price"
-import { ProductTypeBadge } from "@workspace/ui/components/product-type-badge"
-import { ReviewStars } from "@workspace/ui/components/review-stars"
+import type { Product } from "@prood/types"
+import { Badge } from "@prood/ui/components/badge"
+import { Button } from "@prood/ui/components/button"
+import { ProductPrice } from "@prood/ui/components/product-price"
+import { ProductTypeBadge } from "@prood/ui/components/product-type-badge"
+import { ReviewStars } from "@prood/ui/components/review-stars"
 import {
   discountPercent,
   localized,
   resolveProductUrl,
   type Locale,
-} from "@workspace/ui/lib/commerce"
-import { cn } from "@workspace/ui/lib/utils"
+} from "@prood/ui/lib/commerce"
+import { cn } from "@prood/ui/lib/utils"
 
 export interface ProductCardProps {
   product: Product

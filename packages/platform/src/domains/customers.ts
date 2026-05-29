@@ -8,7 +8,7 @@ import type {
   Address,
   RegisterInput,
   UpdateCustomerInput,
-} from '@commercejs/types'
+} from '@prood/types'
 import {
   findCustomerByEmail,
   findCustomerById,

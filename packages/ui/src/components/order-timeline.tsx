@@ -1,5 +1,5 @@
-import type { OrderStatus } from "@commercejs/types"
-import { cn } from "@workspace/ui/lib/utils"
+import type { OrderStatus } from "@prood/types"
+import { cn } from "@prood/ui/lib/utils"
 
 const FLOW: OrderStatus[] = ["pending", "processing", "shipped", "delivered"]
 

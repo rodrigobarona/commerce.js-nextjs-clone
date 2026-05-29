@@ -1,5 +1,5 @@
 // ---------------------------------------------------------------------------
-// @commercejs/storage-vercel-blob — Vercel Blob StorageProvider
+// @prood/storage-vercel-blob — Vercel Blob StorageProvider
 // ---------------------------------------------------------------------------
 
 export { VercelBlobStorageProvider } from './vercel-blob-provider.js'

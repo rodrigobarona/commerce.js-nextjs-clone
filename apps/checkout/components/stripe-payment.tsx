@@ -8,7 +8,7 @@ import {
   useElements,
   useStripe,
 } from "@stripe/react-stripe-js"
-import { Button } from "@workspace/ui/components/button"
+import { Button } from "@prood/ui/components/button"
 
 function PaymentForm({ returnUrl }: { returnUrl: string }) {
   const stripe = useStripe()

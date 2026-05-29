@@ -9,7 +9,7 @@ import type {
   SearchParams,
   GetProductParams,
   GetCategoriesParams,
-} from '@commercejs/types'
+} from '@prood/types'
 import {
   findProductById,
   findProductBySlug,

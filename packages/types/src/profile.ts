@@ -1,9 +1,9 @@
 // ---------------------------------------------------------------------------
 // Profile domain types — cross-merchant buyer identity
 // ---------------------------------------------------------------------------
-// Profile is a universal identity that spans all Commerce.js stores.
+// Profile is a universal identity that spans all Prood stores.
 // It is NOT the same as Customer — Customer is merchant-scoped, Profile is
-// network-scoped (across all stores using Commerce.js Cloud).
+// network-scoped (across all stores using Prood Cloud).
 // ---------------------------------------------------------------------------
 
 import type { Maybe } from './common.js'

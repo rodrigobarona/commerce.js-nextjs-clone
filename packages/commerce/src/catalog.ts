@@ -9,7 +9,7 @@ import type {
   SearchParams,
   SearchResult,
   StoreInfo,
-} from '@commercejs/types'
+} from '@prood/types'
 import { getAdapter, runScoped } from './adapter'
 
 /** Maps Nuxt routeRules SWR: /products/** and /categories/** → 600s. */

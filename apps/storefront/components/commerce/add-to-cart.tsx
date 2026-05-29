@@ -2,10 +2,10 @@
 
 import { useState } from "react"
 import { ShoppingCartIcon } from "@phosphor-icons/react"
-import type { Product } from "@workspace/commerce/types"
-import { Button } from "@workspace/ui/components/button"
-import { ProductOptions } from "@workspace/ui/components/product-options"
-import { QuantitySelector } from "@workspace/ui/components/quantity-selector"
+import type { Product } from "@prood/commerce/types"
+import { Button } from "@prood/ui/components/button"
+import { ProductOptions } from "@prood/ui/components/product-options"
+import { QuantitySelector } from "@prood/ui/components/quantity-selector"
 import { useCart } from "@/components/providers/cart-provider"
 
 export function AddToCart({ product }: { product: Product }) {

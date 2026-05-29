@@ -1,6 +1,6 @@
 "use server"
 
-import type { Address } from "@workspace/commerce/types"
+import type { Address } from "@prood/commerce/types"
 import {
   getShippingMethods,
   placeOrder,
@@ -9,7 +9,7 @@ import {
   setBillingAddress,
   setShippingAddress,
   setShippingMethod,
-} from "@workspace/commerce"
+} from "@prood/commerce"
 import { clearCartId, getCartId } from "@/lib/cart-cookie"
 import { resolveTenantId } from "@/lib/tenant"
 

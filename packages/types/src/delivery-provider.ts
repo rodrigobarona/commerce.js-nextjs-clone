@@ -104,7 +104,7 @@ export interface Delivery {
   estimatedDuration?: number
   /** Estimated distance in meters */
   estimatedDistance?: number
-  /** Associated Commerce.js order ID */
+  /** Associated Prood order ID */
   orderId?: string
   /** Provider-specific data */
   providerData?: Record<string, unknown>
@@ -122,7 +122,7 @@ export interface CreateDeliveryInput {
   origin: DeliveryAddress | { branchId: string }
   /** Destination address */
   destination: DeliveryAddress
-  /** Associated Commerce.js order ID */
+  /** Associated Prood order ID */
   orderId?: string
   /** Payment collection at delivery */
   payment?: {

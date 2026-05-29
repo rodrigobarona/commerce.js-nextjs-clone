@@ -2,9 +2,9 @@ import type { Metadata } from "next"
 import { Geist_Mono, Inter } from "next/font/google"
 import { Suspense } from "react"
 
-import "@workspace/ui/globals.css"
-import { cn } from "@workspace/ui/lib/utils"
-import { Toaster } from "@workspace/ui/components/sonner"
+import "@prood/ui/globals.css"
+import { cn } from "@prood/ui/lib/utils"
+import { Toaster } from "@prood/ui/components/sonner"
 
 const fontSans = Inter({ subsets: ["latin"], variable: "--font-sans" })
 const fontMono = Geist_Mono({ subsets: ["latin"], variable: "--font-mono" })
@@ -14,7 +14,7 @@ export const metadata: Metadata = {
     default: "Checkout",
     template: "%s · Checkout",
   },
-  description: "Secure checkout powered by CommerceJS.",
+  description: "Secure checkout powered by Prood.",
 }
 
 export default function RootLayout({

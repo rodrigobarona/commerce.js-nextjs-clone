@@ -2,7 +2,7 @@ import type { NextConfig } from "next"
 
 const nextConfig: NextConfig = {
   cacheComponents: true,
-  transpilePackages: ["@workspace/ui", "@workspace/commerce"],
+  transpilePackages: ["@prood/ui", "@prood/commerce"],
   images: {
     remotePatterns: [{ protocol: "https", hostname: "**" }],
   },

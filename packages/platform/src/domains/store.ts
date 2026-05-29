@@ -2,7 +2,7 @@
 // Store domain — store metadata
 // ---------------------------------------------------------------------------
 
-import type { StoreInfo } from '@commercejs/types'
+import type { StoreInfo } from '@prood/types'
 import { findStoreInfo, createStoreInfo as dbCreateStoreInfo } from '../database/index.js'
 import { localized, img } from './helpers.js'
 

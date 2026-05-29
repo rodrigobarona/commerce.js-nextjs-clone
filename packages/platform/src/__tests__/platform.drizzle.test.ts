@@ -1,5 +1,5 @@
 // ---------------------------------------------------------------------------
-// @commercejs/platform — Drizzle driver tests
+// @prood/platform — Drizzle driver tests
 // ---------------------------------------------------------------------------
 
 import { vi } from 'vitest'
@@ -43,7 +43,7 @@ async function cleanDatabase() {
   CASCADE`)
 }
 
-describe('@commercejs/platform [drizzle]', () => {
+describe('@prood/platform [drizzle]', () => {
   platformTestSuite({
     setup: async () => {
       resetDb()

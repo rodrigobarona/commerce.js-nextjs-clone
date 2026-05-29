@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { Skeleton } from "@workspace/ui/components/skeleton"
+import { Skeleton } from "@prood/ui/components/skeleton"
 
 function formatAmount(amount: number, currency: string): string {
   try {

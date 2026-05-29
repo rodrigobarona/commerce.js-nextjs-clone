@@ -2,7 +2,7 @@
 // Countries domain — country listing for address forms
 // ---------------------------------------------------------------------------
 
-import type { Country } from '@commercejs/types'
+import type { Country } from '@prood/types'
 import { findCountries } from '../database/index.js'
 import { localized } from './helpers.js'
 

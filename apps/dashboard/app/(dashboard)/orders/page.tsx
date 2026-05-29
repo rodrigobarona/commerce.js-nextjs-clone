@@ -1,8 +1,8 @@
 import Link from "next/link"
-import type { Order } from "@workspace/commerce"
-import { Badge } from "@workspace/ui/components/badge"
-import { Button } from "@workspace/ui/components/button"
-import { Card, CardContent } from "@workspace/ui/components/card"
+import type { Order } from "@prood/commerce"
+import { Badge } from "@prood/ui/components/badge"
+import { Button } from "@prood/ui/components/button"
+import { Card, CardContent } from "@prood/ui/components/card"
 import {
   Table,
   TableBody,
@@ -10,8 +10,8 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@workspace/ui/components/table"
-import { formatPrice } from "@workspace/ui/lib/commerce"
+} from "@prood/ui/components/table"
+import { formatPrice } from "@prood/ui/lib/commerce"
 import { withActiveOrg } from "@/lib/admin"
 
 export const metadata = { title: "Orders" }

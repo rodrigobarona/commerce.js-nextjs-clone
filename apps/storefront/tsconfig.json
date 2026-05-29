@@ -1,13 +1,13 @@
 {
-  "extends": "@workspace/typescript-config/nextjs.json",
+  "extends": "@prood/typescript-config/nextjs.json",
   "compilerOptions": {
     "declaration": false,
     "declarationMap": false,
     "paths": {
       "@/*": ["./*"],
-      "@workspace/ui/*": ["../../packages/ui/src/*"],
-      "@workspace/commerce": ["../../packages/commerce/src/index.ts"],
-      "@workspace/commerce/*": ["../../packages/commerce/src/*"]
+      "@prood/ui/*": ["../../packages/ui/src/*"],
+      "@prood/commerce": ["../../packages/commerce/src/index.ts"],
+      "@prood/commerce/*": ["../../packages/commerce/src/*"]
     },
     "plugins": [
       {

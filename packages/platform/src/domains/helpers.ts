@@ -2,7 +2,7 @@
 // Shared helpers for domain implementations
 // ---------------------------------------------------------------------------
 
-import type { LocalizedString, Maybe, Price, DiscountablePrice, Image } from '@commercejs/types'
+import type { LocalizedString, Maybe, Price, DiscountablePrice, Image } from '@prood/types'
 
 /** Create a bilingual LocalizedString from en/ar columns */
 export function localized(en: string | null, ar: string | null): LocalizedString {

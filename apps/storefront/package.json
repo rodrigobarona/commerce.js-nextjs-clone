@@ -16,8 +16,8 @@
   "dependencies": {
     "@neondatabase/serverless": "^1.1.0",
     "@phosphor-icons/react": "^2.1.10",
-    "@workspace/commerce": "workspace:*",
-    "@workspace/ui": "workspace:*",
+    "@prood/commerce": "workspace:*",
+    "@prood/ui": "workspace:*",
     "better-auth": "^1.6.11",
     "drizzle-orm": "^0.45.2",
     "next": "16.2.6",
@@ -32,8 +32,8 @@
     "@types/node": "^24",
     "@types/react": "^19",
     "@types/react-dom": "^19",
-    "@workspace/eslint-config": "workspace:^",
-    "@workspace/typescript-config": "workspace:*",
+    "@prood/eslint-config": "workspace:^",
+    "@prood/typescript-config": "workspace:*",
     "drizzle-kit": "^0.31.9",
     "eslint": "^9",
     "typescript": "^5"

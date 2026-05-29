@@ -2,7 +2,7 @@
 // Promotions domain — discounts and coupons
 // ---------------------------------------------------------------------------
 
-import type { Promotion, Coupon } from '@commercejs/types'
+import type { Promotion, Coupon } from '@prood/types'
 import {
   findActivePromotions,
   findCouponByCode,

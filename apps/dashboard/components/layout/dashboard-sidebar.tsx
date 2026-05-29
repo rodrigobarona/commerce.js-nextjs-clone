@@ -13,7 +13,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarRail,
-} from "@workspace/ui/components/sidebar"
+} from "@prood/ui/components/sidebar"
 import { navGroups } from "@/lib/nav"
 import { OrgSwitcher, type OrgSummary } from "@/components/layout/org-switcher"
 import { UserMenu, type UserSummary } from "@/components/layout/user-menu"

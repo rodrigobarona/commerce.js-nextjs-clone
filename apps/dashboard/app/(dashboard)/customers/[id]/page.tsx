@@ -1,11 +1,11 @@
 import { notFound } from "next/navigation"
-import type { Customer } from "@workspace/commerce"
+import type { Customer } from "@prood/commerce"
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
-} from "@workspace/ui/components/card"
+} from "@prood/ui/components/card"
 import { withActiveOrg } from "@/lib/admin"
 
 export const metadata = { title: "Customer" }

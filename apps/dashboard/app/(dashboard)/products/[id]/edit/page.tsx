@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation"
-import type { Product } from "@workspace/commerce"
-import { localized } from "@workspace/ui/lib/commerce"
+import type { Product } from "@prood/commerce"
+import { localized } from "@prood/ui/lib/commerce"
 import { ProductForm } from "@/components/store/product-form"
 import { DeleteProductButton } from "@/components/store/delete-product-button"
 import { withActiveOrg } from "@/lib/admin"

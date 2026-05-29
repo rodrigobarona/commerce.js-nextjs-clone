@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server"
-import { verifyPaymentWebhook } from "@workspace/commerce"
-import { reconcilePayment } from "@workspace/checkout-host"
+import { verifyPaymentWebhook } from "@prood/commerce"
+import { reconcilePayment } from "@prood/checkout-host"
 
 type Ctx = { params: Promise<{ provider: string; org: string }> }
 

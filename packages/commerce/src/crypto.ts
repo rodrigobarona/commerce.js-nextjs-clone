@@ -22,7 +22,7 @@ let derivedKey: Buffer | null | undefined
 function getKey(): Buffer | null {
   if (derivedKey !== undefined) return derivedKey
   derivedKey = keySource
-    ? scryptSync(keySource, 'commercejs.integration.v1', 32)
+    ? scryptSync(keySource, 'commercejs.integration.v1', 32) // legacy salt — do not change (breaks existing encrypted configs)
     : null
   return derivedKey
 }

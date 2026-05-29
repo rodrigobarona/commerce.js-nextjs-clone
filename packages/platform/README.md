@@ -1,6 +1,6 @@
-# @commercejs/platform
+# @prood/platform
 
-The built-in CommerceJS commerce engine — a fully functional eCommerce backend powered by SQLite. Zero external APIs, zero configuration, batteries included.
+The built-in Prood commerce engine — a fully functional eCommerce backend powered by SQLite. Zero external APIs, zero configuration, batteries included.
 
 ## When to Use
 
@@ -12,13 +12,13 @@ The built-in CommerceJS commerce engine — a fully functional eCommerce backend
 ## Installation
 
 ```bash
-pnpm add @commercejs/platform @commercejs/types
+pnpm add @prood/platform @prood/types
 ```
 
 ## Quick Start
 
 ```typescript
-import { initDatabase, createPlatformAdapter, seedDrizzle } from '@commercejs/platform'
+import { initDatabase, createPlatformAdapter, seedDrizzle } from '@prood/platform'
 
 // 1. Initialize the database (auto-creates all tables)
 initDatabase({ driver: 'drizzle' })
@@ -39,8 +39,8 @@ const summary = await adapter.getReviewSummary('prod-1')
 ### With the orchestration engine
 
 ```typescript
-import { createCommerce } from '@commercejs/core'
-import { initDatabase, createPlatformAdapter, seedDrizzle } from '@commercejs/platform'
+import { createCommerce } from '@prood/core'
+import { initDatabase, createPlatformAdapter, seedDrizzle } from '@prood/platform'
 
 initDatabase({ driver: 'drizzle' })
 seedDrizzle()
@@ -100,12 +100,12 @@ The `seedDrizzle()` and `seedPrisma()` functions populate the database with demo
 
 | Data | Records |
 |---|---|
-| Store info | 1 (CommerceJS Demo Store, SAR, en/ar) |
+| Store info | 1 (Prood Demo Store, SAR, en/ar) |
 | Categories | 3 (Clothing, Electronics, Accessories) |
 | Products | 3 (T-Shirt, Earbuds, Leather Bag) |
 | Product images | 3 |
 | Product variants | 3 (S/M/L for T-Shirt) |
-| Brands | 3 (CommerceJS Essentials, TechWave, Artisan Leather) |
+| Brands | 3 (Prood Essentials, TechWave, Artisan Leather) |
 | Countries | 6 (SA, AE, KW, BH, OM, QA) |
 | Reviews | 6 (across all 3 products, ratings 3–5) |
 

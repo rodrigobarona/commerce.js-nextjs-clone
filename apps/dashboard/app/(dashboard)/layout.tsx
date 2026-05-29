@@ -2,7 +2,7 @@ import { redirect } from "next/navigation"
 import {
   SidebarInset,
   SidebarProvider,
-} from "@workspace/ui/components/sidebar"
+} from "@prood/ui/components/sidebar"
 import { DashboardSidebar } from "@/components/layout/dashboard-sidebar"
 import { DashboardHeader } from "@/components/layout/dashboard-header"
 import type { OrgSummary } from "@/components/layout/org-switcher"

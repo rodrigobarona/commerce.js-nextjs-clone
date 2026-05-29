@@ -1,7 +1,7 @@
 import Link from "next/link"
 import { notFound } from "next/navigation"
-import type { Product } from "@workspace/commerce/types"
-import { getProduct } from "@workspace/commerce"
+import type { Product } from "@prood/commerce/types"
+import { getProduct } from "@prood/commerce"
 import { resolveTenantId } from "@/lib/tenant"
 import {
   Breadcrumb,
@@ -10,11 +10,11 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
-} from "@workspace/ui/components/breadcrumb"
-import { ProductGallery } from "@workspace/ui/components/product-gallery"
-import { ProductPrice } from "@workspace/ui/components/product-price"
-import { ReviewStars } from "@workspace/ui/components/review-stars"
-import { localized } from "@workspace/ui/lib/commerce"
+} from "@prood/ui/components/breadcrumb"
+import { ProductGallery } from "@prood/ui/components/product-gallery"
+import { ProductPrice } from "@prood/ui/components/product-price"
+import { ReviewStars } from "@prood/ui/components/review-stars"
+import { localized } from "@prood/ui/lib/commerce"
 import { AddToCart } from "@/components/commerce/add-to-cart"
 
 async function loadProduct(slug: string): Promise<Product | null> {

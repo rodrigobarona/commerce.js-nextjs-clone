@@ -1,8 +1,8 @@
 "use client"
 
 import { useCallback } from "react"
-import type { Product } from "@workspace/commerce/types"
-import { SearchPalette } from "@workspace/ui/components/search-palette"
+import type { Product } from "@prood/commerce/types"
+import { SearchPalette } from "@prood/ui/components/search-palette"
 
 export function Search() {
   const onSearch = useCallback(async (query: string): Promise<Product[]> => {

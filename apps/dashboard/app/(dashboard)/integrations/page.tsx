@@ -1,11 +1,11 @@
 import Link from "next/link"
-import { Badge } from "@workspace/ui/components/badge"
+import { Badge } from "@prood/ui/components/badge"
 import {
   Card,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@workspace/ui/components/card"
+} from "@prood/ui/components/card"
 import { getActiveOrganizationId } from "@/lib/auth"
 import { listIntegrations, type IntegrationState } from "@/lib/integrations"
 import {

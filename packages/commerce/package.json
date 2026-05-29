@@ -1,5 +1,5 @@
 {
-  "name": "@workspace/commerce",
+  "name": "@prood/commerce",
   "version": "0.0.0",
   "private": true,
   "type": "module",
@@ -11,15 +11,15 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@commercejs/checkout": "workspace:*",
+    "@prood/checkout": "workspace:*",
     "@neondatabase/serverless": "^1.1.0",
-    "@commercejs/payment-easypay": "workspace:*",
-    "@commercejs/payment-ifthenpay": "workspace:*",
-    "@commercejs/payment-stripe": "workspace:*",
-    "@commercejs/platform": "workspace:*",
-    "@commercejs/storage-s3": "workspace:*",
-    "@commercejs/storage-vercel-blob": "workspace:*",
-    "@commercejs/types": "workspace:*",
+    "@prood/payment-easypay": "workspace:*",
+    "@prood/payment-ifthenpay": "workspace:*",
+    "@prood/payment-stripe": "workspace:*",
+    "@prood/platform": "workspace:*",
+    "@prood/storage-s3": "workspace:*",
+    "@prood/storage-vercel-blob": "workspace:*",
+    "@prood/types": "workspace:*",
     "server-only": "^0.0.1",
     "zod": "^4.4.3"
   },
@@ -28,7 +28,7 @@
   },
   "devDependencies": {
     "@types/node": "^24",
-    "@workspace/typescript-config": "workspace:*",
+    "@prood/typescript-config": "workspace:*",
     "next": "16.2.6",
     "typescript": "^5"
   }

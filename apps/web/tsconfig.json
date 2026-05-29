@@ -1,5 +1,5 @@
 {
-  "extends": "@workspace/typescript-config/nextjs.json",
+  "extends": "@prood/typescript-config/nextjs.json",
   "compilerOptions": {
     "declaration": false,
     "declarationMap": false,

@@ -6,7 +6,7 @@
 // ---------------------------------------------------------------------------
 
 function notSupported(domain: string, method: string): never {
-  const error = new Error(`${domain}.${method} is not supported by @commercejs/platform yet`)
+  const error = new Error(`${domain}.${method} is not supported by @prood/platform yet`)
   ;(error as any).code = 'NOT_SUPPORTED'
   ;(error as any).statusCode = 501
   throw error

@@ -1,18 +1,18 @@
-# @commercejs/storage-s3
+# @prood/storage-s3
 
-S3-compatible storage provider for [Commerce.js](https://github.com/commerce-js/commerce.js) — works with **AWS S3**, **Cloudflare R2**, **DigitalOcean Spaces**, **MinIO**, and any S3-protocol service.
+S3-compatible storage provider for Prood — works with **AWS S3**, **Cloudflare R2**, **DigitalOcean Spaces**, **MinIO**, and any S3-protocol service.
 
 ## Install
 
 ```bash
-pnpm add @commercejs/storage-s3
+pnpm add @prood/storage-s3
 ```
 
 ## Quick Start
 
 ```ts
-import { createCommerce } from '@commercejs/core'
-import { S3StorageProvider } from '@commercejs/storage-s3'
+import { createCommerce } from '@prood/core'
+import { S3StorageProvider } from '@prood/storage-s3'
 
 const storage = new S3StorageProvider({
   endpoint: 'https://s3.us-east-1.amazonaws.com',

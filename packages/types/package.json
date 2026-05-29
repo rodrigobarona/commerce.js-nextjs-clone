@@ -1,12 +1,7 @@
 {
-  "name": "@commercejs/types",
+  "name": "@prood/types",
   "version": "0.3.0",
-  "description": "Unified Data Model types for CommerceJS SDK",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/commerce-js/commerce.js.git",
-    "directory": "packages/types"
-  },
+  "description": "Unified Data Model types for Prood SDK",
   "license": "MIT",
   "type": "module",
   "main": "./dist/index.js",

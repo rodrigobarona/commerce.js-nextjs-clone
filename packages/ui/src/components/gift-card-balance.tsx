@@ -1,12 +1,12 @@
 "use client"
 
 import { useState } from "react"
-import type { GiftCard } from "@commercejs/types"
-import { Badge } from "@workspace/ui/components/badge"
-import { Button } from "@workspace/ui/components/button"
-import { Input } from "@workspace/ui/components/input"
-import { formatPrice, type Locale } from "@workspace/ui/lib/commerce"
-import { cn } from "@workspace/ui/lib/utils"
+import type { GiftCard } from "@prood/types"
+import { Badge } from "@prood/ui/components/badge"
+import { Button } from "@prood/ui/components/button"
+import { Input } from "@prood/ui/components/input"
+import { formatPrice, type Locale } from "@prood/ui/lib/commerce"
+import { cn } from "@prood/ui/lib/utils"
 
 export interface GiftCardBalanceProps {
   /** Resolved gift card to display (after a successful lookup). */

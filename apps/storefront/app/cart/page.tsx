@@ -1,9 +1,9 @@
 "use client"
 
 import { ShoppingBagIcon } from "@phosphor-icons/react"
-import { CartItemRow } from "@workspace/ui/components/cart-item"
-import { CartSummary } from "@workspace/ui/components/cart-summary"
-import { EmptyState } from "@workspace/ui/components/empty-state"
+import { CartItemRow } from "@prood/ui/components/cart-item"
+import { CartSummary } from "@prood/ui/components/cart-summary"
+import { EmptyState } from "@prood/ui/components/empty-state"
 import { useCart } from "@/components/providers/cart-provider"
 
 export default function CartPage() {

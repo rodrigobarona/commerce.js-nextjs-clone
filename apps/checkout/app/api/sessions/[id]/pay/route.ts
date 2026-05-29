@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server"
 import { z } from "zod"
-import { loadAndHydrate, persistSession } from "@workspace/checkout-host"
+import { loadAndHydrate, persistSession } from "@prood/checkout-host"
 import { errorResponse } from "@/lib/api"
 
 const paySchema = z.object({

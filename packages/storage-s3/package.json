@@ -1,12 +1,7 @@
 {
-  "name": "@commercejs/storage-s3",
+  "name": "@prood/storage-s3",
   "version": "0.2.0",
-  "description": "S3-compatible storage provider for CommerceJS — works with AWS S3, Cloudflare R2, DigitalOcean Spaces, MinIO",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/commerce-js/commerce.js.git",
-    "directory": "packages/storage-s3"
-  },
+  "description": "S3-compatible storage provider for Prood — works with AWS S3, Cloudflare R2, DigitalOcean Spaces, MinIO",
   "license": "MIT",
   "type": "module",
   "main": "./dist/index.js",
@@ -28,7 +23,7 @@
     "clean": "rm -rf dist"
   },
   "dependencies": {
-    "@commercejs/types": "workspace:*",
+    "@prood/types": "workspace:*",
     "aws4fetch": "^1.0.20"
   },
   "devDependencies": {

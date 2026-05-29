@@ -8,7 +8,7 @@ import type {
   ShippingMethod,
   PaymentMethod,
   Address,
-} from '@commercejs/types'
+} from '@prood/types'
 import {
   findCart,
   updateCart,

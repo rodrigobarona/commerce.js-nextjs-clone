@@ -3,9 +3,9 @@ import type {
   StorageProvider,
   StorageUploadResult,
   UploadInput,
-} from '@commercejs/types'
-import { VercelBlobStorageProvider } from '@commercejs/storage-vercel-blob'
-import { S3StorageProvider } from '@commercejs/storage-s3'
+} from '@prood/types'
+import { VercelBlobStorageProvider } from '@prood/storage-vercel-blob'
+import { S3StorageProvider } from '@prood/storage-s3'
 import { getCommerceConfig } from './env'
 
 let cached: StorageProvider | null = null

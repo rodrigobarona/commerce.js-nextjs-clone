@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { CheckoutSession } from '../checkout-session.js'
-import type { PaymentProvider, PaymentSession } from '@commercejs/types'
+import type { PaymentProvider, PaymentSession } from '@prood/types'
 import type { CheckoutSessionConfig } from '../types.js'
 
 // ---------------------------------------------------------------------------

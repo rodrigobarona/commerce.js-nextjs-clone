@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server"
-import { getCountries } from "@workspace/commerce"
+import { getCountries } from "@prood/commerce"
 import { errorResponse } from "@/lib/api"
 
 export async function GET() {

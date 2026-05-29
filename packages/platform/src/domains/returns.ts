@@ -2,7 +2,7 @@
 // Returns domain — return requests and refunds
 // ---------------------------------------------------------------------------
 
-import type { ReturnRequest, CreateReturnInput } from '@commercejs/types'
+import type { ReturnRequest, CreateReturnInput } from '@prood/types'
 import {
   findReturnsByOrder,
   findReturnById,

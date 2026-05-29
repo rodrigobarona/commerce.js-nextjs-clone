@@ -2,7 +2,7 @@
 // Wishlist domain — customer wishlists
 // ---------------------------------------------------------------------------
 
-import type { Wishlist } from '@commercejs/types'
+import type { Wishlist } from '@prood/types'
 import {
   findWishlistByCustomer,
   createWishlist as dbCreateWishlist,

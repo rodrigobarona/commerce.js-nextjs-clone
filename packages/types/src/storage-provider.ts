@@ -3,7 +3,7 @@
 // ---------------------------------------------------------------------------
 //
 // Provides a universal interface for storing and serving files (product images,
-// invoices, exports). Required by the native Commerce.js platform; external
+// invoices, exports). Required by the native Prood platform; external
 // adapters (Salla, Medusa) manage their own media and don't use this.
 // ---------------------------------------------------------------------------
 
@@ -56,7 +56,7 @@ export interface PresignedUrlResult {
  *
  * @example
  * ```ts
- * import { S3StorageProvider } from '@commercejs/storage-s3'
+ * import { S3StorageProvider } from '@prood/storage-s3'
  *
  * const storage = new S3StorageProvider({
  *   endpoint: 'https://s3.us-east-1.amazonaws.com',

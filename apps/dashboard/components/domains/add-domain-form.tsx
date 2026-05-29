@@ -3,9 +3,9 @@
 import { useState, useTransition } from "react"
 import { useRouter } from "next/navigation"
 import { toast } from "sonner"
-import { Button } from "@workspace/ui/components/button"
-import { Input } from "@workspace/ui/components/input"
-import { Label } from "@workspace/ui/components/label"
+import { Button } from "@prood/ui/components/button"
+import { Input } from "@prood/ui/components/input"
+import { Label } from "@prood/ui/components/label"
 import { addDomainAction } from "@/app/(dashboard)/domains/actions"
 
 export function AddDomainForm() {

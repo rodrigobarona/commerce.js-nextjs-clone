@@ -1,7 +1,7 @@
 "use server"
 
 import { revalidatePath } from "next/cache"
-import type { FulfillOrderInput } from "@workspace/commerce"
+import type { FulfillOrderInput } from "@prood/commerce"
 import { withActiveOrg } from "@/lib/admin"
 
 export async function fulfillOrderAction(

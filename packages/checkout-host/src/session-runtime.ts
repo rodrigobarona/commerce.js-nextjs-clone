@@ -1,8 +1,8 @@
 import 'server-only'
-import { CheckoutSession } from '@commercejs/checkout'
-import type { CheckoutSnapshot } from '@commercejs/checkout'
-import type { PaymentProvider } from '@commercejs/types'
-import { getPaymentProvider, getTenantPaymentConfig } from '@workspace/commerce'
+import { CheckoutSession } from '@prood/checkout'
+import type { CheckoutSnapshot } from '@prood/checkout'
+import type { PaymentProvider } from '@prood/types'
+import { getPaymentProvider, getTenantPaymentConfig } from '@prood/commerce'
 import { loadSession, saveSession, type SessionMeta, type StoredSession } from './session-store'
 
 /**

@@ -1,11 +1,11 @@
-import { Badge } from "@workspace/ui/components/badge"
+import { Badge } from "@prood/ui/components/badge"
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@workspace/ui/components/card"
+} from "@prood/ui/components/card"
 import {
   Table,
   TableBody,
@@ -13,7 +13,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@workspace/ui/components/table"
+} from "@prood/ui/components/table"
 import { InviteMemberForm } from "@/components/team/invite-member-form"
 import {
   CancelInvitationButton,

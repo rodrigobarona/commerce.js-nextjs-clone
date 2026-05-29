@@ -1,15 +1,15 @@
 import Link from "next/link"
 import { Plus } from "@phosphor-icons/react/dist/ssr"
-import type { Product } from "@workspace/commerce"
-import { Button } from "@workspace/ui/components/button"
-import { Badge } from "@workspace/ui/components/badge"
+import type { Product } from "@prood/commerce"
+import { Button } from "@prood/ui/components/button"
+import { Badge } from "@prood/ui/components/badge"
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@workspace/ui/components/card"
+} from "@prood/ui/components/card"
 import {
   Table,
   TableBody,
@@ -17,8 +17,8 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@workspace/ui/components/table"
-import { localized, formatPrice } from "@workspace/ui/lib/commerce"
+} from "@prood/ui/components/table"
+import { localized, formatPrice } from "@prood/ui/lib/commerce"
 import { withActiveOrg } from "@/lib/admin"
 
 export const metadata = { title: "Products" }

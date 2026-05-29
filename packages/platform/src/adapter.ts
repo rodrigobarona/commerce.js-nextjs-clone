@@ -2,7 +2,7 @@
 // PlatformAdapter — native commerce engine implementing CommerceAdapter
 // ---------------------------------------------------------------------------
 
-import type { CommerceAdapter, AdapterDomain } from '@commercejs/types'
+import type { CommerceAdapter, AdapterDomain } from '@prood/types'
 import type { PlatformConfig } from './types.js'
 import type { AdminAPI } from './admin/types.js'
 import { createAdminAPI } from './admin/index.js'
@@ -58,7 +58,7 @@ export interface PlatformAdapterResult {
 }
 
 /**
- * Create a PlatformAdapter — the native CommerceJS commerce engine.
+ * Create a PlatformAdapter — the native Prood commerce engine.
  *
  * Returns both the storefront adapter and the admin API.
  *
@@ -97,7 +97,7 @@ export async function createPlatformAdapter(config: PlatformConfig = {}): Promis
   await admin.auth.seedInitialAdmin()
 
   const adapter = {
-    name: 'commercejs',
+    name: 'prood',
     capabilities: ['catalog', 'cart', 'checkout', 'orders', 'customers', 'store', 'brands', 'countries', 'wishlist', 'reviews', 'promotions', 'returns'] as AdapterDomain[],
 
     // ---- Catalog ----

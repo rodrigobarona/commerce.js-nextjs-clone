@@ -3,12 +3,12 @@
 import Image from "next/image"
 import Link from "next/link"
 import { TrashIcon } from "@phosphor-icons/react"
-import type { CartItem } from "@commercejs/types"
-import { Button } from "@workspace/ui/components/button"
-import { ProductPrice } from "@workspace/ui/components/product-price"
-import { QuantitySelector } from "@workspace/ui/components/quantity-selector"
-import { formatPrice, localized, type Locale } from "@workspace/ui/lib/commerce"
-import { cn } from "@workspace/ui/lib/utils"
+import type { CartItem } from "@prood/types"
+import { Button } from "@prood/ui/components/button"
+import { ProductPrice } from "@prood/ui/components/product-price"
+import { QuantitySelector } from "@prood/ui/components/quantity-selector"
+import { formatPrice, localized, type Locale } from "@prood/ui/lib/commerce"
+import { cn } from "@prood/ui/lib/utils"
 
 export interface CartItemRowProps {
   item: CartItem

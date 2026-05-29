@@ -1,7 +1,7 @@
 {
-  "name": "@commercejs/payment-stripe",
+  "name": "@prood/payment-stripe",
   "version": "0.1.0",
-  "description": "Stripe payment provider for CommerceJS — embedded Payment Element via PaymentIntents",
+  "description": "Stripe payment provider for Prood — embedded Payment Element via PaymentIntents",
   "license": "MIT",
   "type": "module",
   "main": "./dist/index.js",
@@ -22,7 +22,7 @@
     "clean": "rm -rf dist"
   },
   "dependencies": {
-    "@commercejs/types": "workspace:*",
+    "@prood/types": "workspace:*",
     "stripe": "^22.2.0"
   },
   "devDependencies": {

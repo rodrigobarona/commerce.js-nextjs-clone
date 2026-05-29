@@ -1,7 +1,7 @@
 import Link from "next/link"
-import type { Product, SearchParams } from "@workspace/commerce/types"
-import { getProducts } from "@workspace/commerce"
-import { Button } from "@workspace/ui/components/button"
+import type { Product, SearchParams } from "@prood/commerce/types"
+import { getProducts } from "@prood/commerce"
+import { Button } from "@prood/ui/components/button"
 import { ConnectedProductGrid } from "@/components/commerce/connected-product-grid"
 import { resolveTenantId } from "@/lib/tenant"
 

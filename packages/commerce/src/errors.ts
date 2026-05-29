@@ -1,4 +1,4 @@
-import { isCommerceError, type CommerceErrorCode } from '@commercejs/types'
+import { isCommerceError, type CommerceErrorCode } from '@prood/types'
 import { ZodError } from 'zod'
 
 /** Normalized error body returned to clients. */

@@ -1,5 +1,5 @@
 import 'server-only'
-import type { AddToCartInput, Cart } from '@commercejs/types'
+import type { AddToCartInput, Cart } from '@prood/types'
 import { getAdapter, runScoped } from './adapter'
 
 /** Create a new empty cart. */

@@ -1,12 +1,7 @@
 {
-  "name": "@commercejs/checkout",
+  "name": "@prood/checkout",
   "version": "2.0.0",
   "description": "Universal checkout engine — framework-agnostic state machine for payment flows",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/commerce-js/commerce.js.git",
-    "directory": "packages/checkout"
-  },
   "license": "MIT",
   "type": "module",
   "main": "./dist/index.js",
@@ -28,10 +23,10 @@
     "clean": "rm -rf dist"
   },
   "peerDependencies": {
-    "@commercejs/types": "workspace:*"
+    "@prood/types": "workspace:*"
   },
   "devDependencies": {
-    "@commercejs/types": "workspace:*",
+    "@prood/types": "workspace:*",
     "typescript": "^5.7.0",
     "vitest": "^4.0.0"
   }

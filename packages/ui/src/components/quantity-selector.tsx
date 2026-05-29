@@ -1,8 +1,8 @@
 "use client"
 
 import { MinusIcon, PlusIcon } from "@phosphor-icons/react"
-import { Button } from "@workspace/ui/components/button"
-import { cn } from "@workspace/ui/lib/utils"
+import { Button } from "@prood/ui/components/button"
+import { cn } from "@prood/ui/lib/utils"
 
 export interface QuantitySelectorProps {
   value: number

@@ -1,8 +1,8 @@
 "use client"
 
 import { usePathname } from "next/navigation"
-import { Separator } from "@workspace/ui/components/separator"
-import { SidebarTrigger } from "@workspace/ui/components/sidebar"
+import { Separator } from "@prood/ui/components/separator"
+import { SidebarTrigger } from "@prood/ui/components/sidebar"
 import { navGroups } from "@/lib/nav"
 
 function titleForPath(pathname: string): string {

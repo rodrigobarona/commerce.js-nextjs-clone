@@ -2,19 +2,19 @@
 
 import Link from "next/link"
 import { ShoppingBagIcon } from "@phosphor-icons/react"
-import type { Cart } from "@commercejs/types"
-import { Button } from "@workspace/ui/components/button"
-import { CartItemRow } from "@workspace/ui/components/cart-item"
-import { EmptyState } from "@workspace/ui/components/empty-state"
-import { Separator } from "@workspace/ui/components/separator"
+import type { Cart } from "@prood/types"
+import { Button } from "@prood/ui/components/button"
+import { CartItemRow } from "@prood/ui/components/cart-item"
+import { EmptyState } from "@prood/ui/components/empty-state"
+import { Separator } from "@prood/ui/components/separator"
 import {
   Sheet,
   SheetContent,
   SheetFooter,
   SheetHeader,
   SheetTitle,
-} from "@workspace/ui/components/sheet"
-import { formatPrice, type Locale } from "@workspace/ui/lib/commerce"
+} from "@prood/ui/components/sheet"
+import { formatPrice, type Locale } from "@prood/ui/lib/commerce"
 
 export interface CartDrawerProps {
   open: boolean

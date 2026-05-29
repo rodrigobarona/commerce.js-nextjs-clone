@@ -1,12 +1,12 @@
-import type { DiscountablePrice, Maybe, Price } from "@commercejs/types"
+import type { DiscountablePrice, Maybe, Price } from "@prood/types"
 import {
   discountPercent,
   formatOriginalPrice,
   formatPrice,
   hasDiscount,
   type Locale,
-} from "@workspace/ui/lib/commerce"
-import { cn } from "@workspace/ui/lib/utils"
+} from "@prood/ui/lib/commerce"
+import { cn } from "@prood/ui/lib/utils"
 
 export interface ProductPriceProps {
   price: Maybe<Price | DiscountablePrice> | undefined

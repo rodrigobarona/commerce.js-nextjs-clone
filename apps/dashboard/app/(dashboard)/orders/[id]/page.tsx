@@ -1,14 +1,14 @@
 import { notFound } from "next/navigation"
-import type { Order } from "@workspace/commerce"
-import { Badge } from "@workspace/ui/components/badge"
+import type { Order } from "@prood/commerce"
+import { Badge } from "@prood/ui/components/badge"
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
-} from "@workspace/ui/components/card"
-import { Separator } from "@workspace/ui/components/separator"
-import { localized, formatPrice } from "@workspace/ui/lib/commerce"
+} from "@prood/ui/components/card"
+import { Separator } from "@prood/ui/components/separator"
+import { localized, formatPrice } from "@prood/ui/lib/commerce"
 import { OrderActions } from "@/components/store/order-actions"
 import { withActiveOrg } from "@/lib/admin"
 

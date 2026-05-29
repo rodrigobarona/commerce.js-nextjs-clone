@@ -1,7 +1,7 @@
 "use client"
 
 import { ShoppingCartIcon } from "@phosphor-icons/react"
-import { Button } from "@workspace/ui/components/button"
+import { Button } from "@prood/ui/components/button"
 import { useCart } from "@/components/providers/cart-provider"
 
 export function CartButton() {

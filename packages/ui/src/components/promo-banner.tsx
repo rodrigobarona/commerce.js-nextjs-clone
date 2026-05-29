@@ -2,9 +2,9 @@
 
 import { useState } from "react"
 import { XIcon } from "@phosphor-icons/react"
-import type { Promotion } from "@commercejs/types"
-import { localized, type Locale } from "@workspace/ui/lib/commerce"
-import { cn } from "@workspace/ui/lib/utils"
+import type { Promotion } from "@prood/types"
+import { localized, type Locale } from "@prood/ui/lib/commerce"
+import { cn } from "@prood/ui/lib/utils"
 
 export interface PromoBannerProps {
   promotion: Promotion

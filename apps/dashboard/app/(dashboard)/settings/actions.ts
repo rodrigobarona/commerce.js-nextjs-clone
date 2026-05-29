@@ -1,7 +1,7 @@
 "use server"
 
 import { revalidatePath } from "next/cache"
-import type { UpdateStoreInput } from "@workspace/commerce"
+import type { UpdateStoreInput } from "@prood/commerce"
 import { withActiveOrg } from "@/lib/admin"
 
 export async function updateStoreSettingsAction(

@@ -1,7 +1,7 @@
 "use client"
 
 import { useRouter } from "next/navigation"
-import { Button } from "@workspace/ui/components/button"
+import { Button } from "@prood/ui/components/button"
 import { signOut } from "@/lib/auth/client"
 
 export function SignOutButton() {

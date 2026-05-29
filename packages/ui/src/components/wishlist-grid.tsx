@@ -1,9 +1,9 @@
 import { HeartIcon } from "@phosphor-icons/react/dist/ssr"
-import type { Product, WishlistItem } from "@commercejs/types"
-import { EmptyState } from "@workspace/ui/components/empty-state"
-import { ProductCard } from "@workspace/ui/components/product-card"
-import { type Locale } from "@workspace/ui/lib/commerce"
-import { cn } from "@workspace/ui/lib/utils"
+import type { Product, WishlistItem } from "@prood/types"
+import { EmptyState } from "@prood/ui/components/empty-state"
+import { ProductCard } from "@prood/ui/components/product-card"
+import { type Locale } from "@prood/ui/lib/commerce"
+import { cn } from "@prood/ui/lib/utils"
 
 export interface WishlistGridProps {
   items: WishlistItem[]

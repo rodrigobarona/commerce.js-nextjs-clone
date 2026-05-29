@@ -2,7 +2,7 @@
 // Admin: Product CRUD
 // ---------------------------------------------------------------------------
 
-import type { Product } from '@commercejs/types'
+import type { Product } from '@prood/types'
 import type { AdminListParams, CreateProductInput, UpdateProductInput } from './types.js'
 import {
   findProductById,

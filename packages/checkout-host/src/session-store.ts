@@ -1,6 +1,6 @@
 import 'server-only'
 import { Redis } from '@upstash/redis'
-import type { CheckoutSnapshot } from '@commercejs/checkout'
+import type { CheckoutSnapshot } from '@prood/checkout'
 
 const KEY_PREFIX = 'checkout:session:'
 const DEFAULT_TTL_S = 60 * 60 * 24 // 24 hours

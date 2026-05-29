@@ -3,10 +3,10 @@
 import { useState, useTransition } from "react"
 import { useRouter } from "next/navigation"
 import { toast } from "sonner"
-import { Button } from "@workspace/ui/components/button"
-import { Input } from "@workspace/ui/components/input"
-import { Label } from "@workspace/ui/components/label"
-import { Textarea } from "@workspace/ui/components/textarea"
+import { Button } from "@prood/ui/components/button"
+import { Input } from "@prood/ui/components/input"
+import { Label } from "@prood/ui/components/label"
+import { Textarea } from "@prood/ui/components/textarea"
 import {
   Dialog,
   DialogClose,
@@ -16,7 +16,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@workspace/ui/components/dialog"
+} from "@prood/ui/components/dialog"
 import {
   fulfillOrderAction,
   refundOrderAction,

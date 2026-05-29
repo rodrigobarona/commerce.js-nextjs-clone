@@ -3,16 +3,16 @@
 import { useState, useTransition } from "react"
 import { useRouter } from "next/navigation"
 import { toast } from "sonner"
-import { Button } from "@workspace/ui/components/button"
-import { Input } from "@workspace/ui/components/input"
-import { Label } from "@workspace/ui/components/label"
+import { Button } from "@prood/ui/components/button"
+import { Input } from "@prood/ui/components/input"
+import { Label } from "@prood/ui/components/label"
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@workspace/ui/components/select"
+} from "@prood/ui/components/select"
 import { organization } from "@/lib/auth/client"
 
 export function InviteMemberForm() {

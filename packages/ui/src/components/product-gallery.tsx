@@ -2,8 +2,8 @@
 
 import { useState } from "react"
 import Image from "next/image"
-import type { Image as ImageType } from "@commercejs/types"
-import { cn } from "@workspace/ui/lib/utils"
+import type { Image as ImageType } from "@prood/types"
+import { cn } from "@prood/ui/lib/utils"
 
 export interface ProductGalleryProps {
   images: ImageType[]

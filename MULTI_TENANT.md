@@ -14,7 +14,7 @@ Better Auth org (tenant)
 - **Dashboard** (`apps/dashboard`) — merchants sign in, pick an active org, and
   manage their store. Every data call runs inside `withActiveOrg()`.
 - **Storefront** (`apps/storefront`) — resolves the tenant from the request host
-  and threads `tenantId` into every `@workspace/commerce` call.
+  and threads `tenantId` into every `@prood/commerce` call.
 - **Platform** (`packages/platform`) — owns the commerce schema, the
   `withTenant()` tenant scope, and `applyTenantIsolation()` (RLS).
 
@@ -125,9 +125,9 @@ Every package was reviewed for cross-tenant leakage. Posture by package:
 | `storage-vercel-blob` / `storage-s3` | File uploads | Tenant-namespaced via `uploadForTenant()` |
 | `types`, `ui`, `eslint-config`, `typescript-config` | No | Safe |
 
-> Legacy/dead packages `@commercejs/core` and `@commercejs/webhook-verifier`, and
+> Legacy/dead packages `@prood/core` and `@prood/webhook-verifier`, and
 > the platform's dormant Prisma backend + legacy query layer, were removed — the
-> only commerce engine in the runtime path is `@commercejs/platform` (Drizzle).
+> only commerce engine in the runtime path is `@prood/platform` (Drizzle).
 
 ### Secure-by-design measures (implemented)
 

@@ -5,7 +5,7 @@ import type {
   LocalizedString,
   Maybe,
   Price,
-} from "@commercejs/types"
+} from "@prood/types"
 
 export type Locale = "en" | "ar"
 

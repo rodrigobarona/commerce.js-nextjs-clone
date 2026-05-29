@@ -1,6 +1,6 @@
 import "server-only"
 import { and, eq } from "drizzle-orm"
-import { decryptConfig, encryptConfig } from "@workspace/commerce"
+import { decryptConfig, encryptConfig } from "@prood/commerce"
 import { authDb } from "@/lib/auth/db"
 import { integrationConfig } from "@/lib/auth/schema"
 

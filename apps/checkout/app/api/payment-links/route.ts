@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server"
 import { z } from "zod"
-import { createPaymentLink } from "@workspace/checkout-host"
+import { createPaymentLink } from "@prood/checkout-host"
 import { errorResponse, requireApiSecret } from "@/lib/api"
 
 const linkSchema = z.object({

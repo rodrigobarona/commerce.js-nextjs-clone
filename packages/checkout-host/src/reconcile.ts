@@ -1,5 +1,5 @@
 import 'server-only'
-import { getAdapter, revalidateProducts, type PaymentWebhookEvent } from '@workspace/commerce'
+import { getAdapter, revalidateProducts, type PaymentWebhookEvent } from '@prood/commerce'
 
 function resolveOrderId(event: PaymentWebhookEvent): string | null {
   const data = event.data as Record<string, unknown>

@@ -2,9 +2,9 @@
 
 import { useState } from "react"
 import { XIcon } from "@phosphor-icons/react"
-import { Button } from "@workspace/ui/components/button"
-import { Input } from "@workspace/ui/components/input"
-import { cn } from "@workspace/ui/lib/utils"
+import { Button } from "@prood/ui/components/button"
+import { Input } from "@prood/ui/components/input"
+import { cn } from "@prood/ui/lib/utils"
 
 export interface CouponInputProps {
   appliedCode?: string | null

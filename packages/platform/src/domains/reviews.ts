@@ -2,7 +2,7 @@
 // Reviews domain — product reviews and ratings
 // ---------------------------------------------------------------------------
 
-import type { Review, ReviewSummary, PaginatedResult } from '@commercejs/types'
+import type { Review, ReviewSummary, PaginatedResult } from '@prood/types'
 import {
   findReviewsByProduct,
   getReviewSummaryByProduct,

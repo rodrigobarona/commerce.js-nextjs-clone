@@ -1,7 +1,7 @@
 {
-  "name": "@commercejs/storage-vercel-blob",
+  "name": "@prood/storage-vercel-blob",
   "version": "0.1.0",
-  "description": "Vercel Blob storage provider for CommerceJS — implements StorageProvider",
+  "description": "Vercel Blob storage provider for Prood — implements StorageProvider",
   "license": "MIT",
   "type": "module",
   "main": "./dist/index.js",
@@ -22,7 +22,7 @@
     "clean": "rm -rf dist"
   },
   "dependencies": {
-    "@commercejs/types": "workspace:*",
+    "@prood/types": "workspace:*",
     "@vercel/blob": "^2.4.0"
   },
   "devDependencies": {

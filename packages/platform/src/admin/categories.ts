@@ -2,7 +2,7 @@
 // Admin: Category CRUD
 // ---------------------------------------------------------------------------
 
-import type { Category } from '@commercejs/types'
+import type { Category } from '@prood/types'
 import type { CreateCategoryInput, UpdateCategoryInput } from './types.js'
 import {
   findCategoryById,

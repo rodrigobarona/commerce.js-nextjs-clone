@@ -1,17 +1,17 @@
 "use client"
 
-import type { Address, Country } from "@commercejs/types"
-import { Input } from "@workspace/ui/components/input"
-import { Label } from "@workspace/ui/components/label"
+import type { Address, Country } from "@prood/types"
+import { Input } from "@prood/ui/components/input"
+import { Label } from "@prood/ui/components/label"
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@workspace/ui/components/select"
-import { localized, type Locale } from "@workspace/ui/lib/commerce"
-import { cn } from "@workspace/ui/lib/utils"
+} from "@prood/ui/components/select"
+import { localized, type Locale } from "@prood/ui/lib/commerce"
+import { cn } from "@prood/ui/lib/utils"
 
 export type AddressInput = Partial<Omit<Address, "id" | "isDefault">>
 

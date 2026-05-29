@@ -1,7 +1,7 @@
 import type { ReactNode } from "react"
 import Link from "next/link"
-import { Button } from "@workspace/ui/components/button"
-import { cn } from "@workspace/ui/lib/utils"
+import { Button } from "@prood/ui/components/button"
+import { cn } from "@prood/ui/lib/utils"
 
 export interface EmptyStateProps {
   icon?: ReactNode

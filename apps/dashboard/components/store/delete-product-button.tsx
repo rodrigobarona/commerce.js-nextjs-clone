@@ -4,7 +4,7 @@ import { useTransition } from "react"
 import { useRouter } from "next/navigation"
 import { toast } from "sonner"
 import { Trash } from "@phosphor-icons/react"
-import { Button } from "@workspace/ui/components/button"
+import { Button } from "@prood/ui/components/button"
 import {
   Dialog,
   DialogClose,
@@ -14,7 +14,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@workspace/ui/components/dialog"
+} from "@prood/ui/components/dialog"
 import { deleteProductAction } from "@/app/(dashboard)/products/actions"
 
 export function DeleteProductButton({ productId }: { productId: string }) {

@@ -1,5 +1,5 @@
 export const siteConfig = {
-  name: "Commerce.js",
+  name: "Prood",
   description:
     "Commerce-agnostic toolkit for building storefronts with Next.js — swap adapters, payments, and storage without rewriting your app.",
   docsUrl: process.env.NEXT_PUBLIC_DOCS_URL ?? "http://localhost:3003",

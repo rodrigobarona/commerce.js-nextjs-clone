@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation"
-import type { Category, Product } from "@workspace/commerce/types"
-import { getCategories, getProducts } from "@workspace/commerce"
-import { localized } from "@workspace/ui/lib/commerce"
+import type { Category, Product } from "@prood/commerce/types"
+import { getCategories, getProducts } from "@prood/commerce"
+import { localized } from "@prood/ui/lib/commerce"
 import { ConnectedProductGrid } from "@/components/commerce/connected-product-grid"
 import { resolveTenantId } from "@/lib/tenant"
 

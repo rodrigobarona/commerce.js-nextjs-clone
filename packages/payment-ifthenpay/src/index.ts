@@ -1,5 +1,5 @@
 // ---------------------------------------------------------------------------
-// @commercejs/payment-ifthenpay — Ifthenpay provider (Portugal)
+// @prood/payment-ifthenpay — Ifthenpay provider (Portugal)
 // ---------------------------------------------------------------------------
 
 export { IfthenpayPaymentProvider } from './ifthenpay-provider.js'

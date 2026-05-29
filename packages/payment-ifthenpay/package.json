@@ -1,7 +1,7 @@
 {
-  "name": "@commercejs/payment-ifthenpay",
+  "name": "@prood/payment-ifthenpay",
   "version": "0.1.0",
-  "description": "Ifthenpay (Portugal) payment provider for CommerceJS — Multibanco, MB WAY, credit card",
+  "description": "Ifthenpay (Portugal) payment provider for Prood — Multibanco, MB WAY, credit card",
   "license": "MIT",
   "type": "module",
   "main": "./dist/index.js",
@@ -22,7 +22,7 @@
     "clean": "rm -rf dist"
   },
   "dependencies": {
-    "@commercejs/types": "workspace:*"
+    "@prood/types": "workspace:*"
   },
   "devDependencies": {
     "@types/node": "^24",

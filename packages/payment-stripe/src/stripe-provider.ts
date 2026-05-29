@@ -19,7 +19,7 @@ import type {
   CreatePaymentSessionInput,
   RefundInput,
   PaymentWebhookEvent,
-} from '@commercejs/types'
+} from '@prood/types'
 
 import type { StripeConfig } from './types.js'
 

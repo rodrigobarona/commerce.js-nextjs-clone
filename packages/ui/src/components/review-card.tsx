@@ -1,7 +1,7 @@
-import type { Review } from "@commercejs/types"
-import { Badge } from "@workspace/ui/components/badge"
-import { ReviewStars } from "@workspace/ui/components/review-stars"
-import { cn } from "@workspace/ui/lib/utils"
+import type { Review } from "@prood/types"
+import { Badge } from "@prood/ui/components/badge"
+import { ReviewStars } from "@prood/ui/components/review-stars"
+import { cn } from "@prood/ui/lib/utils"
 
 export interface ReviewCardProps {
   review: Review

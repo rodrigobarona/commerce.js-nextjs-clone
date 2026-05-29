@@ -1,7 +1,7 @@
 import Link from "next/link"
-import type { Customer } from "@workspace/commerce"
-import { Button } from "@workspace/ui/components/button"
-import { Card, CardContent } from "@workspace/ui/components/card"
+import type { Customer } from "@prood/commerce"
+import { Button } from "@prood/ui/components/button"
+import { Card, CardContent } from "@prood/ui/components/card"
 import {
   Table,
   TableBody,
@@ -9,7 +9,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@workspace/ui/components/table"
+} from "@prood/ui/components/table"
 import { withActiveOrg } from "@/lib/admin"
 
 export const metadata = { title: "Customers" }

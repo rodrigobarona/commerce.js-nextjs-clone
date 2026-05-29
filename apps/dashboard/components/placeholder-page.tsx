@@ -4,7 +4,7 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@workspace/ui/components/card"
+} from "@prood/ui/components/card"
 
 export function PlaceholderPage({
   title,

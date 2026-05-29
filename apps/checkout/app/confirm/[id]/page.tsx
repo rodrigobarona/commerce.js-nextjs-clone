@@ -1,5 +1,5 @@
 import { Suspense } from "react"
-import { Skeleton } from "@workspace/ui/components/skeleton"
+import { Skeleton } from "@prood/ui/components/skeleton"
 import { ConfirmClient } from "./confirm-client"
 
 export default async function ConfirmPage({

@@ -2,7 +2,7 @@
 // Profile domain — cross-merchant buyer identity
 // ---------------------------------------------------------------------------
 
-import type { Profile, SavedAddress, SavedPaymentMethod } from '@commercejs/types'
+import type { Profile, SavedAddress, SavedPaymentMethod } from '@prood/types'
 import {
   createProfile as dbCreateProfile,
   findProfileById,

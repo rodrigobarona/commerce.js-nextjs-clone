@@ -1,7 +1,7 @@
 {
-  "name": "@commercejs/payment-easypay",
+  "name": "@prood/payment-easypay",
   "version": "0.1.0",
-  "description": "Easypay (Portugal) payment provider for CommerceJS — Multibanco, MB WAY, card",
+  "description": "Easypay (Portugal) payment provider for Prood — Multibanco, MB WAY, card",
   "license": "MIT",
   "type": "module",
   "main": "./dist/index.js",
@@ -22,7 +22,7 @@
     "clean": "rm -rf dist"
   },
   "dependencies": {
-    "@commercejs/types": "workspace:*"
+    "@prood/types": "workspace:*"
   },
   "devDependencies": {
     "@types/node": "^24",

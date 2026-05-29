@@ -2,7 +2,7 @@
 // Admin: Order management
 // ---------------------------------------------------------------------------
 
-import type { Order, PaginatedResult } from '@commercejs/types'
+import type { Order, PaginatedResult } from '@prood/types'
 import type { AdminListOrdersParams, FulfillOrderInput } from './types.js'
 import {
   findOrderById,

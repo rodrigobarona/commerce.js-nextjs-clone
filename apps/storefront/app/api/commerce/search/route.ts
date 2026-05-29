@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server"
-import { getProducts } from "@workspace/commerce"
+import { getProducts } from "@prood/commerce"
 import { errorResponse } from "@/lib/api"
 import { resolveTenantId } from "@/lib/tenant"
 

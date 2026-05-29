@@ -1,10 +1,10 @@
 "use client"
 
-import type { Facet } from "@commercejs/types"
-import { Checkbox } from "@workspace/ui/components/checkbox"
-import { Label } from "@workspace/ui/components/label"
-import { localized, type Locale } from "@workspace/ui/lib/commerce"
-import { cn } from "@workspace/ui/lib/utils"
+import type { Facet } from "@prood/types"
+import { Checkbox } from "@prood/ui/components/checkbox"
+import { Label } from "@prood/ui/components/label"
+import { localized, type Locale } from "@prood/ui/lib/commerce"
+import { cn } from "@prood/ui/lib/utils"
 
 export interface CategoryFilterProps {
   facets: Facet[]

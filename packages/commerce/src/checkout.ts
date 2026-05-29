@@ -15,7 +15,7 @@ import type {
   Review,
   ReviewSummary,
   ShippingMethod,
-} from '@commercejs/types'
+} from '@prood/types'
 import { getAdapter, runScoped } from './adapter'
 import { getPaymentProvider } from './payments'
 import { getTenantPaymentConfig } from './integrations'

@@ -1,5 +1,5 @@
 // ---------------------------------------------------------------------------
-// @commercejs/types — Unified Data Model for eCommerce
+// @prood/types — Unified Data Model for eCommerce
 // ---------------------------------------------------------------------------
 // Barrel export — re-exports all domain types
 

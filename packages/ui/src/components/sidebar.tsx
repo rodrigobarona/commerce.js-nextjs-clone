@@ -5,25 +5,25 @@ import { Slot } from "radix-ui"
 import { cva, type VariantProps } from "class-variance-authority"
 import { SidebarSimple } from "@phosphor-icons/react"
 
-import { cn } from "@workspace/ui/lib/utils"
-import { useIsMobile } from "@workspace/ui/hooks/use-mobile"
-import { Button } from "@workspace/ui/components/button"
-import { Input } from "@workspace/ui/components/input"
-import { Separator } from "@workspace/ui/components/separator"
+import { cn } from "@prood/ui/lib/utils"
+import { useIsMobile } from "@prood/ui/hooks/use-mobile"
+import { Button } from "@prood/ui/components/button"
+import { Input } from "@prood/ui/components/input"
+import { Separator } from "@prood/ui/components/separator"
 import {
   Sheet,
   SheetContent,
   SheetDescription,
   SheetHeader,
   SheetTitle,
-} from "@workspace/ui/components/sheet"
-import { Skeleton } from "@workspace/ui/components/skeleton"
+} from "@prood/ui/components/sheet"
+import { Skeleton } from "@prood/ui/components/skeleton"
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "@workspace/ui/components/tooltip"
+} from "@prood/ui/components/tooltip"
 
 const SIDEBAR_COOKIE_NAME = "sidebar_state"
 const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7

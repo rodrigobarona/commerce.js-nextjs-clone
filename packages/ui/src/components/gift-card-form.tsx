@@ -1,12 +1,12 @@
 "use client"
 
 import { useState } from "react"
-import type { PurchaseGiftCardInput } from "@commercejs/types"
-import { Button } from "@workspace/ui/components/button"
-import { Input } from "@workspace/ui/components/input"
-import { Label } from "@workspace/ui/components/label"
-import { Textarea } from "@workspace/ui/components/textarea"
-import { cn } from "@workspace/ui/lib/utils"
+import type { PurchaseGiftCardInput } from "@prood/types"
+import { Button } from "@prood/ui/components/button"
+import { Input } from "@prood/ui/components/input"
+import { Label } from "@prood/ui/components/label"
+import { Textarea } from "@prood/ui/components/textarea"
+import { cn } from "@prood/ui/lib/utils"
 
 export interface GiftCardFormProps {
   currency?: string

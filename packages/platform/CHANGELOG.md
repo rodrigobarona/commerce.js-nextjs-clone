@@ -1,4 +1,4 @@
-# @commercejs/platform
+# @prood/platform
 
 ## 0.5.4
 
@@ -39,8 +39,8 @@
 
 - [`b28e4fc`](https://github.com/commerce-js/commerce.js/commit/b28e4fcb5e922c2a6dc4587bdebfa66c5af227e5) Thanks [@masterde](https://github.com/masterde)! - Cloud deployment readiness
 
-  - **@commercejs/nuxt**: Adapter plugin now detects `DATABASE_URL` for Neon Postgres and calls the correct migration function (`migrateNeon` for Postgres, `migratePrisma` for SQLite). Added admin auth dev-mode bypass, new admin API endpoints for orders and products by ID.
-  - **@commercejs/platform**: Admin API enhancements — added `getProduct`, `getOrder`, `fulfillOrder`, `refundOrder`, `deleteProduct` methods. Added `seedInitialAdmin` for DB-backed admin users.
+  - **@prood/nuxt**: Adapter plugin now detects `DATABASE_URL` for Neon Postgres and calls the correct migration function (`migrateNeon` for Postgres, `migratePrisma` for SQLite). Added admin auth dev-mode bypass, new admin API endpoints for orders and products by ID.
+  - **@prood/platform**: Admin API enhancements — added `getProduct`, `getOrder`, `fulfillOrder`, `refundOrder`, `deleteProduct` methods. Added `seedInitialAdmin` for DB-backed admin users.
 
 ## 0.4.0
 
@@ -62,14 +62,14 @@
 ### Patch Changes
 
 - Updated dependencies [[`3c539a5`](https://github.com/commerce-js/commerce.js/commit/3c539a51746d02d2643b25a5dbb041abc143928b)]:
-  - @commercejs/types@0.3.0
+  - @prood/types@0.3.0
 
 ## 0.3.1
 
 ### Patch Changes
 
 - Updated dependencies [[`e72ed4a`](https://github.com/commerce-js/commerce.js/commit/e72ed4a76e85f8b81e6d285150d152562c2626b9)]:
-  - @commercejs/types@0.2.1
+  - @prood/types@0.2.1
 
 ## 0.3.0
 
@@ -87,13 +87,13 @@
 
 - [`8adbefb`](https://github.com/commerce-js/commerce.js/commit/8adbefbbce1d9c24c55ea2c9e8a6daa7bbb204a5) Thanks [@masterde](https://github.com/masterde)! - Architecture evolution: three-tier orchestrator, multi-adapter composition, and provider interfaces.
 
-  - **@commercejs/types**: Added `CommerceOrchestrator`, `UniversalDomains`, `CommonDomains`, `SpecializedDomains` interfaces. New provider types: `NotificationProvider`, `AnalyticsProvider`, `TaxProvider`.
-  - **@commercejs/core**: Added `createOrchestrator()`, `createCompositeOrchestrator()`, and `withPlatformFallback()` factories. Wired notification and analytics providers into `createCommerce()` event bus.
-  - **@commercejs/nuxt**: Fixed build failure caused by broken relative imports in 46 API route handlers. Switched to Nitro auto-imports via `addServerScanDir`.
-  - **@commercejs/platform**: Minor fixes to cart, checkout, countries, and order domain helpers.
+  - **@prood/types**: Added `CommerceOrchestrator`, `UniversalDomains`, `CommonDomains`, `SpecializedDomains` interfaces. New provider types: `NotificationProvider`, `AnalyticsProvider`, `TaxProvider`.
+  - **@prood/core**: Added `createOrchestrator()`, `createCompositeOrchestrator()`, and `withPlatformFallback()` factories. Wired notification and analytics providers into `createCommerce()` event bus.
+  - **@prood/nuxt**: Fixed build failure caused by broken relative imports in 46 API route handlers. Switched to Nitro auto-imports via `addServerScanDir`.
+  - **@prood/platform**: Minor fixes to cart, checkout, countries, and order domain helpers.
 
 - Updated dependencies [[`8adbefb`](https://github.com/commerce-js/commerce.js/commit/8adbefbbce1d9c24c55ea2c9e8a6daa7bbb204a5)]:
-  - @commercejs/types@0.2.0
+  - @prood/types@0.2.0
 
 ## 0.2.0
 

@@ -16,7 +16,7 @@ export default async function PayPage({
     <div className="bg-background flex flex-col gap-6 rounded-2xl border p-6 shadow-sm">
       <div className="text-center">
         <h1 className="text-lg font-bold tracking-tight">Secure Checkout</h1>
-        <p className="text-muted-foreground text-xs">Powered by CommerceJS</p>
+        <p className="text-muted-foreground text-xs">Powered by Prood</p>
       </div>
       <PaymentPageClient sessionId={id} />
     </div>

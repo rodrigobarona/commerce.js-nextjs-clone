@@ -2,7 +2,7 @@
 // Cart domain — cart CRUD and item management
 // ---------------------------------------------------------------------------
 
-import type { Cart, AddToCartInput } from '@commercejs/types'
+import type { Cart, AddToCartInput } from '@prood/types'
 import {
   createCart as dbCreateCart,
   findCart,

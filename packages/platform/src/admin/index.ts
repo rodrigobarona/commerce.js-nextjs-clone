@@ -25,7 +25,7 @@ import { localized, priceRequired, price, img, parseJsonField } from '../domains
 /**
  * Create an AdminAPI — the merchant-facing management interface.
  *
- * Only available for the native platform (Commerce.js Cloud).
+ * Only available for the native platform (Prood Cloud).
  * External adapters manage their own admin dashboards.
  *
  * @example

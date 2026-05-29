@@ -1,8 +1,8 @@
 import 'server-only'
-import type { PaymentProvider, PaymentWebhookEvent } from '@commercejs/types'
-import { StripePaymentProvider } from '@commercejs/payment-stripe'
-import { EasypayPaymentProvider } from '@commercejs/payment-easypay'
-import { IfthenpayPaymentProvider } from '@commercejs/payment-ifthenpay'
+import type { PaymentProvider, PaymentWebhookEvent } from '@prood/types'
+import { StripePaymentProvider } from '@prood/payment-stripe'
+import { EasypayPaymentProvider } from '@prood/payment-easypay'
+import { IfthenpayPaymentProvider } from '@prood/payment-ifthenpay'
 import { getTenantPaymentConfig } from './integrations'
 
 const cache = new Map<string, PaymentProvider>()

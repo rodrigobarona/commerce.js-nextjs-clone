@@ -1,6 +1,6 @@
 import "server-only"
 import { redirect } from "next/navigation"
-import { getAdmin, withTenant } from "@workspace/commerce"
+import { getAdmin, withTenant } from "@prood/commerce"
 import { getActiveOrganizationId } from "@/lib/auth"
 
 type Admin = Awaited<ReturnType<typeof getAdmin>>

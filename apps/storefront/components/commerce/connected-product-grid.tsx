@@ -1,7 +1,7 @@
 "use client"
 
-import type { Product } from "@workspace/commerce/types"
-import { ProductGrid } from "@workspace/ui/components/product-grid"
+import type { Product } from "@prood/commerce/types"
+import { ProductGrid } from "@prood/ui/components/product-grid"
 import { useCart } from "@/components/providers/cart-provider"
 
 export function ConnectedProductGrid({

@@ -4,9 +4,9 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@workspace/ui/components/card"
-import { Badge } from "@workspace/ui/components/badge"
-import type { DashboardStats } from "@workspace/commerce"
+} from "@prood/ui/components/card"
+import { Badge } from "@prood/ui/components/badge"
+import type { DashboardStats } from "@prood/commerce"
 import { withActiveOrg } from "@/lib/admin"
 
 export const metadata = { title: "Overview" }

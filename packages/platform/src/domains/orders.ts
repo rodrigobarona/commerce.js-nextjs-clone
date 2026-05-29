@@ -10,7 +10,7 @@ import type {
   OrderStatusInfo,
   OrderHistoryEntry,
   UpdateOrderStatusInput,
-} from '@commercejs/types'
+} from '@prood/types'
 import {
   createOrder as dbCreateOrder,
   createOrderItem,

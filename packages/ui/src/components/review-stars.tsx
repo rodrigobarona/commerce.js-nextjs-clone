@@ -1,5 +1,5 @@
 import { StarIcon } from "@phosphor-icons/react/dist/ssr"
-import { cn } from "@workspace/ui/lib/utils"
+import { cn } from "@prood/ui/lib/utils"
 
 export interface ReviewStarsProps {
   rating: number

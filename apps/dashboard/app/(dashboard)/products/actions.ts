@@ -4,7 +4,7 @@ import { revalidatePath } from "next/cache"
 import type {
   CreateProductInput,
   UpdateProductInput,
-} from "@workspace/commerce"
+} from "@prood/commerce"
 import { withActiveOrg } from "@/lib/admin"
 
 export async function createProductAction(

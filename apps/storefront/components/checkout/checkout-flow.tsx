@@ -1,11 +1,11 @@
 "use client"
 
 import { useState } from "react"
-import { AddressForm, type AddressInput } from "@workspace/ui/components/address-form"
-import { Button } from "@workspace/ui/components/button"
-import { EmptyState } from "@workspace/ui/components/empty-state"
-import { Input } from "@workspace/ui/components/input"
-import { Label } from "@workspace/ui/components/label"
+import { AddressForm, type AddressInput } from "@prood/ui/components/address-form"
+import { Button } from "@prood/ui/components/button"
+import { EmptyState } from "@prood/ui/components/empty-state"
+import { Input } from "@prood/ui/components/input"
+import { Label } from "@prood/ui/components/label"
 import { startCheckout } from "@/app/checkout/actions"
 import { useCart } from "@/components/providers/cart-provider"
 

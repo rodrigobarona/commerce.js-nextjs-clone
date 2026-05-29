@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server"
 import { z } from "zod"
-import { addToCart, createCart, revalidateProducts } from "@workspace/commerce"
+import { addToCart, createCart, revalidateProducts } from "@prood/commerce"
 import { errorResponse } from "@/lib/api"
 import { getCartId, setCartId } from "@/lib/cart-cookie"
 import { resolveTenantId } from "@/lib/tenant"

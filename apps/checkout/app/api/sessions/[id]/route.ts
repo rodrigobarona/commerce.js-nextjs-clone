@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server"
-import { loadSession } from "@workspace/checkout-host"
+import { loadSession } from "@prood/checkout-host"
 import { errorResponse } from "@/lib/api"
 
 export async function GET(

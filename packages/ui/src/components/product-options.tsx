@@ -1,8 +1,8 @@
 "use client"
 
-import type { ProductOption } from "@commercejs/types"
-import { localized, type Locale } from "@workspace/ui/lib/commerce"
-import { cn } from "@workspace/ui/lib/utils"
+import type { ProductOption } from "@prood/types"
+import { localized, type Locale } from "@prood/ui/lib/commerce"
+import { cn } from "@prood/ui/lib/utils"
 
 export interface ProductOptionsProps {
   items: ProductOption[]

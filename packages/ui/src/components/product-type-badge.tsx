@@ -1,4 +1,4 @@
-import { Badge } from "@workspace/ui/components/badge"
+import { Badge } from "@prood/ui/components/badge"
 
 export interface ProductTypeBadgeProps {
   type: string

@@ -1,12 +1,7 @@
 {
-  "name": "@commercejs/platform",
+  "name": "@prood/platform",
   "version": "0.5.4",
   "description": "Native commerce engine — own your data, implement CommerceAdapter without external platforms",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/commerce-js/commerce.js.git",
-    "directory": "packages/platform"
-  },
   "license": "MIT",
   "type": "module",
   "main": "./dist/index.js",
@@ -33,7 +28,7 @@
     "db:migrate:seed": "node scripts/migrate.mjs --seed"
   },
   "dependencies": {
-    "@commercejs/types": "workspace:*",
+    "@prood/types": "workspace:*",
     "@neondatabase/serverless": "^1.0.2",
     "bcrypt-ts": "^5.0.3",
     "drizzle-orm": "^0.45.1"

@@ -1,11 +1,11 @@
 "use client"
 
 import { useState } from "react"
-import type { CreateRentalBookingInput, Product } from "@commercejs/types"
-import { Button } from "@workspace/ui/components/button"
-import { Input } from "@workspace/ui/components/input"
-import { Label } from "@workspace/ui/components/label"
-import { cn } from "@workspace/ui/lib/utils"
+import type { CreateRentalBookingInput, Product } from "@prood/types"
+import { Button } from "@prood/ui/components/button"
+import { Input } from "@prood/ui/components/input"
+import { Label } from "@prood/ui/components/label"
+import { cn } from "@prood/ui/lib/utils"
 
 export interface RentalBookingFormProps {
   product: Product

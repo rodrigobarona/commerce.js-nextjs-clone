@@ -2,7 +2,7 @@
 // Admin API types — platform-only input/output types for merchant operations
 // ---------------------------------------------------------------------------
 
-import type { PaginationParams, PaginatedResult, Order, Product, Customer, Category } from '@commercejs/types'
+import type { PaginationParams, PaginatedResult, Order, Product, Customer, Category } from '@prood/types'
 
 // ---- Admin Users ----
 

@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server"
-import { createCart, getCart } from "@workspace/commerce"
+import { createCart, getCart } from "@prood/commerce"
 import { errorResponse } from "@/lib/api"
 import { getCartId, setCartId } from "@/lib/cart-cookie"
 import { resolveTenantId } from "@/lib/tenant"

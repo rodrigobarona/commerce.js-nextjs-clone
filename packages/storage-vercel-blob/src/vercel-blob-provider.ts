@@ -16,7 +16,7 @@ import type {
   StorageUploadResult,
   PresignedUrlOptions,
   PresignedUrlResult,
-} from '@commercejs/types'
+} from '@prood/types'
 
 import type { VercelBlobConfig } from './types.js'
 

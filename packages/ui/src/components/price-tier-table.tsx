@@ -1,6 +1,6 @@
-import type { PriceTier } from "@commercejs/types"
-import { formatPrice, localized, type Locale } from "@workspace/ui/lib/commerce"
-import { cn } from "@workspace/ui/lib/utils"
+import type { PriceTier } from "@prood/types"
+import { formatPrice, localized, type Locale } from "@prood/ui/lib/commerce"
+import { cn } from "@prood/ui/lib/utils"
 
 export interface PriceTierTableProps {
   tiers: PriceTier[]

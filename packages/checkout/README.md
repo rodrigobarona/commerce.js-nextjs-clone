@@ -1,26 +1,26 @@
-# @commercejs/checkout
+# @prood/checkout
 
 Universal checkout engine — a framework-agnostic state machine for payment flows.
 
-[![npm](https://img.shields.io/npm/v/@commercejs/checkout?color=CB3837)](https://www.npmjs.com/package/@commercejs/checkout)
+[![npm](https://img.shields.io/npm/v/@prood/checkout?color=CB3837)](https://www.npmjs.com/package/@prood/checkout)
 [![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 ## Overview
 
-`@commercejs/checkout` provides a `CheckoutSession` class that manages the entire checkout lifecycle — from collecting customer info to processing payments and handling 3DS redirects. It works in any JavaScript runtime: Nuxt, React, Node.js, Edge, or the browser.
+`@prood/checkout` provides a `CheckoutSession` class that manages the entire checkout lifecycle — from collecting customer info to processing payments and handling 3DS redirects. It works in any JavaScript runtime: Nuxt, React, Node.js, Edge, or the browser.
 
 ## Install
 
 ```bash
-npm install @commercejs/checkout @commercejs/types
+npm install @prood/checkout @prood/types
 ```
 
 ## Quick Start
 
 ```typescript
-import { CheckoutSession } from '@commercejs/checkout'
-import { TapPaymentProvider } from '@commercejs/payment-tap'
+import { CheckoutSession } from '@prood/checkout'
+import { TapPaymentProvider } from '@prood/payment-tap'
 
 // Create a session with a payment provider
 const session = new CheckoutSession({
@@ -106,7 +106,7 @@ idle → info → shipping → payment → complete
 
 ## Documentation
 
-Full docs at [commerce.js.org](https://commerce.js.org)
+Full docs at [prood.dev](https://prood.dev)
 
 ## License
 

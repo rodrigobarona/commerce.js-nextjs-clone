@@ -1,7 +1,7 @@
-# next-commerce
+# Prood
 
 A commerce-agnostic storefront built with **Next.js 16 / React 19**, ported from
-the Commerce.js Nuxt reference storefront. Turborepo + pnpm monorepo, Node 24,
+the upstream Nuxt reference storefront. Turborepo + pnpm monorepo, Node 24,
 deployed on Vercel + Neon Postgres.
 
 ## Architecture
@@ -14,16 +14,16 @@ apps/
   docs/                    # Fumadocs documentation — :3003
   checkout/                # Standalone checkout (Stripe / Easypay / Ifthenpay) — :3004
 packages/
-  commerce/                # @workspace/commerce — server-only data layer
-  checkout-host/           # @workspace/checkout-host — session store (Upstash Redis)
-  ui/                      # @workspace/ui — shadcn/Radix + 33 commerce components
-  # vendored, framework-agnostic Commerce.js packages:
+  commerce/                # @prood/commerce — server-only data layer
+  checkout-host/           # @prood/checkout-host — session store (Upstash Redis)
+  ui/                      # @prood/ui — shadcn/Radix + 33 commerce components
+  # vendored, framework-agnostic Prood packages:
   types/ core/ checkout/ platform/ webhook-verifier/
   storage-s3/ storage-vercel-blob/
   payment-stripe/ payment-easypay/ payment-ifthenpay/
 ```
 
-- **Data layer** (`@workspace/commerce`) wraps a pluggable `CommerceAdapter`.
+- **Data layer** (`@prood/commerce`) wraps a pluggable `CommerceAdapter`.
   The built-in **platform** adapter (Neon Postgres + Drizzle) is the default and
   is swappable via `COMMERCE_ADAPTER` (medusa/salla seams included).
 - **Payments** are gateway-agnostic (`PaymentProvider`): **Stripe** (embedded
@@ -71,7 +71,7 @@ Both apps deploy as separate Vercel projects sharing the same Neon database.
 3. Set `CHECKOUT_URL` to the production URL of the checkout project.
 4. Run `pnpm db:setup` once (locally against the prod DB, or as a deploy step).
 5. Deploy (`turbo build`). Catalog data uses Cache Components (`cacheComponents: true`)
-   with `'use cache'` + `cacheTag`/`cacheLife` on `@workspace/commerce` catalog
+   with `'use cache'` + `cacheTag`/`cacheLife` on `@prood/commerce` catalog
    queries (SWR: home/store 3600s, products/categories 600s). Cart/checkout/
    account stay dynamic via cookies/session.
 
@@ -93,7 +93,7 @@ pnpm dlx shadcn@latest add <component> -c packages/ui
 ```
 
 Commerce components live in `packages/ui/src/components/*` and are imported as
-`@workspace/ui/components/<name>`.
+`@prood/ui/components/<name>`.
 
 ## Roadmap
 
@@ -105,7 +105,7 @@ Commerce components live in `packages/ui/src/components/*` and are imported as
 | **`hosted-checkout`**                   | **Ported** → `apps/checkout` (CheckoutSession + Upstash Redis)              |
 | **`docs`**                              | **Ported** → `apps/docs` (Fumadocs MDX)                                     |
 | **`landing-page`**                      | **Ported** → `apps/web` (marketing site, shadcn preset)                     |
-| `dashboard`                             | Not ported — planned (commercejs.cloud admin)                               |
+| `dashboard`                             | **Ported** → `apps/dashboard` (admin dashboard)                             |
 | `pitch-deck`, `cloud-*`                 | Not ported — static marketing sites                                         |
 
 - CMS integration (Sanity / Payload) for marketing content — the data layer and

@@ -1,11 +1,11 @@
 "use client"
 
 import { useState } from "react"
-import type { Product } from "@commercejs/types"
-import { Button } from "@workspace/ui/components/button"
-import { Input } from "@workspace/ui/components/input"
-import { formatPrice, type Locale } from "@workspace/ui/lib/commerce"
-import { cn } from "@workspace/ui/lib/utils"
+import type { Product } from "@prood/types"
+import { Button } from "@prood/ui/components/button"
+import { Input } from "@prood/ui/components/input"
+import { formatPrice, type Locale } from "@prood/ui/lib/commerce"
+import { cn } from "@prood/ui/lib/utils"
 
 export interface BidPanelProps {
   product: Product

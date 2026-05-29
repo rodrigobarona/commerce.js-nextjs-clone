@@ -2,7 +2,7 @@
 // Brands domain — product brand listing
 // ---------------------------------------------------------------------------
 
-import type { Brand } from '@commercejs/types'
+import type { Brand } from '@prood/types'
 import { findBrands } from '../database/index.js'
 import { localized, img } from './helpers.js'
 

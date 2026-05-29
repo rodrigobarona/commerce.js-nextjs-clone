@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server"
-import { toErrorResponse } from "@workspace/commerce"
+import { toErrorResponse } from "@prood/commerce"
 
 export function errorResponse(err: unknown): NextResponse {
   const { status, body } = toErrorResponse(err)

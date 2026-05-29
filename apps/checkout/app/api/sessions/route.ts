@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server"
 import { z } from "zod"
-import { createCheckoutSession } from "@workspace/checkout-host"
+import { createCheckoutSession } from "@prood/checkout-host"
 import { errorResponse, requireApiSecret } from "@/lib/api"
 
 const createSchema = z.object({

@@ -3,7 +3,7 @@
 import * as React from "react"
 import { DropdownMenu as DropdownMenuPrimitive } from "radix-ui"
 
-import { cn } from "@workspace/ui/lib/utils"
+import { cn } from "@prood/ui/lib/utils"
 import { Check, CaretRight } from "@phosphor-icons/react"
 
 function DropdownMenu({

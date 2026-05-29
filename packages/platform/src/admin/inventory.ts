@@ -2,7 +2,7 @@
 // Admin: Inventory management
 // ---------------------------------------------------------------------------
 
-import type { Product } from '@commercejs/types'
+import type { Product } from '@prood/types'
 import type { UpdateInventoryInput } from './types.js'
 import {
   findProductById,

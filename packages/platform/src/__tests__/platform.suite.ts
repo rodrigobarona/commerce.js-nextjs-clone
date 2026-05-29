@@ -1,11 +1,11 @@
 // ---------------------------------------------------------------------------
-// @commercejs/platform — shared test suite
+// @prood/platform — shared test suite
 // ---------------------------------------------------------------------------
 // All adapter tests. Each driver test file calls this with its own setup.
 
 import { it, expect, beforeEach } from 'vitest'
 import { createPlatformAdapter } from '../adapter.js'
-import type { CommerceAdapter, Address } from '@commercejs/types'
+import type { CommerceAdapter, Address } from '@prood/types'
 
 /** Helper: create a full Address with all required fields */
 function fullAddress(overrides: Partial<Address> = {}): Omit<Address, 'id' | 'isDefault'> {
@@ -451,7 +451,7 @@ export function platformTestSuite(opts: SuiteOptions, timeout = 30_000) {
     expect(Array.isArray(brands)).toBe(true)
     expect(brands.length).toBe(3)
     const names = brands.map((b: any) => b.name.en)
-    expect(names).toContain('CommerceJS Essentials')
+    expect(names).toContain('Prood Essentials')
     expect(names).toContain('TechWave')
     expect(names).toContain('Artisan Leather')
   })
@@ -484,6 +484,6 @@ export function platformTestSuite(opts: SuiteOptions, timeout = 30_000) {
   })
 
   it('should have correct adapter name', async () => {
-    expect(adapter.name).toBe('commercejs')
+    expect(adapter.name).toBe('prood')
   })
 }

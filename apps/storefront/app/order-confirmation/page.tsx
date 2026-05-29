@@ -1,11 +1,11 @@
 import Link from "next/link"
 import { CheckCircleIcon } from "@phosphor-icons/react/dist/ssr"
-import type { Order } from "@workspace/commerce/types"
-import { getOrder } from "@workspace/commerce"
-import { Button } from "@workspace/ui/components/button"
-import { EmptyState } from "@workspace/ui/components/empty-state"
-import { OrderTimeline } from "@workspace/ui/components/order-timeline"
-import { formatPrice, localized } from "@workspace/ui/lib/commerce"
+import type { Order } from "@prood/commerce/types"
+import { getOrder } from "@prood/commerce"
+import { Button } from "@prood/ui/components/button"
+import { EmptyState } from "@prood/ui/components/empty-state"
+import { OrderTimeline } from "@prood/ui/components/order-timeline"
+import { formatPrice, localized } from "@prood/ui/lib/commerce"
 import { resolveTenantId } from "@/lib/tenant"
 
 export const metadata = { title: "Order confirmation" }

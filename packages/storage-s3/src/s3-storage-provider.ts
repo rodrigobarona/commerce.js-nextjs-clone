@@ -3,7 +3,7 @@
 // ---------------------------------------------------------------------------
 //
 // Wraps the S3 REST API via aws4fetch and normalizes operations into
-// Commerce.js's unified StorageProvider interface.
+// Prood's unified StorageProvider interface.
 //
 // Works with any S3-compatible service by changing the endpoint URL.
 // ---------------------------------------------------------------------------
@@ -15,7 +15,7 @@ import type {
   UploadInput,
   PresignedUrlOptions,
   PresignedUrlResult,
-} from '@commercejs/types'
+} from '@prood/types'
 
 import type { S3StorageConfig } from './types.js'
 

@@ -1,7 +1,7 @@
 // ---------------------------------------------------------------------------
-// @workspace/commerce — server-only commerce data layer
+// @prood/commerce — server-only commerce data layer
 // ---------------------------------------------------------------------------
-// Wraps the pluggable Commerce.js adapter (platform/Neon by default), the
+// Wraps the pluggable Prood adapter (platform/Neon by default), the
 // payment provider registry, and the storage provider behind typed functions
 // for use in Next.js Server Components, Server Actions, and Route Handlers.
 // ---------------------------------------------------------------------------
@@ -21,4 +21,4 @@ export * from './revalidate'
 
 // Re-export the unified domain model for convenience (includes the
 // CommerceError class + isCommerceError guard as runtime values).
-export * from '@commercejs/types'
+export * from '@prood/types'
