@@ -108,9 +108,8 @@ into the provider factory at runtime:
   credentials (and publishable key) on pay/confirm.
 - Provider registry field keys (`lib/providers.ts`) match the provider
   constructor params, so stored config maps directly.
-
-Webhook signature verification stays **platform-level** (single secret) for now
-— per-tenant webhook routing is the natural next step.
+- Webhooks are routed per tenant (`/api/webhooks/[provider]/[org]`) and verified
+  against the merchant's stored secret.
 
 ## Package security audit (secure-by-design)
 
@@ -123,10 +122,12 @@ Every package was reviewed for cross-tenant leakage. Posture by package:
 | `checkout-host` | Yes — checkout sessions | `tenantId` stored on session; provider rebuilt per tenant |
 | `checkout` | Per-session state machine | New instance per session; no module-level mutable state |
 | `payment-stripe` / `-easypay` / `-ifthenpay` | Credentials only | Stateless; config injected per tenant via the factory |
-| `webhook-verifier` | Signature secrets | Platform-level (see follow-ups) |
-| `storage-vercel-blob` / `storage-s3` | File uploads | **Not yet wired** — must namespace keys per tenant when wired |
+| `storage-vercel-blob` / `storage-s3` | File uploads | Tenant-namespaced via `uploadForTenant()` |
 | `types`, `ui`, `eslint-config`, `typescript-config` | No | Safe |
-| `core` | Legacy engine | Not in the Next runtime path (not imported by apps) |
+
+> Legacy/dead packages `@commercejs/core` and `@commercejs/webhook-verifier`, and
+> the platform's dormant Prisma backend + legacy query layer, were removed — the
+> only commerce engine in the runtime path is `@commercejs/platform` (Drizzle).
 
 ### Secure-by-design measures (implemented)
 

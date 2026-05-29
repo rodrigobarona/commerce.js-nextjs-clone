@@ -44,11 +44,6 @@ export {
 } from './database/index.js'
 export type { DrizzleDatabase } from './database/drizzle/client.js'
 
-// Prisma (dormant — commented out to prevent WASM bundling)
-// export { initPrisma, getPrismaDb, migratePrisma } from './database/index.js'
-// export type { PrismaDatabase } from './database/prisma/client.js'
-// export { seedPrisma } from './database/prisma/seed.js'
-
 // Drizzle schema (for raw queries)
 export * as schema from './database/drizzle/schema/index.js'
 
