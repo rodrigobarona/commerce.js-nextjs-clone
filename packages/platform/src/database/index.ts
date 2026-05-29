@@ -2,9 +2,9 @@
 // Database barrel export
 // ---------------------------------------------------------------------------
 
-// Drizzle (active driver — Neon serverless, no WASM)
+// Drizzle (active driver — Neon serverless WebSocket Pool)
 export { initDrizzle, getDb as getDrizzleDb } from './drizzle/client.js'
-export { getDb } from './drizzle/client.js'
+export { getDb, withTenant, currentTenantScope } from './drizzle/client.js'
 export type { DrizzleDatabase } from './drizzle/client.js'
 export { migrateDrizzle } from './drizzle/migrate.js'
 export { seedDrizzle } from './drizzle/seed.js'

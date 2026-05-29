@@ -30,8 +30,16 @@ export type {
 // Config
 export type { PlatformConfig } from './types.js'
 
-// Database (Drizzle + Neon serverless — no WASM)
-export { initDrizzle, getDrizzleDb, getDb, migrateDrizzle, seedDrizzle } from './database/index.js'
+// Database (Drizzle + Neon serverless WebSocket Pool)
+export {
+  initDrizzle,
+  getDrizzleDb,
+  getDb,
+  withTenant,
+  currentTenantScope,
+  migrateDrizzle,
+  seedDrizzle,
+} from './database/index.js'
 export type { DrizzleDatabase } from './database/drizzle/client.js'
 
 // Prisma (dormant — commented out to prevent WASM bundling)

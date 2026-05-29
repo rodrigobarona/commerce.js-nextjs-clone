@@ -1,41 +1,96 @@
 // ---------------------------------------------------------------------------
-// Database client (Drizzle + Neon serverless HTTP)
+// Database client (Drizzle + Neon serverless WebSocket Pool)
 // ---------------------------------------------------------------------------
+//
+// Uses the WebSocket-based Pool driver (not neon-http) because multi-tenant
+// row-level security needs a *session-bound* connection: each tenant-scoped
+// request runs inside a transaction that sets `app.current_org_id`, and every
+// query in that request must execute on the same connection. neon-http is
+// stateless per query and cannot carry that session variable.
 
-import { neon } from '@neondatabase/serverless'
-import { drizzle } from 'drizzle-orm/neon-http'
+import { AsyncLocalStorage } from 'node:async_hooks'
+import { Pool } from '@neondatabase/serverless'
+import { drizzle } from 'drizzle-orm/neon-serverless'
+import { sql } from 'drizzle-orm'
 import * as schema from './schema/index.js'
 
 export type DrizzleDatabase = ReturnType<typeof drizzle<typeof schema>>
 
+/** A transaction handle, shaped like the database for query reuse. */
+type DrizzleTx = Parameters<Parameters<DrizzleDatabase['transaction']>[0]>[0]
+
 // Module-level database instance — set via initDrizzle()
+let _pool: Pool | null = null
 let _db: DrizzleDatabase | null = null
 
+// Per-request tenant context. When set, getDb() returns the transaction handle
+// bound to the tenant connection so RLS policies see `app.current_org_id`.
+const tenantStore = new AsyncLocalStorage<{ db: DrizzleTx }>()
+
 /**
- * Initialize the Drizzle database with a Neon serverless connection.
- *
- * Explicitly creates the neon() HTTP client and passes it to drizzle() —
- * the drizzle(connectionString) shorthand has a v1.x compatibility issue
- * where the client.query fallback breaks parallel queries on CF Workers.
+ * Initialize the Drizzle database with a Neon serverless WebSocket Pool.
  *
  * @param connectionString - PostgreSQL connection string (e.g. from Neon)
  */
 export function initDrizzle(connectionString: string): DrizzleDatabase {
   if (_db) return _db
 
-  const client = neon(connectionString)
-  _db = drizzle({ client, schema })
+  _pool = new Pool({ connectionString })
+  _db = drizzle({ client: _pool, schema })
   return _db
 }
 
-/** Get the current database instance. Throws if not initialized. */
-export function getDb(): DrizzleDatabase {
-  if (!_db) throw new Error('Drizzle database not initialized. Call initDrizzle(connectionString) first.')
+/** Get the base (non-tenant-scoped) database instance. Throws if uninitialized. */
+function getBaseDb(): DrizzleDatabase {
+  if (!_db) {
+    throw new Error(
+      'Drizzle database not initialized. Call initDrizzle(connectionString) first.',
+    )
+  }
   return _db
+}
+
+/**
+ * Get the database for the current execution context.
+ *
+ * Inside `withTenant()`, this returns the tenant-bound transaction handle so
+ * every query runs on the connection that has `app.current_org_id` set (RLS).
+ * Outside a tenant scope, it returns the base pool database.
+ */
+export function getDb(): DrizzleDatabase {
+  const scoped = tenantStore.getStore()
+  if (scoped) return scoped.db as unknown as DrizzleDatabase
+  return getBaseDb()
+}
+
+/**
+ * Run `fn` with all queries scoped to a tenant (organization).
+ *
+ * Opens a transaction, sets the `app.current_org_id` session variable (local to
+ * the transaction) so RLS policies filter rows by organization, and exposes the
+ * transaction handle to `getDb()` via AsyncLocalStorage. Every query issued
+ * inside `fn` automatically runs on that connection.
+ */
+export async function withTenant<T>(
+  organizationId: string,
+  fn: () => Promise<T>,
+): Promise<T> {
+  const base = getBaseDb()
+  return base.transaction(async (tx) => {
+    await tx.execute(
+      sql`select set_config('app.current_org_id', ${organizationId}, true)`,
+    )
+    return tenantStore.run({ db: tx }, fn)
+  })
+}
+
+/** The organization id for the current tenant scope, if any. */
+export function currentTenantScope(): boolean {
+  return tenantStore.getStore() !== undefined
 }
 
 /** Reset the database singleton (for tests). */
 export function resetDb(): void {
+  _pool = null
   _db = null
 }
-

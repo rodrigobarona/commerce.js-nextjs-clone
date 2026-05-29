@@ -1,7 +1,25 @@
 import 'server-only'
-import { createPlatformAdapter, type AdminAPI } from '@commercejs/platform'
+import {
+  createPlatformAdapter,
+  withTenant,
+  type AdminAPI,
+} from '@commercejs/platform'
 import type { CommerceAdapter } from '@commercejs/types'
 import { getCommerceConfig } from './env'
+
+/**
+ * Run commerce/admin operations scoped to a tenant (organization).
+ *
+ * Opens a DB transaction with `app.current_org_id` set so row-level security
+ * filters every query by organization. Use this around any data access in a
+ * multi-tenant request:
+ *
+ * ```ts
+ * const admin = await getAdmin()
+ * const products = await withTenant(orgId, () => admin.listProducts())
+ * ```
+ */
+export { withTenant }
 
 interface CommerceInstance {
   adapter: CommerceAdapter
