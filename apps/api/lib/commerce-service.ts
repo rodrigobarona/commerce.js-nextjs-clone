@@ -22,7 +22,11 @@ import {
   placeOrder,
   getAdmin,
   withTenant,
+  getAdapter,
+  verifyPaymentWebhook,
+  revalidateProducts,
 } from "@prood/commerce"
+import type { PaymentWebhookEvent } from "@prood/types"
 import type { PaginationParams } from "@prood/commerce"
 import type { z } from "zod"
 import { checkoutAddressBody } from "./schemas"
@@ -135,7 +139,50 @@ export const checkout = {
     ),
   setShippingMethod: (orgId: string, cartId: string, methodId: string) =>
     setShippingMethod(cartId, methodId, orgId),
-  placeOrder: (orgId: string, cartId: string) => placeOrder(cartId, orgId),
+  placeOrder: async (orgId: string, cartId: string) => {
+    const order = await placeOrder(cartId, orgId)
+    revalidateProducts(orgId)
+    return order
+  },
+}
+
+function resolveOrderIdFromWebhook(event: PaymentWebhookEvent): string | null {
+  const data = event.data as Record<string, unknown>
+  const object = (data?.data as { object?: Record<string, unknown> })?.object
+  const metadata = object?.metadata as Record<string, string> | undefined
+  if (metadata?.orderId) return metadata.orderId
+  if (typeof data?.orderId === "string") return data.orderId
+  if (typeof data?.key === "string") return data.key
+  return null
+}
+
+export const webhooks = {
+  async reconcilePayment(
+    provider: string,
+    payload: string,
+    signature: string,
+    orgId?: string
+  ): Promise<void> {
+    const event = await verifyPaymentWebhook(payload, signature, provider, orgId)
+    const orderId = resolveOrderIdFromWebhook(event)
+    if (!orderId) return
+
+    const apply = async () => {
+      const adapter = await getAdapter()
+      if (event.type === "payment.captured") {
+        await adapter.updateOrderStatus(orderId, { status: "processing" })
+        revalidateProducts(orgId)
+      } else if (event.type === "payment.failed" || event.type === "payment.cancelled") {
+        await adapter.updateOrderStatus(orderId, { status: "cancelled" })
+      }
+    }
+
+    if (orgId) {
+      await withTenant(orgId, apply)
+    } else {
+      await apply()
+    }
+  },
 }
 
 export const orders = {

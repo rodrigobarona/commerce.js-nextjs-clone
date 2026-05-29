@@ -1,6 +1,6 @@
 "use client"
 
-import type { Product } from "@prood/commerce/types"
+import type { Product } from "@prood/types"
 import { ProductGrid } from "@prood/ui/components/product-grid"
 import { useCart } from "@/components/providers/cart-provider"
 

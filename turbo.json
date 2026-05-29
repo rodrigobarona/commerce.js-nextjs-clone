@@ -3,6 +3,7 @@
   "ui": "tui",
   "globalEnv": [
     "NODE_ENV",
+    "NEXT_PHASE",
     "DATABASE_URL",
     "DEFAULT_TENANT_ORG_ID",
     "VERCEL_TOKEN",

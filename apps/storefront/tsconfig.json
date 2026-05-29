@@ -5,9 +5,7 @@
     "declarationMap": false,
     "paths": {
       "@/*": ["./*"],
-      "@prood/ui/*": ["../../packages/ui/src/*"],
-      "@prood/commerce": ["../../packages/commerce/src/index.ts"],
-      "@prood/commerce/*": ["../../packages/commerce/src/*"]
+      "@prood/ui/*": ["../../packages/ui/src/*"]
     },
     "plugins": [
       {

@@ -1,6 +1,6 @@
 import Image from "next/image"
 import Link from "next/link"
-import type { Category, Product } from "@prood/commerce/types"
+import type { Category, Product } from "@prood/types"
 import { HeroBanner } from "@prood/ui/components/hero-banner"
 import { localized } from "@prood/ui/lib/commerce"
 import { ConnectedProductGrid } from "@/components/commerce/connected-product-grid"

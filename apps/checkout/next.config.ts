@@ -4,7 +4,7 @@ const nextConfig: NextConfig = {
   cacheComponents: true,
   transpilePackages: [
     "@prood/ui",
-    "@prood/commerce",
+    "@prood/types",
     "@prood/checkout-host",
   ],
   images: {

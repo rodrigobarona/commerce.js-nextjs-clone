@@ -1,6 +1,6 @@
 import Link from "next/link"
 import { UserIcon } from "@phosphor-icons/react/dist/ssr"
-import type { Category } from "@prood/commerce/types"
+import type { Category } from "@prood/types"
 import { fetchCategories, fetchStoreInfo } from "@/lib/commerce-data"
 import { Button } from "@prood/ui/components/button"
 import { localized } from "@prood/ui/lib/commerce"

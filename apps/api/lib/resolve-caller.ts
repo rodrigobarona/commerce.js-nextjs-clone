@@ -1,5 +1,5 @@
 import type { AgentSession } from "@better-auth/agent-auth"
-import { CommerceError } from "@prood/commerce"
+import { CommerceError } from "@prood/types"
 import { eq } from "drizzle-orm"
 import { getAuth } from "@/lib/auth"
 import { authDb } from "@/lib/auth/db"

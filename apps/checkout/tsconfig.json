@@ -6,8 +6,6 @@
     "paths": {
       "@/*": ["./*"],
       "@prood/ui/*": ["../../packages/ui/src/*"],
-      "@prood/commerce": ["../../packages/commerce/src/index.ts"],
-      "@prood/commerce/*": ["../../packages/commerce/src/*"],
       "@prood/checkout-host": ["../../packages/checkout-host/src/index.ts"],
       "@prood/checkout-host/*": ["../../packages/checkout-host/src/*"]
     },

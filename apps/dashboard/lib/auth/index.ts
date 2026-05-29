@@ -1,5 +1,5 @@
 import { headers } from "next/headers"
-import { auth, type Session } from "./server"
+import { getAuth, type Session } from "./server"
 
 /**
  * Provider-agnostic session accessor (the auth "seam").
@@ -9,7 +9,10 @@ import { auth, type Session } from "./server"
  * without changing callers.
  */
 export async function getSession(): Promise<Session | null> {
-  return auth.api.getSession({ headers: await headers() })
+  if (process.env.NEXT_PHASE === "phase-production-build") {
+    return null
+  }
+  return getAuth().api.getSession({ headers: await headers() })
 }
 
 /** Convenience: the current user or null. */
@@ -26,7 +29,10 @@ export async function getActiveOrganizationId(): Promise<string | null> {
 
 /** All organizations (tenant stores) the current merchant belongs to. */
 export async function listOrganizations() {
-  return auth.api.listOrganizations({ headers: await headers() })
+  if (process.env.NEXT_PHASE === "phase-production-build") {
+    return []
+  }
+  return getAuth().api.listOrganizations({ headers: await headers() })
 }
 
 /**
@@ -36,11 +42,14 @@ export async function listOrganizations() {
 export async function getFullActiveOrganization() {
   const orgId = await getActiveOrganizationId()
   if (!orgId) return null
-  return auth.api.getFullOrganization({
+  if (process.env.NEXT_PHASE === "phase-production-build") {
+    return null
+  }
+  return getAuth().api.getFullOrganization({
     headers: await headers(),
     query: { organizationId: orgId },
   })
 }
 
-export { auth } from "./server"
+export { getAuth } from "./server"
 export type { Session, SessionUser } from "./server"

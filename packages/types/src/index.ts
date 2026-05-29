@@ -5,7 +5,9 @@
 
 // Common primitives & utilities
 export type { Maybe, Id, LocalizedString, PaginatedResult, PaginationParams, Price, DiscountablePrice, Image, DeepPartial, CommerceErrorCode, TaxStrategy } from './common.js'
-export { CommerceError, isCommerceError } from './common.js'
+export { CommerceError, isCommerceError, priceToMajorAmount } from './common.js'
+export type { CommerceErrorBody, CommerceErrorResponse } from './http-errors.js'
+export { toErrorResponse } from './http-errors.js'
 
 // Product
 export type { Product, ProductVariant, ProductOption, Attribute, ProductType, DigitalProductMeta, ServiceProductMeta, EventProductMeta, SubscriptionProductMeta, PreOrderMeta } from './product.js'

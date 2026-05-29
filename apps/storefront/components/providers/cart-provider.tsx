@@ -8,7 +8,7 @@ import {
   useState,
   type ReactNode,
 } from "react"
-import type { Cart, Product } from "@prood/commerce/types"
+import type { Cart, Product } from "@prood/types"
 import { CartDrawer } from "@prood/ui/components/cart-drawer"
 import { toast } from "sonner"
 

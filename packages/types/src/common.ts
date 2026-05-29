@@ -46,6 +46,35 @@ export interface Price {
   formatted: string
 }
 
+const ZERO_DECIMAL_CURRENCIES = new Set([
+  'BIF',
+  'CLP',
+  'DJF',
+  'GNF',
+  'JPY',
+  'KMF',
+  'KRW',
+  'MGA',
+  'PYG',
+  'RWF',
+  'UGX',
+  'VND',
+  'VUV',
+  'XAF',
+  'XOF',
+  'XPF',
+])
+
+/**
+ * Convert a {@link Price} (amount in the smallest currency unit) to the major
+ * unit expected by payment gateways (e.g. 4990 → 49.90).
+ */
+export function priceToMajorAmount(price: Price): number {
+  return ZERO_DECIMAL_CURRENCIES.has(price.currency.toUpperCase())
+    ? price.amount
+    : price.amount / 100
+}
+
 /** Price that may have a discount applied */
 export interface DiscountablePrice extends Price {
   /** Original amount before discount */

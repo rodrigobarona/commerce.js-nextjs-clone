@@ -1,6 +1,6 @@
 import Link from "next/link"
 import { notFound } from "next/navigation"
-import type { Product } from "@prood/commerce/types"
+import type { Product } from "@prood/types"
 import { fetchProductBySlug } from "@/lib/commerce-data"
 import {
   Breadcrumb,

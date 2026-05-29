@@ -7,7 +7,7 @@
     "dev": "next dev -p 3004",
     "build": "next build",
     "start": "next start -p 3004",
-    "lint": "eslint",
+    "lint": "eslint --max-warnings 0",
     "format": "prettier --write \"**/*.{ts,tsx}\"",
     "typecheck": "tsc --noEmit"
   },
@@ -16,7 +16,7 @@
     "@stripe/react-stripe-js": "^6.4.0",
     "@stripe/stripe-js": "^9.7.0",
     "@prood/checkout-host": "workspace:*",
-    "@prood/commerce": "workspace:*",
+    "@prood/types": "workspace:*",
     "@prood/ui": "workspace:*",
     "next": "16.2.6",
     "next-themes": "^0.4.6",

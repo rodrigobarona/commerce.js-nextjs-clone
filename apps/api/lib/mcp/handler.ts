@@ -1,5 +1,5 @@
 import { createMcpHandler } from "mcp-handler"
-import { CommerceError } from "@prood/commerce"
+import { CommerceError } from "@prood/types"
 import { resolveCallerFromHeaders } from "@/lib/resolve-caller"
 import { mcpCallerStorage } from "@/lib/mcp/context"
 import { registerCommerceMcpTools } from "@/lib/mcp/tools"

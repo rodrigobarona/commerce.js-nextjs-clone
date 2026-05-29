@@ -10,7 +10,6 @@ import type {
   PaginationParams,
   PaymentMethod,
   PaymentSession,
-  Price,
   Promotion,
   Review,
   ReviewSummary,
@@ -22,21 +21,7 @@ import { getTenantPaymentConfig } from './integrations'
 
 type CheckoutAddress = Omit<Address, 'id' | 'isDefault'>
 
-/** Currencies whose smallest unit equals the major unit (no division). */
-const ZERO_DECIMAL_CURRENCIES = new Set([
-  'BIF', 'CLP', 'DJF', 'GNF', 'JPY', 'KMF', 'KRW', 'MGA',
-  'PYG', 'RWF', 'UGX', 'VND', 'VUV', 'XAF', 'XOF', 'XPF',
-])
-
-/**
- * Convert a {@link Price} (amount in the smallest currency unit) to the major
- * unit expected by the {@link PaymentProvider} contract (e.g. 4990 -> 49.90).
- */
-export function priceToMajorAmount(price: Price): number {
-  return ZERO_DECIMAL_CURRENCIES.has(price.currency.toUpperCase())
-    ? price.amount
-    : price.amount / 100
-}
+export { priceToMajorAmount } from '@prood/types'
 
 // ---- Shipping & payment options ----
 

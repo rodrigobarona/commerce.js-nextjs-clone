@@ -1,7 +1,7 @@
 "use client"
 
 import { useCallback } from "react"
-import type { Product } from "@prood/commerce/types"
+import type { Product } from "@prood/types"
 import { SearchPalette } from "@prood/ui/components/search-palette"
 
 export function Search() {

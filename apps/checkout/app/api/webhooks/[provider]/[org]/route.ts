@@ -1,15 +1,12 @@
 import { NextResponse } from "next/server"
-import { verifyPaymentWebhook } from "@prood/commerce"
-import { reconcilePayment } from "@prood/checkout-host"
+import { forwardPaymentWebhook } from "@prood/checkout-host/reconcile"
 
 type Ctx = { params: Promise<{ provider: string; org: string }> }
 
-// "_" is the sentinel for "no tenant" (env-based credentials).
 function tenantFrom(org: string): string | undefined {
   return org && org !== "_" ? decodeURIComponent(org) : undefined
 }
 
-// POST — Stripe (signed header), EasyPay, and IfThenPay notifications.
 export async function POST(request: Request, { params }: Ctx) {
   const { provider, org } = await params
   const signature =
@@ -17,13 +14,7 @@ export async function POST(request: Request, { params }: Ctx) {
   const payload = await request.text()
 
   try {
-    const event = await verifyPaymentWebhook(
-      payload,
-      signature,
-      provider,
-      tenantFrom(org),
-    )
-    await reconcilePayment(event, tenantFrom(org))
+    await forwardPaymentWebhook(provider, payload, signature, tenantFrom(org))
     return NextResponse.json({ received: true })
   } catch (err) {
     console.error(`[webhooks/${provider}]`, err)
@@ -31,14 +22,12 @@ export async function POST(request: Request, { params }: Ctx) {
   }
 }
 
-// GET — IfThenPay delivers callbacks as query-string GETs.
 export async function GET(request: Request, { params }: Ctx) {
   const { provider, org } = await params
   const query = new URL(request.url).search.replace(/^\?/, "")
 
   try {
-    const event = await verifyPaymentWebhook(query, "", provider, tenantFrom(org))
-    await reconcilePayment(event, tenantFrom(org))
+    await forwardPaymentWebhook(provider, query, "", tenantFrom(org), "GET")
     return NextResponse.json({ received: true })
   } catch (err) {
     console.error(`[webhooks/${provider}]`, err)

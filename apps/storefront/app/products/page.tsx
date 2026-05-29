@@ -1,5 +1,5 @@
 import Link from "next/link"
-import type { Product, SearchParams } from "@prood/commerce/types"
+import type { Product, SearchParams } from "@prood/types"
 import { Button } from "@prood/ui/components/button"
 import { ConnectedProductGrid } from "@/components/commerce/connected-product-grid"
 import { fetchProductList } from "@/lib/commerce-data"

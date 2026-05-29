@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import { ShoppingCartIcon } from "@phosphor-icons/react"
-import type { Product } from "@prood/commerce/types"
+import type { Product } from "@prood/types"
 import { Button } from "@prood/ui/components/button"
 import { ProductOptions } from "@prood/ui/components/product-options"
 import { QuantitySelector } from "@prood/ui/components/quantity-selector"

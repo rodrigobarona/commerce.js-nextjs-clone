@@ -1,10 +1,9 @@
 "use server"
 
-import type { Address, Order } from "@prood/commerce/types"
-import { priceToMajorAmount, revalidateProducts } from "@prood/commerce"
+import type { Address, Order } from "@prood/types"
+import { priceToMajorAmount } from "@prood/types"
 import { clearCartId, getCartId } from "@/lib/cart-cookie"
 import { getCommerceApi } from "@/lib/commerce-api"
-import { resolveTenantId } from "@/lib/tenant"
 
 type CheckoutAddress = Omit<Address, "id" | "isDefault">
 
@@ -35,7 +34,6 @@ export async function startCheckout(input: StartCheckoutInput): Promise<Checkout
     const cartId = await getCartId()
     if (!cartId) return { ok: false, error: "No active cart" }
 
-    const tenantId = await resolveTenantId()
     const api = await getCommerceApi()
     const address = input.address as CheckoutAddress
 
@@ -79,11 +77,10 @@ export async function startCheckout(input: StartCheckoutInput): Promise<Checkout
       api.POST("/carts/{id}/place-order", { params: { path: { id: cartId } } })
     )
 
-    revalidateProducts(tenantId)
-
     const providerId = input.providerId ?? process.env.DEFAULT_PAYMENT_PROVIDER ?? "stripe"
     const checkoutUrl = process.env.CHECKOUT_URL ?? "http://localhost:3004"
     const storefrontUrl = process.env.BETTER_AUTH_URL ?? "http://localhost:3000"
+    const tenantId = process.env.DEFAULT_TENANT_ORG_ID
 
     const sessionRes = await fetch(`${checkoutUrl}/api/sessions`, {
       method: "POST",

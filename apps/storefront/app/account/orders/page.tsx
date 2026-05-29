@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation"
-import type { Order } from "@prood/commerce/types"
+import type { Order } from "@prood/types"
 import { OrderCard } from "@prood/ui/components/order-card"
 import { getCurrentUser } from "@/lib/auth"
 import { fetchCustomerOrders } from "@/lib/commerce-data"

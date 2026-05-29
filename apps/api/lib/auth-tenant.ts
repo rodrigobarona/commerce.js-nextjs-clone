@@ -1,6 +1,5 @@
 import "server-only"
 import { headers } from "next/headers"
-import { CommerceError } from "@prood/commerce"
 import {
   requireCallerFromHeaders,
   resolveCallerFromHeaders,

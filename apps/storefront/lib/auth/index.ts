@@ -1,5 +1,5 @@
 import { headers } from "next/headers"
-import { auth, type Session } from "./server"
+import { getAuth, type Session } from "./server"
 
 /**
  * Provider-agnostic session accessor (the auth "seam").
@@ -9,7 +9,10 @@ import { auth, type Session } from "./server"
  * without changing callers.
  */
 export async function getSession(): Promise<Session | null> {
-  return auth.api.getSession({ headers: await headers() })
+  if (process.env.NEXT_PHASE === "phase-production-build") {
+    return null
+  }
+  return getAuth().api.getSession({ headers: await headers() })
 }
 
 /** Convenience: the current user or null. */
@@ -18,5 +21,5 @@ export async function getCurrentUser() {
   return session?.user ?? null
 }
 
-export { auth } from "./server"
+export { getAuth } from "./server"
 export type { Session, SessionUser } from "./server"

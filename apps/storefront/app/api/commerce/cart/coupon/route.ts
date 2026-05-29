@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server"
 import { z } from "zod"
-import { CommerceError } from "@prood/commerce"
+import { CommerceError } from "@prood/types"
 import { errorResponse } from "@/lib/api"
 import { getCartId } from "@/lib/cart-cookie"
 import { getCommerceApi } from "@/lib/commerce-api"

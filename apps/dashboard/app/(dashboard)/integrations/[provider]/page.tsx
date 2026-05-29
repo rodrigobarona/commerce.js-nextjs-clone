@@ -1,19 +1,14 @@
 import Link from "next/link"
 import { notFound } from "next/navigation"
+import { connection } from "next/server"
 import { ArrowLeft } from "@phosphor-icons/react/dist/ssr"
 import { ProviderConfigForm } from "@/components/integrations/provider-config-form"
 import { getActiveOrganizationId } from "@/lib/auth"
 import { getIntegration } from "@/lib/integrations"
-import { getProvider } from "@/lib/providers"
+import { getProvider, providerRegistry } from "@/lib/providers"
 
-export async function generateMetadata({
-  params,
-}: {
-  params: Promise<{ provider: string }>
-}) {
-  const { provider } = await params
-  const meta = getProvider(provider)
-  return { title: meta ? meta.name : "Integration" }
+export function generateStaticParams() {
+  return providerRegistry.map((p) => ({ provider: p.id }))
 }
 
 export default async function IntegrationConfigPage({
@@ -21,6 +16,7 @@ export default async function IntegrationConfigPage({
 }: {
   params: Promise<{ provider: string }>
 }) {
+  await connection()
   const { provider } = await params
   const meta = getProvider(provider)
   if (!meta) notFound()

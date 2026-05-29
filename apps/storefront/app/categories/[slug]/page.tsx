@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation"
-import type { Category, Product } from "@prood/commerce/types"
+import type { Category, Product } from "@prood/types"
 import { localized } from "@prood/ui/lib/commerce"
 import { ConnectedProductGrid } from "@/components/commerce/connected-product-grid"
 import { fetchCategories, fetchProductList } from "@/lib/commerce-data"

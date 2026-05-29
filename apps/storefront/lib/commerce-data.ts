@@ -1,5 +1,5 @@
 import "server-only"
-import type { Cart, Category, Order, Product, StoreInfo } from "@prood/commerce/types"
+import type { Cart, Category, Order, Product, StoreInfo } from "@prood/types"
 
 type ProductListResult = {
   products: { items: Product[]; total: number }

@@ -10,7 +10,7 @@ if [[ ! -f "$ENV_FILE" ]]; then
   exit 1
 fi
 
-APPS=(storefront checkout dashboard docs web)
+APPS=(api storefront checkout dashboard docs web)
 
 for app in "${APPS[@]}"; do
   target="$ROOT/apps/$app/.env.local"

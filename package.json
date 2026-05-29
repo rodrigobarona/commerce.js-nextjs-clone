@@ -8,6 +8,7 @@
     "lint": "turbo lint",
     "format": "turbo format",
     "typecheck": "turbo typecheck",
+    "verify": "turbo lint typecheck build",
     "db:migrate": "turbo db:migrate:seed --filter=@prood/platform",
     "db:auth": "pnpm --filter storefront db:push",
     "db:setup": "pnpm db:migrate && pnpm db:auth",

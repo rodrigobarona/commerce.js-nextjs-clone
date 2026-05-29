@@ -1,6 +1,6 @@
 import Link from "next/link"
 import { redirect } from "next/navigation"
-import type { Order } from "@prood/commerce/types"
+import type { Order } from "@prood/types"
 import { OrderCard } from "@prood/ui/components/order-card"
 import { SignOutButton } from "@/components/auth/sign-out-button"
 import { getCurrentUser } from "@/lib/auth"

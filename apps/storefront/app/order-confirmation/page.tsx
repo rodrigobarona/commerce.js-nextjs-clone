@@ -1,6 +1,6 @@
 import Link from "next/link"
 import { CheckCircleIcon } from "@phosphor-icons/react/dist/ssr"
-import type { Order } from "@prood/commerce/types"
+import type { Order } from "@prood/types"
 import { Button } from "@prood/ui/components/button"
 import { EmptyState } from "@prood/ui/components/empty-state"
 import { OrderTimeline } from "@prood/ui/components/order-timeline"

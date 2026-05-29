@@ -327,6 +327,18 @@ export function buildOpenApiDocument() {
       "/admin/dashboard": pathItem("GET", "Dashboard stats", "adminGetDashboard", {
         scope: "admin",
       }),
+      "/webhooks/payments/{provider}": {
+        ...pathItem("POST", "Payment webhook (checkout service)", "paymentWebhook", {
+          pathTemplate: "/webhooks/payments/{provider}",
+          scope: "storefront",
+          responses: { "200": { description: "Webhook accepted" } },
+        }),
+        ...pathItem("GET", "Payment webhook GET (IfThenPay)", "paymentWebhookGet", {
+          pathTemplate: "/webhooks/payments/{provider}",
+          scope: "storefront",
+          responses: { "200": { description: "Webhook accepted" } },
+        }),
+      },
     },
   }
 }

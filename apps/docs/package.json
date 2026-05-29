@@ -9,7 +9,7 @@
     "build": "next build",
     "dev": "pnpm sync:openapi && next dev -p 3003",
     "start": "next start -p 3003",
-    "lint": "eslint",
+    "lint": "eslint --max-warnings 0",
     "format": "prettier --write \"**/*.{ts,tsx,mdx}\"",
     "typecheck": "fumadocs-mdx && next typegen && tsc --noEmit",
     "postinstall": "fumadocs-mdx"
