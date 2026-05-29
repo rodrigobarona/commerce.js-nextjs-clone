@@ -32,6 +32,9 @@ importers:
       '@phosphor-icons/react':
         specifier: ^2.1.10
         version: 2.1.10(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
+      '@workspace/commerce':
+        specifier: workspace:*
+        version: link:../../packages/commerce
       '@workspace/ui':
         specifier: workspace:*
         version: link:../../packages/ui
@@ -84,6 +87,52 @@ importers:
       vitest:
         specifier: ^4.0.0
         version: 4.1.7(@types/node@25.9.1)(msw@2.14.6(@types/node@25.9.1)(typescript@5.9.3))(vite@8.0.14(@types/node@25.9.1)(esbuild@0.28.0)(jiti@2.7.0)(tsx@4.22.3))
+
+  packages/commerce:
+    dependencies:
+      '@commercejs/checkout':
+        specifier: workspace:*
+        version: link:../checkout
+      '@commercejs/core':
+        specifier: workspace:*
+        version: link:../core
+      '@commercejs/payment-easypay':
+        specifier: workspace:*
+        version: link:../payment-easypay
+      '@commercejs/payment-ifthenpay':
+        specifier: workspace:*
+        version: link:../payment-ifthenpay
+      '@commercejs/payment-stripe':
+        specifier: workspace:*
+        version: link:../payment-stripe
+      '@commercejs/platform':
+        specifier: workspace:*
+        version: link:../platform
+      '@commercejs/storage-s3':
+        specifier: workspace:*
+        version: link:../storage-s3
+      '@commercejs/storage-vercel-blob':
+        specifier: workspace:*
+        version: link:../storage-vercel-blob
+      '@commercejs/types':
+        specifier: workspace:*
+        version: link:../types
+      server-only:
+        specifier: ^0.0.1
+        version: 0.0.1
+      zod:
+        specifier: ^4.4.3
+        version: 4.4.3
+    devDependencies:
+      '@types/node':
+        specifier: ^24
+        version: 24.12.4
+      '@workspace/typescript-config':
+        specifier: workspace:*
+        version: link:../typescript-config
+      typescript:
+        specifier: ^5
+        version: 5.9.3
 
   packages/core:
     dependencies:
@@ -181,7 +230,7 @@ importers:
         specifier: workspace:*
         version: link:../types
       stripe:
-        specifier: '>=18'
+        specifier: ^22.2.0
         version: 22.2.0(@types/node@24.12.4)
     devDependencies:
       '@types/node':
@@ -247,7 +296,7 @@ importers:
         specifier: workspace:*
         version: link:../types
       '@vercel/blob':
-        specifier: '>=1'
+        specifier: ^2.4.0
         version: 2.4.0
     devDependencies:
       '@types/node':
@@ -4793,6 +4842,9 @@ packages:
   serve-static@2.2.1:
     resolution: {integrity: sha512-xRXBn0pPqQTVQiC8wyQrKs2MOlX24zQ0POGaj0kultvoOCstBQM5yvOhAVSUwOMjQtTvsPWoNCHfPGwaaQJhTw==}
     engines: {node: '>= 18'}
+
+  server-only@0.0.1:
+    resolution: {integrity: sha512-qepMx2JxAa5jjfzxG79yPPq+8BuFToHd1hm7kI+Z4zAq1ftQiP7HcxMhDDItrbtwVeLg/cY2JnKnrcFkmiswNA==}
 
   set-cookie-parser@3.1.0:
     resolution: {integrity: sha512-kjnC1DXBHcxaOaOXBHBeRtltsDG2nUiUni+jP92M9gYdW12rsmx92UsfpH7o5tDRs7I1ZZPSQJQGv3UaRfCiuw==}
@@ -9818,6 +9870,8 @@ snapshots:
       send: 1.2.1
     transitivePeerDependencies:
       - supports-color
+
+  server-only@0.0.1: {}
 
   set-cookie-parser@3.1.0: {}
 

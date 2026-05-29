@@ -1,0 +1,59 @@
+import 'server-only'
+import { createPlatformAdapter, type AdminAPI } from '@commercejs/platform'
+import type { CommerceAdapter } from '@commercejs/types'
+import { getCommerceConfig } from './env'
+
+interface CommerceInstance {
+  adapter: CommerceAdapter
+  admin: AdminAPI
+}
+
+// Singleton promise — the adapter (and its DB connection) is created once
+// per server runtime and shared across requests.
+let instancePromise: Promise<CommerceInstance> | null = null
+
+function create(): Promise<CommerceInstance> {
+  const config = getCommerceConfig()
+
+  switch (config.adapter) {
+    case 'platform':
+      return createPlatformAdapter({
+        connectionString: config.databaseUrl,
+        currency: config.currency,
+      })
+    case 'medusa':
+    case 'salla':
+      // The registry is intentionally pluggable: drop in @commercejs/adapter-*
+      // here to swap the backing platform without touching the data layer.
+      throw new Error(
+        `COMMERCE_ADAPTER='${config.adapter}' is not wired in this app yet. ` +
+          `Add the corresponding adapter package and register it in adapter.ts.`,
+      )
+    default: {
+      const exhaustive: never = config.adapter
+      throw new Error(`Unknown COMMERCE_ADAPTER: ${String(exhaustive)}`)
+    }
+  }
+}
+
+/** Get the shared commerce instance (adapter + admin), creating it lazily. */
+export function getCommerce(): Promise<CommerceInstance> {
+  if (!instancePromise) {
+    instancePromise = create().catch((err) => {
+      // Reset so a transient failure (e.g. cold DB) can be retried.
+      instancePromise = null
+      throw err
+    })
+  }
+  return instancePromise
+}
+
+/** Get the storefront commerce adapter. */
+export async function getAdapter(): Promise<CommerceAdapter> {
+  return (await getCommerce()).adapter
+}
+
+/** Get the platform admin API (merchant operations). */
+export async function getAdmin(): Promise<AdminAPI> {
+  return (await getCommerce()).admin
+}

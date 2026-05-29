@@ -3,7 +3,9 @@
   "compilerOptions": {
     "paths": {
       "@/*": ["./*"],
-      "@workspace/ui/*": ["../../packages/ui/src/*"]
+      "@workspace/ui/*": ["../../packages/ui/src/*"],
+      "@workspace/commerce": ["../../packages/commerce/src/index.ts"],
+      "@workspace/commerce/*": ["../../packages/commerce/src/*"]
     },
     "plugins": [
       {

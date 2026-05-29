@@ -22,10 +22,8 @@
     "clean": "rm -rf dist"
   },
   "dependencies": {
-    "@commercejs/types": "workspace:*"
-  },
-  "peerDependencies": {
-    "stripe": ">=18"
+    "@commercejs/types": "workspace:*",
+    "stripe": "^22.2.0"
   },
   "devDependencies": {
     "@types/node": "^24",

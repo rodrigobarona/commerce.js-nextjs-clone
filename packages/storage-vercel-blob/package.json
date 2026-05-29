@@ -22,10 +22,8 @@
     "clean": "rm -rf dist"
   },
   "dependencies": {
-    "@commercejs/types": "workspace:*"
-  },
-  "peerDependencies": {
-    "@vercel/blob": ">=1"
+    "@commercejs/types": "workspace:*",
+    "@vercel/blob": "^2.4.0"
   },
   "devDependencies": {
     "@types/node": "^24",
