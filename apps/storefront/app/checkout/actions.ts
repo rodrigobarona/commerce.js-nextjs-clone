@@ -2,7 +2,6 @@
 
 import type { Address } from "@workspace/commerce/types"
 import {
-  createPaymentSession,
   getShippingMethods,
   placeOrder,
   priceToMajorAmount,
@@ -19,10 +18,7 @@ export interface CheckoutResult {
   ok: boolean
   error?: string
   orderId?: string
-  providerId?: string
-  clientSecret?: string
-  redirectUrl?: string
-  reference?: { entity?: string; reference?: string }
+  checkoutUrl?: string
 }
 
 export interface StartCheckoutInput {
@@ -45,37 +41,44 @@ export async function startCheckout(input: StartCheckoutInput): Promise<Checkout
 
     const order = await placeOrder(cartId)
     revalidateProducts()
-    const providerId = input.providerId ?? process.env.DEFAULT_PAYMENT_PROVIDER ?? "stripe"
 
-    const baseUrl = process.env.BETTER_AUTH_URL ?? ""
-    const session = await createPaymentSession({
-      amount: priceToMajorAmount(order.totals.total),
-      currency: order.totals.total.currency,
-      orderId: order.id,
-      customer: {
-        email: input.email,
-        firstName: address.firstName,
-        lastName: address.lastName,
-        phone: address.phone ?? undefined,
+    const providerId = input.providerId ?? process.env.DEFAULT_PAYMENT_PROVIDER ?? "stripe"
+    const hostedCheckoutUrl = process.env.HOSTED_CHECKOUT_URL ?? "http://localhost:3100"
+    const storefrontUrl = process.env.BETTER_AUTH_URL ?? "http://localhost:3000"
+
+    const sessionRes = await fetch(`${hostedCheckoutUrl}/api/sessions`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        ...(process.env.CHECKOUT_API_SECRET
+          ? { "x-checkout-secret": process.env.CHECKOUT_API_SECRET }
+          : {}),
       },
-      returnUrl: `${baseUrl}/order-confirmation?orderId=${order.id}`,
-      providerId,
+      body: JSON.stringify({
+        orderId: order.id,
+        amount: priceToMajorAmount(order.totals.total),
+        currency: order.totals.total.currency,
+        returnUrl: `${storefrontUrl}/order-confirmation?orderId=${order.id}`,
+        providerId,
+        customerInfo: {
+          email: input.email,
+          firstName: address.firstName,
+          lastName: address.lastName,
+          phone: address.phone ?? undefined,
+        },
+        fulfillment: "none",
+      }),
     })
 
-    // Order placed — the cart is consumed; drop the cookie.
+    if (!sessionRes.ok) {
+      const err = (await sessionRes.json().catch(() => ({}))) as { message?: string }
+      return { ok: false, error: err.message ?? "Failed to create checkout session" }
+    }
+
+    const session = (await sessionRes.json()) as { checkoutUrl: string }
     await clearCartId()
 
-    return {
-      ok: true,
-      orderId: order.id,
-      providerId,
-      clientSecret: (session.providerData?.clientSecret as string | undefined) ?? undefined,
-      redirectUrl: session.redirectUrl ?? undefined,
-      reference: {
-        entity: session.providerData?.entity as string | undefined,
-        reference: session.providerData?.reference as string | undefined,
-      },
-    }
+    return { ok: true, orderId: order.id, checkoutUrl: session.checkoutUrl }
   } catch (err) {
     return { ok: false, error: err instanceof Error ? err.message : "Checkout failed" }
   }
