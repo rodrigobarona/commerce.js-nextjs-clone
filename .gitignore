@@ -1,0 +1,40 @@
+# Dependencies
+node_modules/
+.pnpm-store/
+
+# Build output
+dist/
+.next/
+.output/
+.turbo/
+*.tsbuildinfo
+
+# Env
+.env
+.env.local
+.env.*.local
+
+# Logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Vercel
+.vercel
+
+# Upstream reference checkout (read-only, not part of this repo's source)
+_context/repo-clone/
+
+# Drizzle generated SQL snapshots kept, but local db files ignored
+*.db
+.secrets

@@ -1,0 +1,55 @@
+{
+  "name": "@commercejs/platform",
+  "version": "0.5.4",
+  "description": "Native commerce engine — own your data, implement CommerceAdapter without external platforms",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/commerce-js/commerce.js.git",
+    "directory": "packages/platform"
+  },
+  "license": "MIT",
+  "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./neon": {
+      "types": "./dist/database/neon/index.d.ts",
+      "import": "./dist/database/neon/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "clean": "rm -rf dist",
+    "db:generate": "drizzle-kit generate",
+    "db:push": "drizzle-kit push",
+    "db:migrate": "node scripts/migrate.mjs",
+    "db:migrate:seed": "node scripts/migrate.mjs --seed",
+    "prisma:generate": "prisma generate --schema=src/database/prisma/schema",
+    "prisma:migrate": "prisma migrate dev --schema=src/database/prisma/schema"
+  },
+  "dependencies": {
+    "@commercejs/types": "workspace:*",
+    "@neondatabase/serverless": "^1.0.2",
+    "@prisma/adapter-neon": "^7.6.0",
+    "bcrypt-ts": "^5.0.3",
+    "drizzle-orm": "^0.45.1"
+  },
+  "devDependencies": {
+    "@types/node": "^24",
+    "drizzle-kit": "^0.31.9",
+    "prisma": "^7.6.0",
+    "typescript": "^5.7.0",
+    "vitest": "^4.0.0"
+  }
+}

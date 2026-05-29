@@ -1,0 +1,14 @@
+// Prisma schema — generator + datasource configuration
+// Models are split across *.prisma files in this directory (multi-file schema)
+
+generator client {
+  provider               = "prisma-client"
+  output                 = "../generated"
+  moduleFormat           = "esm"
+  generatedFileExtension = "ts"
+  runtime                = "nodejs"
+}
+
+datasource db {
+  provider = "postgresql"
+}
