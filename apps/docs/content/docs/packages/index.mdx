@@ -1,0 +1,84 @@
+---
+title: Packages Overview
+description: Shared packages in the Prood monorepo — types, platform engine, commerce layer, checkout, UI, and providers.
+---
+
+Prood packages are organized by responsibility. Applications compose them — no package depends on an app.
+
+## Package dependency graph
+
+```
+@prood/types          (interfaces only — no dependencies)
+    │
+    ├── @prood/platform      (Neon Postgres engine)
+    │       └── implements CommerceAdapter + AdminAPI
+    │
+    ├── @prood/commerce      (server data layer)
+    │       └── wraps platform + payment/storage providers
+    │
+    ├── @prood/checkout      (state machine)
+    │       └── uses PaymentProvider from types
+    │
+    ├── @prood/checkout-host (Redis session host)
+    │       └── uses checkout + commerce
+    │
+    ├── @prood/payment-*     (gateway providers)
+    ├── @prood/storage-*     (file upload providers)
+    │
+    ├── @prood/api-client    (typed HTTP client)
+    └── @prood/ui            (React components)
+```
+
+## Core stack
+
+| Package | Version | Description |
+| --- | --- | --- |
+| [`@prood/types`](/docs/packages/types) | 0.3.0 | Unified data model — 20+ domain types, adapter and provider interfaces |
+| [`@prood/platform`](/docs/packages/platform) | 0.5.4 | Built-in commerce engine — Neon Postgres, Drizzle, RLS, Admin API |
+| [`@prood/commerce`](/docs/packages/commerce) | 0.0.0 | Server-only data layer — caching, tenant scope, provider factory |
+| [`@prood/checkout`](/docs/packages/checkout) | — | Framework-agnostic checkout state machine |
+| [`@prood/checkout-host`](/docs/packages/checkout-host) | — | Next.js session host with Upstash Redis |
+
+## Client & UI
+
+| Package | Description |
+| --- | --- |
+| [`@prood/api-client`](/docs/packages/api-client) | Typed OpenAPI fetch client |
+| [`@prood/ui`](/docs/packages/ui) | shadcn/Radix + 33+ commerce components |
+
+## Providers
+
+| Package | Description |
+| --- | --- |
+| [`@prood/payment-stripe`](/docs/packages/payments/stripe) | Stripe Payment Element via PaymentIntents |
+| [`@prood/payment-easypay`](/docs/packages/payments/easypay) | Portugal — Multibanco, MB WAY, card |
+| [`@prood/payment-ifthenpay`](/docs/packages/payments/ifthenpay) | Portugal — Multibanco, MB WAY, credit card |
+| [`@prood/storage-vercel-blob`](/docs/packages/storage/vercel-blob) | Vercel Blob storage provider |
+| [`@prood/storage-s3`](/docs/packages/storage/s3) | S3-compatible storage (AWS, R2, MinIO) |
+
+## Tooling (private)
+
+| Package | Description |
+| --- | --- |
+| `@prood/eslint-config` | Shared ESLint configs |
+| `@prood/typescript-config` | Shared TypeScript configs |
+
+## Which package do I need?
+
+| Task | Package(s) |
+| --- | --- |
+| Build a storefront page | `@prood/api-client`, `@prood/ui`, `@prood/types` |
+| Add a payment provider | `@prood/payment-*`, register in `@prood/commerce` |
+| Custom commerce adapter | `@prood/types` (implement `CommerceAdapter`) |
+| Direct database access | `@prood/platform` (prefer API for apps) |
+| Hosted checkout session | `@prood/checkout-host` |
+| Upload product images | `@prood/storage-*` via `@prood/commerce` |
+
+## Package guides
+
+<Cards>
+  <Card title="@prood/types" href="/docs/packages/types" description="Unified domain model and interfaces." />
+  <Card title="@prood/platform" href="/docs/packages/platform" description="Built-in Postgres commerce engine." />
+  <Card title="@prood/commerce" href="/docs/packages/commerce" description="Server data layer and provider factory." />
+  <Card title="@prood/ui" href="/docs/packages/ui" description="Shared React components." />
+</Cards>

@@ -1,0 +1,4 @@
+{
+  "title": "Payment Providers",
+  "pages": ["stripe", "easypay", "ifthenpay"]
+}

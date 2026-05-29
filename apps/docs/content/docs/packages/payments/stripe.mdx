@@ -1,0 +1,86 @@
+---
+title: "@prood/payment-stripe"
+description: Stripe Payment Element provider via PaymentIntents — the default payment gateway.
+---
+
+`@prood/payment-stripe` implements the `PaymentProvider` interface for Stripe, using the Payment Element and PaymentIntents API.
+
+## Installation
+
+```bash
+pnpm add @prood/payment-stripe
+```
+
+## Usage
+
+```ts
+import { StripePaymentProvider } from '@prood/payment-stripe'
+
+const provider = new StripePaymentProvider({
+  secretKey: process.env.STRIPE_SECRET_KEY!,
+  webhookSecret: process.env.STRIPE_WEBHOOK_SECRET,
+  publishableKey: process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY,
+})
+```
+
+Via commerce factory (preferred in apps):
+
+```ts
+import { getPaymentProvider } from '@prood/commerce'
+const provider = await getPaymentProvider('stripe', orgId)
+```
+
+## Configuration
+
+| Field | Env fallback | Required | Description |
+| --- | --- | --- | --- |
+| `secretKey` | `STRIPE_SECRET_KEY` | Yes | Server-side secret key |
+| `webhookSecret` | `STRIPE_WEBHOOK_SECRET` | Webhooks | Webhook signing secret |
+| `publishableKey` | `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` | Client UI | Publishable key for Payment Element |
+
+Per-tenant overrides via dashboard Integrations → Stripe.
+
+## Payment flow
+
+1. `createSession()` → creates Stripe PaymentIntent
+2. Client renders Payment Element with `clientSecret`
+3. Customer submits → Stripe handles 3DS if required
+4. `confirmSession()` → verifies PaymentIntent status
+5. Webhook `payment_intent.succeeded` → async confirmation
+
+## Webhook events
+
+| Event | Action |
+| --- | --- |
+| `payment_intent.succeeded` | Mark order as confirmed |
+| `payment_intent.payment_failed` | Mark order as failed |
+| `charge.refunded` | Update order refund status |
+
+Webhook URL: `https://pay.example.com/api/webhooks/stripe/{orgId}`
+
+## Refunds
+
+```ts
+const result = await provider.refund({
+  sessionId: 'pi_xxx',
+  amount: 5000, // partial refund in minor units
+  reason: 'Customer request',
+})
+```
+
+## Test mode
+
+Use Stripe test keys (`sk_test_...`, `pk_test_...`):
+
+| Card | Result |
+| --- | --- |
+| `4242 4242 4242 4242` | Success |
+| `4000 0000 0000 3220` | 3DS required |
+| `4000 0000 0000 9995` | Declined |
+
+## Related pages
+
+<Cards>
+  <Card title="Payment integration" href="/docs/guides/payment-integration" description="Setup guide." />
+  <Card title="Checkout payments" href="/docs/apps/checkout/payments" description="Payment Element UI." />
+</Cards>

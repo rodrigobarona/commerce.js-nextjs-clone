@@ -1,0 +1,15 @@
+{
+  "title": "Packages",
+  "pages": [
+    "index",
+    "types",
+    "platform",
+    "commerce",
+    "checkout",
+    "checkout-host",
+    "api-client",
+    "ui",
+    "payments",
+    "storage"
+  ]
+}

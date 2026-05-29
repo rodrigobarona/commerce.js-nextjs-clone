@@ -1,0 +1,136 @@
+---
+title: "@prood/platform"
+description: Built-in commerce engine — Neon Postgres, Drizzle ORM, row-level security, and Admin API.
+---
+
+`@prood/platform` is the **default commerce engine**. It provides a full `CommerceAdapter` and `AdminAPI` backed by Neon Postgres with Drizzle ORM and forced row-level security.
+
+## Installation
+
+```bash
+pnpm add @prood/platform
+```
+
+Requires `DATABASE_URL` environment variable pointing to a Neon Postgres instance.
+
+## Quick start
+
+```ts
+import { createPlatformAdapter } from '@prood/platform'
+
+const { adapter, admin } = await createPlatformAdapter()
+
+// Catalog (storefront scope)
+const products = await adapter.getProducts({ page: 1, limit: 20 })
+const product = await adapter.getProduct('prod_abc')
+const categories = await adapter.getCategories()
+const store = await adapter.getStoreInfo()
+
+// Admin operations
+const stats = await admin.getDashboardStats()
+const newProduct = await admin.createProduct({ name: { en: 'T-Shirt' }, ... })
+```
+
+## Tenant scoping
+
+All operations must run inside a tenant scope:
+
+```ts
+import { withTenant } from '@prood/platform'
+
+await withTenant('org_demo', async () => {
+  const products = await adapter.getProducts({ page: 1, limit: 10 })
+  // RLS filters to org_demo rows only
+})
+```
+
+`withTenant()` sets `app.current_org_id` in a Postgres transaction. Forced RLS ensures no cross-tenant leakage.
+
+## Database setup
+
+```bash
+# From repo root
+pnpm db:migrate
+```
+
+This runs:
+
+1. `migrateDrizzle()` — applies Drizzle schema migrations
+2. `applyTenantIsolation()` — adds `organization_id` columns + RLS policies
+3. `seedDrizzle()` — seeds demo catalog tagged with `org_demo`
+
+### Manual migration
+
+```ts
+import { migrateDrizzle, seedDrizzle, applyTenantIsolation } from '@prood/platform'
+
+await migrateDrizzle()
+await applyTenantIsolation()
+await seedDrizzle()
+```
+
+## Implemented domains
+
+| Domain | Adapter methods | Admin methods |
+| --- | --- | --- |
+| **Catalog** | `getProducts`, `getProduct`, `getCategories` | CRUD products, categories |
+| **Store** | `getStoreInfo` | Update store settings |
+| **Cart** | Full cart lifecycle | — |
+| **Checkout** | `placeOrder` | — |
+| **Orders** | `getOrders`, `getOrder` | List, fulfill, refund |
+| **Customers** | `getCustomer` | List, detail |
+| **Inventory** | — | Update stock levels |
+| **Dashboard** | — | `getDashboardStats` |
+
+## Schema
+
+Drizzle schema in `packages/platform/src/database/drizzle/schema/`:
+
+| Table | Tenant-scoped | Description |
+| --- | --- | --- |
+| `products` | Yes | Product catalog |
+| `product_variants` | Yes | SKU variants |
+| `product_options` | Yes | Configurable options |
+| `categories` | Yes | Category tree |
+| `carts` | Yes | Shopping carts |
+| `cart_items` | Yes | Cart line items |
+| `orders` | Yes | Placed orders |
+| `order_items` | Yes | Order line items |
+| `customers` | Yes | Customer profiles |
+| `store_info` | Yes (composite PK) | Store settings per org |
+| `coupons` | Yes | Discount codes |
+
+## Exports
+
+```ts
+// Adapter factory
+export { createPlatformAdapter } from '@prood/platform'
+
+// Tenant scoping
+export { withTenant, getDb, initDrizzle } from '@prood/platform'
+
+// Admin API
+export { createAdminAPI } from '@prood/platform'
+
+// Migrations
+export { migrateDrizzle, seedDrizzle, applyTenantIsolation } from '@prood/platform'
+
+// Schema (for direct queries)
+export * from '@prood/platform/database/drizzle'
+```
+
+## Configuration
+
+| Variable | Default | Description |
+| --- | --- | --- |
+| `DATABASE_URL` | — | Neon Postgres connection string |
+| `COMMERCE_CURRENCY` | `EUR` | Default store currency |
+| `ADMIN_EMAIL` | — | Seed admin email |
+| `ADMIN_PASSWORD` | — | Seed admin password |
+
+## Related pages
+
+<Cards>
+  <Card title="@prood/commerce" href="/docs/packages/commerce" description="Server layer wrapping the platform adapter." />
+  <Card title="Multi-tenant platform" href="/docs/architecture/multi-tenant" description="RLS and tenant isolation." />
+</Cards>

@@ -1,0 +1,143 @@
+---
+title: "@prood/ui"
+description: Shared React component library — shadcn/Radix primitives and 33+ commerce-specific components.
+---
+
+`@prood/ui` provides the shared UI layer for all Prood applications. It combines shadcn/ui primitives (Radix + Tailwind) with commerce-specific components ported from the upstream Nuxt reference.
+
+## Installation
+
+Already a workspace dependency. Import directly:
+
+```tsx
+import { Button } from '@prood/ui/components/button'
+import { ProductGrid } from '@prood/ui/components/product-grid'
+import { CartDrawer } from '@prood/ui/components/cart-drawer'
+```
+
+Import global styles in your app's root layout:
+
+```tsx
+import '@prood/ui/globals.css'
+```
+
+## Component categories
+
+### Product
+
+| Component | Import | Description |
+| --- | --- | --- |
+| `ProductCard` | `@prood/ui/components/product-card` | Product thumbnail with price and add-to-cart |
+| `ProductGrid` | `@prood/ui/components/product-grid` | Responsive product grid layout |
+| `ProductGallery` | `@prood/ui/components/product-gallery` | Image gallery with zoom |
+| `ProductOptions` | `@prood/ui/components/product-options` | Variant option selector |
+| `ProductPrice` | `@prood/ui/components/product-price` | Formatted price with compare-at |
+
+### Cart
+
+| Component | Import | Description |
+| --- | --- | --- |
+| `CartDrawer` | `@prood/ui/components/cart-drawer` | Slide-out cart panel |
+| `CartItem` | `@prood/ui/components/cart-item` | Single cart line item |
+| `CartSummary` | `@prood/ui/components/cart-summary` | Totals breakdown |
+| `QuantitySelector` | `@prood/ui/components/quantity-selector` | +/- quantity control |
+| `CouponInput` | `@prood/ui/components/coupon-input` | Coupon code input |
+
+### Checkout
+
+| Component | Import | Description |
+| --- | --- | --- |
+| `CheckoutStepper` | `@prood/ui/components/checkout-stepper` | Multi-step progress indicator |
+| `AddressForm` | `@prood/ui/components/address-form` | Shipping/billing address form |
+
+### Order
+
+| Component | Import | Description |
+| --- | --- | --- |
+| `OrderCard` | `@prood/ui/components/order-card` | Order summary card |
+| `OrderTimeline` | `@prood/ui/components/order-timeline` | Status timeline |
+
+### Navigation & search
+
+| Component | Import | Description |
+| --- | --- | --- |
+| `SearchPalette` | `@prood/ui/components/search-palette` | Command-k style search |
+| `SearchBar` | `@prood/ui/components/search-bar` | Inline search input |
+
+### Marketing
+
+| Component | Import | Description |
+| --- | --- | --- |
+| `HeroBanner` | `@prood/ui/components/hero-banner` | Full-width hero section |
+| `PromoBanner` | `@prood/ui/components/promo-banner` | Promotional banner |
+
+### Reviews
+
+| Component | Import | Description |
+| --- | --- | --- |
+| `ReviewCard` | `@prood/ui/components/review-card` | Single review display |
+| `ReviewStars` | `@prood/ui/components/review-stars` | Star rating display |
+
+### Specialized
+
+| Component | Import | Description |
+| --- | --- | --- |
+| `WishlistGrid` | `@prood/ui/components/wishlist-grid` | Wishlist product grid |
+| `AuctionCard` | `@prood/ui/components/auction-card` | Auction listing card |
+| `RentalCard` | `@prood/ui/components/rental-card` | Rental product card |
+| `SubscriptionCard` | `@prood/ui/components/subscription-card` | Subscription plan card |
+| `GiftCardForm` | `@prood/ui/components/gift-card-form` | Gift card purchase form |
+| `PriceTierTable` | `@prood/ui/components/price-tier-table` | Wholesale pricing tiers |
+
+### Common
+
+| Component | Import | Description |
+| --- | --- | --- |
+| `EmptyState` | `@prood/ui/components/empty-state` | Empty list placeholder |
+| `ProductTypeBadge` | `@prood/ui/components/product-type-badge` | Product type indicator |
+
+### shadcn primitives
+
+Standard shadcn/ui components in `@prood/ui/components/`:
+
+`button`, `input`, `label`, `card`, `dialog`, `dropdown-menu`, `sheet`, `table`, `tabs`, `badge`, `skeleton`, `sonner`, `sidebar`, etc.
+
+## Utility functions
+
+```ts
+import { formatPrice, localized } from '@prood/ui/lib/commerce'
+
+formatPrice(9999, 'EUR')           // → "€99.99"
+localized(product.name, 'en')      // → "T-Shirt"
+```
+
+## Adding new components
+
+Install shadcn primitives:
+
+```bash
+pnpm dlx shadcn@latest add dialog -c packages/ui
+```
+
+Commerce components are hand-authored in `packages/ui/src/components/`.
+
+## Theming
+
+Uses CSS variables with Tailwind v4. Dark mode via `next-themes`:
+
+```tsx
+import { ThemeProvider } from 'next-themes'
+
+<ThemeProvider attribute="class" defaultTheme="system">
+  {children}
+</ThemeProvider>
+```
+
+Color tokens defined in `packages/ui/src/globals.css` with `@theme inline`.
+
+## Related pages
+
+<Cards>
+  <Card title="Storefront" href="/docs/apps/storefront" description="Primary consumer of UI components." />
+  <Card title="Installation" href="/docs/getting-started/installation" description="Adding shadcn components." />
+</Cards>

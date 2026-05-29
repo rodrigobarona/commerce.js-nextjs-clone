@@ -1,0 +1,125 @@
+---
+title: "@prood/checkout-host"
+description: Next.js checkout session host with Upstash Redis persistence and webhook forwarding.
+---
+
+`@prood/checkout-host` wraps `@prood/checkout` with session persistence in **Upstash Redis**, provider factory integration, and webhook forwarding to the Commerce API.
+
+Used by `apps/checkout`.
+
+## Installation
+
+```bash
+pnpm add @prood/checkout-host
+```
+
+Requires `UPSTASH_REDIS_REST_URL` and `UPSTASH_REDIS_REST_TOKEN`.
+
+## Create a session
+
+```ts
+import { createCheckoutSession } from '@prood/checkout-host'
+
+const session = await createCheckoutSession({
+  orderId: 'ord_123',
+  amount: 9999,
+  currency: 'EUR',
+  tenantId: 'org_demo',
+  returnUrl: 'https://store.example.com/order-confirmation',
+  customerInfo: { email: '...', firstName: '...', lastName: '...' },
+  fulfillment: 'shipping',
+  provider: 'stripe',
+})
+
+// session.id → 'cs_abc123'
+// session.payUrl → 'http://localhost:3004/pay/cs_abc123'
+```
+
+Internally:
+
+1. Builds `PaymentProvider` from tenant integration config
+2. Creates `CheckoutSession` state machine
+3. Saves snapshot to Redis with TTL
+4. Returns session ID and payment URL
+
+## Load and hydrate
+
+```ts
+import { loadSession, loadAndHydrate } from '@prood/checkout-host'
+
+// Read snapshot
+const snapshot = await loadSession('cs_abc123')
+
+// Rehydrate with live provider
+const session = await loadAndHydrate('cs_abc123', async (providerId) =>
+  getPaymentProvider(providerId, tenantId)
+)
+```
+
+## Save session
+
+```ts
+import { saveSession } from '@prood/checkout-host'
+
+await saveSession(session.id, session.toSnapshot())
+```
+
+Called after every state transition to persist updated state.
+
+## Payment links
+
+```ts
+import { createPaymentLink } from '@prood/checkout-host'
+
+const link = await createPaymentLink({
+  amount: 4500,
+  currency: 'EUR',
+  tenantId: 'org_demo',
+  description: 'Invoice #1234',
+  expiresIn: 86400000, // 24 hours
+})
+
+// link.url → 'http://localhost:3004/pay/cs_link_abc'
+```
+
+## Webhook forwarding
+
+```ts
+import { forwardPaymentWebhook } from '@prood/checkout-host'
+
+await forwardPaymentWebhook({
+  provider: 'stripe',
+  orgId: 'org_demo',
+  payload: rawBody,
+  signature: req.headers.get('stripe-signature'),
+})
+```
+
+Forwards to `{COMMERCE_API_URL}/webhooks/payments/{provider}?org={orgId}` with `x-checkout-secret`.
+
+## Redis key schema
+
+| Key | TTL | Value |
+| --- | --- | --- |
+| `checkout:session:{id}` | Session `expiresIn` or 30 min | CheckoutSnapshot JSON |
+
+## Exports
+
+```ts
+export {
+  createCheckoutSession,
+  createPaymentLink,
+  loadSession,
+  loadAndHydrate,
+  saveSession,
+  forwardPaymentWebhook,
+} from '@prood/checkout-host'
+```
+
+## Related pages
+
+<Cards>
+  <Card title="Checkout app" href="/docs/apps/checkout" description="Application using this package." />
+  <Card title="Checkout sessions" href="/docs/apps/checkout/sessions" description="Session API routes." />
+  <Card title="@prood/checkout" href="/docs/packages/checkout" description="Underlying state machine." />
+</Cards>

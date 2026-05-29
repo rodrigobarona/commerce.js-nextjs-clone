@@ -1,0 +1,63 @@
+---
+title: "@prood/payment-ifthenpay"
+description: Ifthenpay payment provider for Portugal — Multibanco, MB WAY, and credit card.
+---
+
+`@prood/payment-ifthenpay` implements the `PaymentProvider` interface for [Ifthenpay](https://www.ifthenpay.com/) — a Portuguese payment gateway supporting Multibanco, MB WAY, and credit card payments.
+
+## Installation
+
+```bash
+pnpm add @prood/payment-ifthenpay
+```
+
+## Usage
+
+```ts
+import { IfthenpayPaymentProvider } from '@prood/payment-ifthenpay'
+
+const provider = new IfthenpayPaymentProvider({
+  antiPhishingKey: process.env.IFTHENPAY_ANTIPHISHING_KEY!,
+  mbKey: process.env.IFTHENPAY_MB_KEY!,
+  mbwayKey: process.env.IFTHENPAY_MBWAY_KEY!,
+  ccKey: process.env.IFTHENPAY_CC_KEY!,
+})
+```
+
+## Configuration
+
+| Field | Env var | Description |
+| --- | --- | --- |
+| `antiPhishingKey` | `IFTHENPAY_ANTIPHISHING_KEY` | Anti-phishing verification key |
+| `mbKey` | `IFTHENPAY_MB_KEY` | Multibanco gateway key |
+| `mbwayKey` | `IFTHENPAY_MBWAY_KEY` | MB WAY gateway key |
+| `ccKey` | `IFTHENPAY_CC_KEY` | Credit card gateway key |
+
+Each key corresponds to a payment method enabled in your Ifthenpay backoffice.
+
+## Payment methods
+
+| Method | Key | Flow |
+| --- | --- | --- |
+| **Multibanco** | `mbKey` | Entity + reference; async ATM/homebanking payment |
+| **MB WAY** | `mbwayKey` | Phone push notification |
+| **Credit card** | `ccKey` | Redirect to Ifthenpay hosted page |
+
+## Anti-phishing verification
+
+Ifthenpay uses an anti-phishing key to verify webhook authenticity. The provider validates incoming webhooks against this key before processing.
+
+## Webhook setup
+
+Configure callback URL in Ifthenpay backoffice:
+
+```
+URL: https://pay.example.com/api/webhooks/ifthenpay/{orgId}
+```
+
+## Related pages
+
+<Cards>
+  <Card title="Payment integration" href="/docs/guides/payment-integration" description="Setup guide." />
+  <Card title="Checkout payments" href="/docs/apps/checkout/payments" description="Reference payment UI." />
+</Cards>

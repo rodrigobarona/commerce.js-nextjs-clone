@@ -1,0 +1,138 @@
+---
+title: "@prood/checkout"
+description: Framework-agnostic checkout state machine managing the payment lifecycle.
+---
+
+`@prood/checkout` provides the `CheckoutSession` class — a finite state machine that orchestrates the complete checkout flow from customer info to payment confirmation.
+
+## Installation
+
+```bash
+pnpm add @prood/checkout
+```
+
+Depends on `@prood/types` for `PaymentProvider` interface.
+
+## Basic usage
+
+```ts
+import { CheckoutSession } from '@prood/checkout'
+import { StripePaymentProvider } from '@prood/payment-stripe'
+
+const provider = new StripePaymentProvider({ secretKey: 'sk_...' })
+
+const session = new CheckoutSession({
+  provider,
+  amount: 9999,
+  currency: 'EUR',
+  orderId: 'ord_123',
+  returnUrl: 'https://store.example.com/order-confirmation',
+  fulfillment: 'shipping',
+})
+```
+
+## State machine API
+
+### Set customer info (idle → info)
+
+```ts
+session.setCustomerInfo({
+  email: 'customer@example.com',
+  firstName: 'Maria',
+  lastName: 'Silva',
+  phone: '+351912345678',
+})
+```
+
+### Set shipping address (info → shipping)
+
+Required for `shipping` and `local_delivery` fulfillment:
+
+```ts
+session.setShippingAddress({
+  street: 'Rua Augusta 123',
+  city: 'Lisboa',
+  country: 'PT',
+  postalCode: '1100-053',
+  street2: null,
+  state: null,
+  district: null,
+  nationalAddress: null,
+})
+```
+
+### Submit payment (→ payment)
+
+```ts
+const paymentSession = await session.submitPayment({
+  sourceToken: 'pm_xxx',
+})
+
+if (paymentSession.redirectUrl) {
+  // Redirect for 3DS
+}
+```
+
+### Confirm payment (payment → complete)
+
+```ts
+const confirmed = await session.confirmPayment(chargeId)
+// session.state === 'complete' | 'failed'
+```
+
+### Webhook update
+
+```ts
+session.handleWebhookUpdate({
+  id: event.id,
+  providerId: 'stripe',
+  status: 'captured',
+  amount: 9999,
+  currency: 'EUR',
+  redirectUrl: null,
+  createdAt: new Date().toISOString(),
+})
+```
+
+## Events
+
+```ts
+session.on('stateChange', ({ from, to }) => { ... })
+session.on('complete', ({ paymentSession }) => { ... })
+session.on('error', ({ error, state }) => { ... })
+session.on('expired', () => { ... })
+```
+
+## Snapshots
+
+```ts
+const snapshot = session.toSnapshot()
+// Serializable — used by @prood/checkout-host for Redis persistence
+
+CheckoutSession.fromSnapshot(snapshot, provider)
+// Rehydrate from saved state
+```
+
+## Fulfillment types
+
+| Type | Flow |
+| --- | --- |
+| `shipping` | info → shipping → payment → complete |
+| `local_delivery` | info → shipping → payment → complete |
+| `pickup` | info → payment → complete |
+| `none` | info → payment → complete |
+
+## Exports
+
+```ts
+export { CheckoutSession } from '@prood/checkout'
+export { buildTransitions } from '@prood/checkout'
+export type { CheckoutState, CheckoutSnapshot, CheckoutChannel } from '@prood/checkout'
+```
+
+## Related pages
+
+<Cards>
+  <Card title="Checkout flow (architecture)" href="/docs/architecture/checkout-flow" description="Full flow diagram and dual confirmation strategy." />
+  <Card title="@prood/checkout-host" href="/docs/packages/checkout-host" description="Redis session persistence layer." />
+</Cards>

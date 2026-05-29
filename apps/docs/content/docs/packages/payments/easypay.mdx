@@ -1,0 +1,70 @@
+---
+title: "@prood/payment-easypay"
+description: Easypay payment provider for Portugal — Multibanco, MB WAY, and credit card.
+---
+
+`@prood/payment-easypay` implements the `PaymentProvider` interface for [Easypay](https://www.easypay.pt/) — a Portuguese payment gateway supporting Multibanco references, MB WAY, and credit card.
+
+## Installation
+
+```bash
+pnpm add @prood/payment-easypay
+```
+
+## Usage
+
+```ts
+import { EasypayPaymentProvider } from '@prood/payment-easypay'
+
+const provider = new EasypayPaymentProvider({
+  accountId: process.env.EASYPAY_ACCOUNT_ID!,
+  apiKey: process.env.EASYPAY_API_KEY!,
+  baseUrl: process.env.EASYPAY_BASE_URL ?? 'https://api.prod.easypay.pt',
+})
+```
+
+## Configuration
+
+| Field | Env var | Description |
+| --- | --- | --- |
+| `accountId` | `EASYPAY_ACCOUNT_ID` | Easypay account ID |
+| `apiKey` | `EASYPAY_API_KEY` | API key |
+| `baseUrl` | `EASYPAY_BASE_URL` | API base URL |
+
+### Environments
+
+| Environment | Base URL |
+| --- | --- |
+| Production | `https://api.prod.easypay.pt` |
+| Sandbox | `https://api.test.easypay.pt` |
+
+## Payment methods
+
+| Method | Flow | UI |
+| --- | --- | --- |
+| **Multibanco** | Reference-based | Entity + reference displayed; customer pays at ATM/homebanking |
+| **MB WAY** | Push notification | Phone number input; customer confirms on phone |
+| **Credit card** | Redirect | Redirect to Easypay hosted payment page |
+
+## Payment flow
+
+1. `createSession({ method: 'multibanco' })` → creates Easypay charge
+2. Reference numbers returned for Multibanco (entity, reference, amount)
+3. Customer pays asynchronously
+4. Easypay webhook notifies payment completion
+5. Order status updated via webhook handler
+
+## Webhook setup
+
+Configure in Easypay merchant panel:
+
+```
+URL: https://pay.example.com/api/webhooks/easypay/{orgId}
+```
+
+## Related pages
+
+<Cards>
+  <Card title="Payment integration" href="/docs/guides/payment-integration" description="Setup guide." />
+  <Card title="Checkout payments" href="/docs/apps/checkout/payments" description="Reference payment UI." />
+</Cards>

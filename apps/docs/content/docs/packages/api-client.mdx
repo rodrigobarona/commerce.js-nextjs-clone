@@ -1,0 +1,141 @@
+---
+title: "@prood/api-client"
+description: Typed OpenAPI fetch client for the Commerce API.
+---
+
+`@prood/api-client` provides a type-safe HTTP client generated from the Commerce API OpenAPI specification.
+
+## Installation
+
+```bash
+pnpm add @prood/api-client
+```
+
+## Basic usage
+
+```ts
+import { createCommerceApiClient } from '@prood/api-client'
+
+const api = createCommerceApiClient({
+  baseUrl: process.env.COMMERCE_API_URL!, // http://localhost:3005/v1
+})
+
+// List products
+const { data, error } = await api.GET('/products', {
+  params: { query: { query: 'shirt', limit: 10 } },
+})
+
+// Get product by ID
+const { data: product } = await api.GET('/products/{id}', {
+  params: { path: { id: 'prod_abc' } },
+})
+```
+
+## With authentication
+
+### Session cookie (dashboard)
+
+```ts
+const api = createCommerceApiClient({
+  baseUrl: COMMERCE_API_URL,
+  headers: async () => ({
+    cookie: (await headers()).get('cookie') ?? '',
+  }),
+})
+```
+
+### Host header (storefront)
+
+```ts
+const api = createCommerceApiClient({
+  baseUrl: COMMERCE_API_URL,
+  headers: async () => ({
+    cookie: (await headers()).get('cookie') ?? '',
+    host: (await headers()).get('host') ?? '',
+  }),
+})
+```
+
+### API key
+
+```ts
+const api = createCommerceApiClient({
+  baseUrl: COMMERCE_API_URL,
+  headers: { 'x-api-key': 'pk_xxx' },
+})
+```
+
+## Admin operations
+
+```ts
+// Create product
+await api.POST('/admin/products', { body: createProductInput })
+
+// List orders
+const { data: orders } = await api.GET('/admin/orders')
+
+// Fulfill order
+await api.POST('/admin/orders/{id}/fulfill', {
+  params: { path: { id: orderId } },
+  body: { trackingNumber: 'TRK123' },
+})
+
+// Dashboard stats
+const { data: stats } = await api.GET('/admin/dashboard/stats')
+```
+
+## Cart operations
+
+```ts
+// Create cart
+const { data: cart } = await api.POST('/carts')
+
+// Add item
+await api.POST('/carts/{id}/items', {
+  params: { path: { id: cart.id } },
+  body: { productId, variantId, quantity: 1 },
+})
+
+// Place order
+const { data: order } = await api.POST('/carts/{id}/place-order', {
+  params: { path: { id: cart.id } },
+})
+```
+
+## Type safety
+
+The client is generated from OpenAPI and provides full TypeScript inference:
+
+```ts
+import type { paths } from '@prood/api-client'
+
+// paths['/products']['get']['parameters']['query'] is typed
+// paths['/admin/products']['post']['requestBody'] is typed
+```
+
+Regenerate types when the API spec changes:
+
+```bash
+pnpm --filter @prood/api-client generate
+```
+
+## Error handling
+
+```ts
+const { data, error, response } = await api.GET('/products/{id}', {
+  params: { path: { id: 'nonexistent' } },
+})
+
+if (error) {
+  console.log(error.code)    // 'NOT_FOUND'
+  console.log(response.status) // 404
+}
+```
+
+## Related pages
+
+<Cards>
+  <Card title="API endpoints" href="/docs/apps/api/endpoints" description="Complete endpoint reference." />
+  <Card title="OpenAPI reference" href="/docs/api" description="Interactive API docs." />
+  <Card title="Authentication" href="/docs/apps/api/authentication" description="Auth methods for the client." />
+</Cards>
