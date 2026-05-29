@@ -93,11 +93,30 @@ run inside `withTenant()`.
 4. With no setting, RLS returns zero rows (writes are blocked too) — proof that
    any code path forgetting `withTenant()` fails closed rather than leaking.
 
+## Per-tenant payments
+
+Payment credentials configured in the dashboard (`integration_config`) flow
+into the provider factory at runtime:
+
+- `getPaymentProvider(id, config?)` builds a provider from a tenant's stored
+  credentials, falling back to env vars per field.
+- The storefront sends `tenantId` when creating a checkout session; the checkout
+  host persists it on the session and rebuilds the provider with the tenant's
+  credentials (and publishable key) on pay/confirm.
+- Provider registry field keys (`lib/providers.ts`) match the provider
+  constructor params, so stored config maps directly.
+
+Webhook signature verification stays **platform-level** (single secret) for now
+— per-tenant webhook routing is the natural next step.
+
 ## Known follow-ups
 
-- Per-tenant integration credentials (Stripe/Resend/etc.) are stored in
-  `integration_config` but the runtime payment/notification providers still read
-  env vars. Wire the stored config into the provider factories to go fully
-  per-tenant.
-- `store_info` / `integrations` use the session-variable default; ensure any new
-  tenant tables are added to `TENANT_TABLES` in `migrate.ts`.
+- **Notifications** (Resend/SMTP) have no runtime factory in the Next stack yet;
+  when one is added, read credentials from `integration_config` the same way
+  payments do.
+- **Per-tenant webhooks**: route provider webhooks per tenant (e.g.
+  `/api/webhooks/:provider/:org`) so signatures verify against the tenant secret.
+- When adding a new tenant-owned table, add it to `TENANT_TABLES` in
+  `packages/platform/src/database/drizzle/migrate.ts`; if its natural key repeats
+  across tenants, include `organization_id` in the primary key (see `store_info`
+  and `integrations`).
