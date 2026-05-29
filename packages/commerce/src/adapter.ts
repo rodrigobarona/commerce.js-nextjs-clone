@@ -7,6 +7,24 @@ import {
 import type { CommerceAdapter } from '@commercejs/types'
 import { getCommerceConfig } from './env'
 
+// Re-export the admin API surface so apps (e.g. the dashboard) can type
+// merchant operations without depending on @commercejs/platform directly.
+export type {
+  AdminAPI,
+  AdminUserSafe,
+  AdminListParams,
+  AdminListOrdersParams,
+  CreateProductInput,
+  UpdateProductInput,
+  CreateCategoryInput,
+  UpdateCategoryInput,
+  FulfillOrderInput,
+  UpdateStoreInput,
+  StoreSettings,
+  UpdateInventoryInput,
+  DashboardStats,
+} from '@commercejs/platform'
+
 /**
  * Run commerce/admin operations scoped to a tenant (organization).
  *

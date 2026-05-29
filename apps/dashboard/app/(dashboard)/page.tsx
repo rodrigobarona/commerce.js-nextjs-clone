@@ -1,39 +1,110 @@
 import {
   Card,
+  CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
 } from "@workspace/ui/components/card"
+import { Badge } from "@workspace/ui/components/badge"
+import type { DashboardStats } from "@workspace/commerce"
+import { withActiveOrg } from "@/lib/admin"
 
 export const metadata = { title: "Overview" }
 
-const placeholderStats = [
-  { label: "Revenue", value: "—" },
-  { label: "Orders", value: "—" },
-  { label: "Customers", value: "—" },
-  { label: "Products", value: "—" },
-]
+function formatCurrency(amount: number, currency: string): string {
+  try {
+    return new Intl.NumberFormat("en", {
+      style: "currency",
+      currency,
+    }).format(amount)
+  } catch {
+    return `${amount.toFixed(2)} ${currency}`
+  }
+}
 
-export default function OverviewPage() {
+export default async function OverviewPage() {
+  let stats: DashboardStats | null = null
+  let currency = "EUR"
+  try {
+    const result = await withActiveOrg(async (admin) => {
+      const [dashboard, settings] = await Promise.all([
+        admin.getDashboardStats(),
+        admin.getStoreSettings(),
+      ])
+      return { dashboard, settings }
+    })
+    stats = result.dashboard
+    currency = result.settings.currency
+  } catch {
+    /* DB unavailable or store not yet provisioned */
+  }
+
+  const cards = [
+    {
+      label: "Revenue",
+      value: stats ? formatCurrency(stats.totalRevenue, currency) : "—",
+    },
+    { label: "Orders", value: stats ? String(stats.totalOrders) : "—" },
+    { label: "Customers", value: stats ? String(stats.totalCustomers) : "—" },
+    {
+      label: "Products",
+      value: stats ? `${stats.activeProducts}/${stats.totalProducts}` : "—",
+    },
+  ]
+
   return (
     <div className="flex flex-col gap-6">
       <div>
         <h2 className="font-heading text-xl font-medium">Overview</h2>
         <p className="text-sm text-muted-foreground">
-          A snapshot of your store. Live metrics arrive with the store admin
-          phase.
+          A snapshot of your store&apos;s performance.
         </p>
       </div>
+
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        {placeholderStats.map((stat) => (
-          <Card key={stat.label}>
+        {cards.map((card) => (
+          <Card key={card.label}>
             <CardHeader>
-              <CardDescription>{stat.label}</CardDescription>
-              <CardTitle className="text-2xl">{stat.value}</CardTitle>
+              <CardDescription>{card.label}</CardDescription>
+              <CardTitle className="text-2xl">{card.value}</CardTitle>
             </CardHeader>
           </Card>
         ))}
       </div>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Recent orders</CardTitle>
+          <CardDescription>Latest activity in your store.</CardDescription>
+        </CardHeader>
+        <CardContent className="flex flex-col gap-3">
+          {stats && stats.recentOrders.length > 0 ? (
+            stats.recentOrders.map((order) => (
+              <div
+                key={order.id}
+                className="flex items-center justify-between border-b pb-3 last:border-0 last:pb-0"
+              >
+                <div className="flex flex-col">
+                  <span className="text-sm font-medium">
+                    #{order.orderNumber}
+                  </span>
+                  <span className="text-xs text-muted-foreground">
+                    {new Date(order.createdAt).toLocaleDateString()}
+                  </span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <Badge variant="secondary">{order.status}</Badge>
+                  <span className="text-sm font-medium">
+                    {formatCurrency(order.totals.total.amount, currency)}
+                  </span>
+                </div>
+              </div>
+            ))
+          ) : (
+            <p className="text-sm text-muted-foreground">No orders yet.</p>
+          )}
+        </CardContent>
+      </Card>
     </div>
   )
 }
