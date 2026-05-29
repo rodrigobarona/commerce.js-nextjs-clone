@@ -1,0 +1,158 @@
+---
+title: Authentication
+description: How the Commerce API resolves callers, assigns scopes, and enforces tenant isolation.
+---
+
+Every request to the Commerce API is authenticated and scoped to a tenant (organization). The `resolve-caller.ts` module determines who is calling and what they can access.
+
+## Caller resolution priority
+
+The API checks authentication methods in this order:
+
+| Priority | Method | Header / Cookie | Tenant source | Scopes |
+| --- | --- | --- | --- | --- |
+| 1 | Agent JWT | `Authorization: Bearer {jwt}` | Agent metadata or user's first org membership | From capability grants |
+| 2 | API key | `x-api-key: {key}` | Key metadata `organizationId` | Key metadata `scopes` |
+| 3 | Session cookie | `Cookie: better-auth.session=...` | `session.activeOrganizationId` | `admin`, `storefront` |
+| 4 | Host header | `Host: merchant.example.com` | Tenant domain / subdomain lookup | `storefront` only |
+
+If no method resolves a valid caller, the request returns `401 Unauthorized`.
+
+## Scopes
+
+Two scopes control access:
+
+| Scope | Endpoints | Callers |
+| --- | --- | --- |
+| `storefront` | Catalog reads, cart CRUD, place order, customer orders | Storefront (Host), customer sessions, agents with storefront grants |
+| `admin` | Full CRUD — products, orders, customers, store, inventory, stats | Dashboard sessions, API keys with admin scope, agents with admin grants |
+
+Route handlers enforce scope:
+
+```ts
+// apps/api/app/v1/products/route.ts
+export async function GET(request: Request) {
+  const caller = await requireCaller('storefront')
+  return listProducts(caller.orgId, params)
+}
+
+// apps/api/app/v1/admin/products/route.ts
+export async function POST(request: Request) {
+  const caller = await requireCaller('admin')
+  return adminCreateProduct(caller.orgId, body)
+}
+```
+
+## Caller type
+
+```ts
+interface ApiCaller {
+  orgId: string
+  scopes: ('storefront' | 'admin')[]
+  type: 'agent' | 'api-key' | 'session' | 'host'
+  userId?: string  // present for session and agent callers
+}
+```
+
+## Session authentication (dashboard)
+
+The dashboard forwards its Better Auth session cookie to the API:
+
+```ts
+// apps/dashboard/lib/commerce-api.ts
+createCommerceApiClient({
+  baseUrl: COMMERCE_API_URL,
+  headers: async () => ({
+    cookie: (await headers()).get('cookie') ?? '',
+  }),
+})
+```
+
+The API reads the session, extracts `activeOrganizationId`, and grants both `admin` and `storefront` scopes.
+
+## Host-based authentication (storefront)
+
+The storefront forwards the `Host` header:
+
+```ts
+// apps/storefront/lib/commerce-api.ts
+headers: async () => ({
+  cookie: (await headers()).get('cookie') ?? '',
+  host: (await headers()).get('host') ?? '',
+})
+```
+
+The API resolves the tenant from the host and grants `storefront` scope only. This prevents storefront requests from accessing admin endpoints.
+
+## API key authentication
+
+API keys are created in the dashboard (Settings → API Keys) and stored by Better Auth's `apiKey()` plugin:
+
+```ts
+// Creating a key (dashboard)
+await auth.api.createApiKey({
+  body: {
+    name: 'Integration key',
+    metadata: {
+      organizationId: activeOrgId,
+      scopes: ['admin'],
+    },
+  },
+})
+```
+
+Usage:
+
+```bash
+curl -H "x-api-key: pk_xxx" http://localhost:3005/v1/admin/products
+```
+
+## Agent JWT authentication
+
+AI agents authenticate via Better Auth Agent Auth. See [Agent Auth](/docs/apps/api/agent-auth) for the full flow.
+
+Briefly:
+
+1. Agent discovers config at `/.well-known/agent-configuration`
+2. Agent registers and receives capability grants
+3. Agent calls API with `Authorization: Bearer {jwt}`
+4. API validates JWT, maps grants to scopes, resolves org from agent metadata
+
+## Webhook authentication
+
+Payment webhook endpoints use a shared secret instead of caller resolution:
+
+```
+POST /v1/webhooks/payments/{provider}?org={orgId}
+Header: x-checkout-secret: {CHECKOUT_API_SECRET}
+```
+
+This allows the checkout app to forward webhooks without a session or API key.
+
+## Error responses
+
+All auth failures use consistent error format from `@prood/types`:
+
+```json
+{
+  "error": "Unauthorized",
+  "code": "UNAUTHORIZED",
+  "status": 401
+}
+```
+
+```json
+{
+  "error": "Insufficient scope",
+  "code": "FORBIDDEN",
+  "status": 403
+}
+```
+
+## Related pages
+
+<Cards>
+  <Card title="Agent Auth" href="/docs/apps/api/agent-auth" description="AI agent registration and JWT access." />
+  <Card title="API keys" href="/docs/apps/dashboard" description="Creating keys in the dashboard." />
+  <Card title="Multi-tenant platform" href="/docs/architecture/multi-tenant" description="Tenant isolation model." />
+</Cards>

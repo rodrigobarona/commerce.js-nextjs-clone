@@ -1,0 +1,4 @@
+{
+  "title": "Storefront",
+  "pages": ["index", "pages-routes", "cart-checkout", "auth-tenant"]
+}

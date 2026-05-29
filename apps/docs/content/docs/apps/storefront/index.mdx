@@ -1,0 +1,87 @@
+---
+title: Storefront
+description: The customer-facing Next.js 16 storefront — catalog, cart, checkout redirect, and account management.
+---
+
+`apps/storefront` is the **customer-facing** application. It renders the product catalog, manages the shopping cart, redirects to the checkout app for payment, and provides customer account pages.
+
+**Port:** 3000 · **Framework:** Next.js 16 (App Router) · **Auth:** Better Auth (customers)
+
+## Architecture
+
+The storefront is a **thin client** of the Commerce API. It does not import `@prood/commerce` directly — all catalog, cart, and order operations go through `@prood/api-client`.
+
+```
+Browser
+  ├─ Server Components → commerce-data.ts → @prood/api-client → API
+  ├─ Client Components → CartProvider → BFF /api/commerce/cart/* → API
+  └─ Server Actions → startCheckout() → API + Checkout app
+```
+
+### Key dependencies
+
+| Package | Role |
+| --- | --- |
+| `@prood/api-client` | Typed HTTP client to `apps/api` |
+| `@prood/types` | Domain types, error helpers |
+| `@prood/ui` | Product grid, cart drawer, hero banner, checkout stepper, etc. |
+| `better-auth` | Customer authentication |
+
+## Tenant resolution
+
+Every request resolves the active merchant from the `Host` header:
+
+1. Custom domain → `tenant_domain` table lookup
+2. `{slug}.{NEXT_PUBLIC_PLATFORM_DOMAIN}` → organization slug
+3. Fallback → `DEFAULT_TENANT_ORG_ID` (dev only)
+
+The resolved tenant ID is forwarded to the API via the `Host` header. Catalog cache tags are scoped per tenant.
+
+See [Auth & tenant](/docs/apps/storefront/auth-tenant) for implementation details.
+
+## Features
+
+| Feature | Implementation |
+| --- | --- |
+| Product catalog | Server components + Cache Components (`'use cache'`) |
+| Category browsing | `/categories/[slug]` with filtered product grid |
+| Search | Client search palette → BFF `/api/commerce/search` |
+| Shopping cart | Cookie-backed cart ID + BFF routes + React context |
+| Checkout | Server action → place order → redirect to checkout app |
+| Customer auth | Better Auth email/password on `/login`, `/register` |
+| Order history | `/account/orders` via API (requires session) |
+| Dark mode | `next-themes` via `@prood/ui` |
+
+## Configuration
+
+| Variable | Purpose |
+| --- | --- |
+| `COMMERCE_API_URL` | API base URL (default `http://localhost:3005/v1`) |
+| `DATABASE_URL` | Auth tables + tenant domain lookup |
+| `BETTER_AUTH_SECRET`, `BETTER_AUTH_URL` | Customer auth |
+| `CHECKOUT_URL` | Checkout app redirect target |
+| `CHECKOUT_API_SECRET` | Auth header for session creation |
+| `DEFAULT_TENANT_ORG_ID` | Dev fallback tenant |
+| `NEXT_PUBLIC_PLATFORM_DOMAIN` | Subdomain tenant resolution |
+
+## Next.js configuration
+
+The storefront enables Cache Components:
+
+```ts
+// next.config.ts
+export default {
+  cacheComponents: true,
+  transpilePackages: ['@prood/ui', '@prood/types'],
+}
+```
+
+Catalog pages use `'use cache'` with tenant-scoped tags from `@prood/commerce`. Cart, checkout, and account routes stay dynamic.
+
+## Related pages
+
+<Cards>
+  <Card title="Pages & routes" href="/docs/apps/storefront/pages-routes" description="Complete route map and page responsibilities." />
+  <Card title="Cart & checkout" href="/docs/apps/storefront/cart-checkout" description="Cart cookie BFF, checkout server action, and redirect flow." />
+  <Card title="Auth & tenant" href="/docs/apps/storefront/auth-tenant" description="Customer auth and host-based tenant resolution." />
+</Cards>

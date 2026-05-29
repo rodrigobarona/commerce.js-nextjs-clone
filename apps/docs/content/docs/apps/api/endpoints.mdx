@@ -1,0 +1,162 @@
+---
+title: API Endpoints
+description: Complete REST endpoint reference for the Commerce API v1.
+---
+
+All endpoints are prefixed with `/v1`. The interactive OpenAPI reference at [Commerce API](/docs/api) provides request/response schemas, try-it-out, and code samples.
+
+## Health & identity
+
+| Method | Path | Scope | Description |
+| --- | --- | --- | --- |
+| GET | `/v1/health` | Public | Health check |
+| GET | `/v1/me` | Any auth | Current caller info (orgId, scopes, type) |
+| GET | `/v1/openapi.json` | Public | OpenAPI 3.1 specification |
+
+## Catalog (storefront)
+
+| Method | Path | Description |
+| --- | --- | --- |
+| GET | `/v1/products` | List products (search, sort, pagination) |
+| GET | `/v1/products/{id}` | Get product by ID or slug |
+| GET | `/v1/categories` | List categories |
+| GET | `/v1/store` | Store info (name, currency, locales) |
+| GET | `/v1/countries` | Country list for address forms |
+
+Query parameters for `/v1/products`:
+
+| Param | Type | Description |
+| --- | --- | --- |
+| `query` | string | Search term |
+| `categoryId` | string | Filter by category |
+| `sort` | string | Sort field (`price`, `name`, `createdAt`) |
+| `page` | number | Page number (default 1) |
+| `limit` | number | Items per page (default 20) |
+
+## Cart (storefront)
+
+| Method | Path | Description |
+| --- | --- | --- |
+| POST | `/v1/carts` | Create a new cart |
+| GET | `/v1/carts/{id}` | Get cart with items and totals |
+| POST | `/v1/carts/{id}/items` | Add item to cart |
+| PATCH | `/v1/carts/{id}/items/{itemId}` | Update item quantity |
+| DELETE | `/v1/carts/{id}/items/{itemId}` | Remove item from cart |
+| POST | `/v1/carts/{id}/coupon` | Apply coupon code |
+| DELETE | `/v1/carts/{id}/coupon` | Remove applied coupon |
+| GET | `/v1/carts/{id}/shipping-methods` | List available shipping methods |
+| POST | `/v1/carts/{id}/shipping-method` | Set shipping method |
+| GET | `/v1/carts/{id}/payment-methods` | List available payment methods |
+| POST | `/v1/carts/{id}/shipping-address` | Set shipping address |
+| POST | `/v1/carts/{id}/billing-address` | Set billing address |
+| POST | `/v1/carts/{id}/place-order` | Convert cart to order |
+
+## Orders (storefront)
+
+| Method | Path | Description |
+| --- | --- | --- |
+| GET | `/v1/orders` | List customer's orders (requires session) |
+| GET | `/v1/orders/{id}` | Get order detail |
+
+## Admin — Products
+
+| Method | Path | Description |
+| --- | --- | --- |
+| GET | `/v1/admin/products` | List all products |
+| POST | `/v1/admin/products` | Create product |
+| GET | `/v1/admin/products/{id}` | Get product |
+| PATCH | `/v1/admin/products/{id}` | Update product |
+| DELETE | `/v1/admin/products/{id}` | Delete product |
+
+## Admin — Categories
+
+| Method | Path | Description |
+| --- | --- | --- |
+| GET | `/v1/admin/categories` | List categories |
+| POST | `/v1/admin/categories` | Create category |
+| PATCH | `/v1/admin/categories/{id}` | Update category |
+| DELETE | `/v1/admin/categories/{id}` | Delete category |
+
+## Admin — Orders
+
+| Method | Path | Description |
+| --- | --- | --- |
+| GET | `/v1/admin/orders` | List all orders |
+| GET | `/v1/admin/orders/{id}` | Get order detail |
+| POST | `/v1/admin/orders/{id}/fulfill` | Mark order as fulfilled |
+| POST | `/v1/admin/orders/{id}/refund` | Refund order (full or partial) |
+
+## Admin — Customers
+
+| Method | Path | Description |
+| --- | --- | --- |
+| GET | `/v1/admin/customers` | List customers |
+| GET | `/v1/admin/customers/{id}` | Get customer detail |
+
+## Admin — Store & inventory
+
+| Method | Path | Description |
+| --- | --- | --- |
+| GET | `/v1/admin/store` | Get store settings |
+| PATCH | `/v1/admin/store` | Update store settings |
+| PATCH | `/v1/admin/inventory/{variantId}` | Update variant inventory |
+| GET | `/v1/admin/dashboard/stats` | Dashboard statistics |
+
+## Webhooks
+
+| Method | Path | Auth | Description |
+| --- | --- | --- | --- |
+| POST | `/v1/webhooks/payments/{provider}` | `x-checkout-secret` | Process payment webhook |
+| GET | `/v1/webhooks/payments/{provider}` | — | Provider verification challenge |
+
+Query param: `org={orgId}` for tenant-scoped webhook verification.
+
+## Response format
+
+### Success
+
+```json
+{
+  "data": { ... },
+  "meta": {
+    "page": 1,
+    "limit": 20,
+    "total": 42
+  }
+}
+```
+
+### Error
+
+```json
+{
+  "error": "Product not found",
+  "code": "NOT_FOUND",
+  "status": 404
+}
+```
+
+## Using the API client
+
+```ts
+import { createCommerceApiClient } from '@prood/api-client'
+
+const api = createCommerceApiClient({
+  baseUrl: 'http://localhost:3005/v1',
+  headers: { 'x-api-key': 'pk_xxx' },
+})
+
+const { data } = await api.GET('/products', {
+  params: { query: { query: 'shirt', limit: 10 } },
+})
+```
+
+See [@prood/api-client](/docs/packages/api-client) for full client documentation.
+
+## Related pages
+
+<Cards>
+  <Card title="OpenAPI reference" href="/docs/api" description="Interactive documentation with schemas." />
+  <Card title="Authentication" href="/docs/apps/api/authentication" description="Auth methods and scopes." />
+  <Card title="MCP tools" href="/docs/apps/api/mcp" description="Same endpoints exposed as MCP tools." />
+</Cards>

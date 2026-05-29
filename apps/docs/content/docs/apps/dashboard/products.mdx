@@ -1,0 +1,108 @@
+---
+title: Products
+description: Product management in the dashboard — create, edit, variants, images, and inventory.
+---
+
+The dashboard provides full product lifecycle management through the Commerce API admin endpoints.
+
+## Product list
+
+**Route:** `/products`
+
+Displays a paginated table of products for the active organization:
+
+| Column | Source |
+| --- | --- |
+| Name | `product.name` (localized) |
+| Status | `draft`, `published`, `archived` |
+| Price | Base variant price (formatted) |
+| Inventory | Total stock across variants |
+| Created | `product.createdAt` |
+
+Actions: edit, delete (with confirmation).
+
+## Create product
+
+**Route:** `/products/new`
+
+Server action in `app/(dashboard)/products/actions.ts`:
+
+```ts
+'use server'
+export async function createProduct(input: CreateProductInput) {
+  const api = getCommerceApi()
+  return api.POST('/admin/products', { body: input })
+}
+```
+
+### Product fields
+
+| Field | Type | Required | Description |
+| --- | --- | --- | --- |
+| `name` | Localized string | Yes | Product name (per locale) |
+| `slug` | string | Yes | URL-safe identifier |
+| `description` | Localized string | No | Rich text description |
+| `status` | enum | Yes | `draft` or `published` |
+| `categories` | string[] | No | Category IDs |
+| `variants` | VariantInput[] | Yes | At least one variant |
+| `options` | OptionInput[] | No | Configurable options (size, color) |
+| `images` | ImageInput[] | No | Product images (via storage provider) |
+
+### Variants
+
+Each product requires at least one variant:
+
+| Field | Description |
+| --- | --- |
+| `sku` | Stock keeping unit |
+| `price` | Price in minor units (cents) |
+| `compareAtPrice` | Original price for sale display |
+| `inventory` | Stock quantity |
+| `options` | Selected option values for this variant |
+
+## Edit product
+
+**Route:** `/products/[id]/edit`
+
+Loads existing product from API and renders an edit form. Updates via:
+
+```ts
+await api.PATCH('/admin/products/{id}', { body: updateInput })
+```
+
+Inventory can be adjusted independently:
+
+```ts
+await api.PATCH('/admin/inventory/{variantId}', { body: { quantity } })
+```
+
+## Image uploads
+
+Product images are uploaded via the storage provider configured in the environment:
+
+| Provider | Upload path |
+| --- | --- |
+| Vercel Blob | `uploadForTenant(orgId, file)` → CDN URL |
+| S3 / R2 | `uploadForTenant(orgId, file)` → public URL |
+
+Images are namespaced per tenant: `org/{orgId}/products/{productId}/...`
+
+## API endpoints used
+
+| Action | Method | Endpoint |
+| --- | --- | --- |
+| List products | GET | `/v1/admin/products` |
+| Get product | GET | `/v1/admin/products/{id}` |
+| Create product | POST | `/v1/admin/products` |
+| Update product | PATCH | `/v1/admin/products/{id}` |
+| Delete product | DELETE | `/v1/admin/products/{id}` |
+| Update inventory | PATCH | `/v1/admin/inventory/{variantId}` |
+
+All endpoints require `admin` scope (session with active organization).
+
+## Related pages
+
+<Cards>
+  <Card title="Storage providers" href="/docs/packages/storage" description="Vercel Blob and S3 upload configuration." />
+  <Card title="Admin API endpoints" href="/docs/apps/api/endpoints" description="Full admin endpoint reference." />
+</Cards>

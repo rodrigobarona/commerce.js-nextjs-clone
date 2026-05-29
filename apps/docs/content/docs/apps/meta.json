@@ -1,0 +1,10 @@
+{
+  "title": "Applications",
+  "pages": [
+    "overview",
+    "storefront",
+    "dashboard",
+    "checkout",
+    "api"
+  ]
+}

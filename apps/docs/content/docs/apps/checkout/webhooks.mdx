@@ -1,0 +1,124 @@
+---
+title: Webhooks
+description: Payment webhook routing, verification, and forwarding in the checkout app.
+---
+
+Payment providers send webhooks to notify about async payment events (Multibanco payments, 3DS completions, refunds). The checkout app receives these webhooks and forwards them to the Commerce API for order reconciliation.
+
+## Webhook routes
+
+```
+POST /api/webhooks/{provider}/{org}
+GET  /api/webhooks/{provider}/{org}  (provider verification)
+```
+
+| Segment | Values |
+| --- | --- |
+| `provider` | `stripe`, `easypay`, `ifthenpay` |
+| `org` | Organization ID (tenant) or `_` for env-fallback |
+
+### Example URLs
+
+```
+POST https://pay.example.com/api/webhooks/stripe/org_abc123
+POST https://pay.example.com/api/webhooks/easypay/org_abc123
+POST https://pay.example.com/api/webhooks/ifthenpay/_
+```
+
+## Flow
+
+```
+Payment provider
+  │
+  POST /api/webhooks/{provider}/{org}
+  │
+  Checkout app
+  ├─ Read raw body + signature headers
+  │
+  @prood/checkout-host forwardPaymentWebhook()
+  │
+  POST {COMMERCE_API_URL}/webhooks/payments/{provider}?org={org}
+  Header: x-checkout-secret: {CHECKOUT_API_SECRET}
+  │
+  Commerce API
+  ├─ verifyPaymentWebhook(payload, signature, provider, org)
+  │     └─ Uses tenant's stored webhook secret (or env fallback)
+  │
+  └─ Update order status (pending → confirmed / failed)
+```
+
+## Per-tenant verification
+
+Each tenant can configure their own webhook secret in the dashboard (Integrations page). The verification flow:
+
+1. Load tenant's `integration_config` for the provider
+2. Decrypt stored `webhookSecret`
+3. Verify signature against tenant's secret
+4. Fall back to env var (`STRIPE_WEBHOOK_SECRET`, etc.) if org is `_` or secret not configured
+
+```ts
+// @prood/commerce
+export async function verifyPaymentWebhook(
+  payload: string,
+  signature: string,
+  providerId: string,
+  orgId: string,
+): Promise<PaymentWebhookResult> {
+  const config = await loadIntegrationConfig(orgId, providerId)
+  const provider = getPaymentProvider(providerId, config)
+  return provider.verifyWebhook({ payload, signature })
+}
+```
+
+## Provider-specific setup
+
+### Stripe
+
+1. In Stripe Dashboard → Webhooks → Add endpoint
+2. URL: `https://pay.example.com/api/webhooks/stripe/{orgId}`
+3. Events: `payment_intent.succeeded`, `payment_intent.payment_failed`, `charge.refunded`
+4. Copy signing secret → dashboard Integrations → Stripe → webhook secret
+
+### Easypay
+
+1. Configure webhook URL in Easypay merchant panel
+2. URL: `https://pay.example.com/api/webhooks/easypay/{orgId}`
+3. Easypay sends payment status notifications
+
+### Ifthenpay
+
+1. Configure callback URL in Ifthenpay backoffice
+2. URL: `https://pay.example.com/api/webhooks/ifthenpay/{orgId}`
+3. Anti-phishing key used for verification
+
+## Webhook as safety net
+
+Webhooks complement the sync-on-return flow:
+
+| Scenario | Primary | Fallback |
+| --- | --- | --- |
+| Stripe 3DS success | `confirmPayment()` on return | Webhook `payment_intent.succeeded` |
+| Customer closes browser during 3DS | — | Webhook updates order |
+| Multibanco async payment | — | Webhook when customer pays at ATM |
+| MB WAY push notification | — | Webhook on phone confirmation |
+
+The checkout state machine's `handleWebhookUpdate()` can transition from any non-terminal state based on webhook data.
+
+## API webhook endpoint
+
+The Commerce API also exposes a direct webhook endpoint:
+
+```
+POST /v1/webhooks/payments/{provider}?org={orgId}
+Header: x-checkout-secret: {CHECKOUT_API_SECRET}
+```
+
+This is the target of `forwardPaymentWebhook()`. It can also be called directly if webhooks are routed to the API domain instead of the checkout domain.
+
+## Related pages
+
+<Cards>
+  <Card title="Webhook setup guide" href="/docs/guides/webhook-setup" description="Step-by-step webhook configuration." />
+  <Card title="Checkout flow" href="/docs/architecture/checkout-flow" description="Sync-on-return vs webhook strategy." />
+  <Card title="Payment integration" href="/docs/guides/payment-integration" description="Provider setup and credentials." />
+</Cards>

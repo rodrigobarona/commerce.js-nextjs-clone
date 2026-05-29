@@ -1,0 +1,109 @@
+---
+title: Orders
+description: Order management in the dashboard — listing, detail, fulfillment, and refunds.
+---
+
+The dashboard provides order visibility and management actions for the active organization's store.
+
+## Order list
+
+**Route:** `/orders`
+
+Paginated table of orders:
+
+| Column | Description |
+| --- | --- |
+| Order # | Order ID (short format) |
+| Customer | Email and name |
+| Status | `pending`, `confirmed`, `processing`, `shipped`, `delivered`, `cancelled`, `refunded` |
+| Total | Grand total (formatted with currency) |
+| Date | Order creation date |
+
+Filters: status, date range (future enhancement).
+
+## Order detail
+
+**Route:** `/orders/[id]`
+
+Displays full order information:
+
+### Order summary
+
+- Order ID, status, creation date
+- Customer info (email, name, phone)
+- Payment status and provider
+- Order totals (subtotal, tax, shipping, discount, grand total)
+
+### Line items
+
+Each item shows product name, variant, quantity, unit price, and line total.
+
+### Addresses
+
+Shipping and billing addresses as provided during checkout.
+
+### Actions
+
+| Action | API endpoint | Description |
+| --- | --- | --- |
+| **Fulfill** | `POST /v1/admin/orders/{id}/fulfill` | Mark as shipped with tracking info |
+| **Refund** | `POST /v1/admin/orders/{id}/refund` | Full or partial refund via payment provider |
+
+Server actions in `app/(dashboard)/orders/actions.ts`:
+
+```ts
+'use server'
+export async function fulfillOrder(orderId: string, input: FulfillOrderInput) {
+  const api = getCommerceApi()
+  return api.POST('/admin/orders/{id}/fulfill', {
+    params: { path: { id: orderId } },
+    body: input,
+  })
+}
+
+export async function refundOrder(orderId: string, input: RefundOrderInput) {
+  const api = getCommerceApi()
+  return api.POST('/admin/orders/{id}/refund', {
+    params: { path: { id: orderId } },
+    body: input,
+  })
+}
+```
+
+## Order statuses
+
+| Status | Meaning | Transitions |
+| --- | --- | --- |
+| `pending` | Order placed, payment not confirmed | → `confirmed` (payment captured) |
+| `confirmed` | Payment confirmed | → `processing` |
+| `processing` | Being prepared | → `shipped` (fulfill action) |
+| `shipped` | In transit | → `delivered` |
+| `delivered` | Received by customer | Terminal |
+| `cancelled` | Cancelled before fulfillment | Terminal |
+| `refunded` | Payment refunded | Terminal |
+
+Payment webhooks from the checkout app drive the `pending` → `confirmed` transition automatically.
+
+## Refund flow
+
+1. Merchant clicks **Refund** on order detail page
+2. Dashboard sends `POST /v1/admin/orders/{id}/refund` with amount and reason
+3. API calls payment provider's `refund()` method with tenant credentials
+4. Order status updated to `refunded` (full) or partial refund recorded
+5. Webhook from provider confirms refund completion
+
+## API endpoints used
+
+| Action | Method | Endpoint |
+| --- | --- | --- |
+| List orders | GET | `/v1/admin/orders` |
+| Get order | GET | `/v1/admin/orders/{id}` |
+| Fulfill order | POST | `/v1/admin/orders/{id}/fulfill` |
+| Refund order | POST | `/v1/admin/orders/{id}/refund` |
+
+## Related pages
+
+<Cards>
+  <Card title="Checkout flow" href="/docs/architecture/checkout-flow" description="How orders are created and payment confirmed." />
+  <Card title="Payment integration" href="/docs/guides/payment-integration" description="Provider-specific refund behavior." />
+</Cards>

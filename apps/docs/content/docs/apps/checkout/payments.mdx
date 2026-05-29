@@ -1,0 +1,126 @@
+---
+title: Payment UI
+description: Stripe Payment Element, Easypay, and Ifthenpay payment interfaces in the checkout app.
+---
+
+The checkout app renders provider-specific payment UI on `/pay/[id]`. The active provider is determined by the session configuration and tenant integration settings.
+
+## Provider selection
+
+Priority order:
+
+1. `provider` field in session creation request
+2. Tenant's configured default in `integration_config`
+3. `DEFAULT_PAYMENT_PROVIDER` env var (default: `stripe`)
+
+At payment time, `@prood/checkout-host` rebuilds the provider with tenant credentials:
+
+```ts
+const provider = getPaymentProvider(session.providerId, tenantConfig)
+// tenantConfig from decryptConfig(integration_config.config)
+// env vars as fallback for missing fields
+```
+
+## Stripe (embedded Payment Element)
+
+**Component:** `components/stripe-payment.tsx`
+
+Uses `@stripe/react-stripe-js` with the Payment Element:
+
+```tsx
+<Elements stripe={stripePromise} options={{ clientSecret }}>
+  <PaymentElement />
+  <Button onClick={handleSubmit}>Pay now</Button>
+</Elements>
+```
+
+### Flow
+
+1. Session loaded → `submitPayment()` creates Stripe PaymentIntent
+2. Client receives `clientSecret` from payment session
+3. Payment Element renders card form
+4. Customer submits → Stripe handles 3DS if required
+5. On success → redirect to `/confirm/{id}` or `/success/{id}`
+
+### Test cards
+
+| Card number | Result |
+| --- | --- |
+| `4242 4242 4242 4242` | Success |
+| `4000 0000 0000 3220` | 3DS required |
+| `4000 0000 0000 9995` | Declined |
+
+### Required env vars
+
+| Variable | Purpose |
+| --- | --- |
+| `STRIPE_SECRET_KEY` | Server-side (via tenant config or env) |
+| `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` | Client-side Payment Element |
+
+## Easypay (Portugal)
+
+**Component:** `components/reference-payment.tsx`
+
+Reference-based payment for Portuguese methods:
+
+| Method | UI |
+| --- | --- |
+| **Multibanco** | Entity + reference number for ATM/homebanking |
+| **MB WAY** | Phone number input → push notification |
+| **Credit card** | Redirect to Easypay hosted page |
+
+### Flow
+
+1. Customer selects payment method
+2. `submitPayment({ method: 'multibanco' })` creates Easypay charge
+3. Reference numbers displayed for Multibanco
+4. Customer pays asynchronously (ATM, app)
+5. Easypay webhook confirms payment → order updated
+
+### Sandbox
+
+Set `EASYPAY_BASE_URL=https://api.test.easypay.pt` for testing.
+
+## Ifthenpay (Portugal)
+
+**Component:** `components/reference-payment.tsx`
+
+Similar reference-based flow:
+
+| Method | Key env var |
+| --- | --- |
+| Multibanco | `IFTHENPAY_MB_KEY` |
+| MB WAY | `IFTHENPAY_MBWAY_KEY` |
+| Credit card | `IFTHENPAY_CC_KEY` |
+
+Anti-phishing verification via `IFTHENPAY_ANTIPHISHING_KEY`.
+
+## Shared payment page
+
+**Component:** `components/payment-page-client.tsx`
+
+Orchestrates the payment page:
+
+1. Loads session snapshot
+2. Determines provider type
+3. Renders Stripe Element or reference payment UI
+4. Handles submit, loading states, and error display
+5. Redirects on success/failure
+
+## Error handling
+
+| Error | UI behavior |
+| --- | --- |
+| Session expired | "Session expired" message with link back to storefront |
+| Payment declined | Retry button — state machine allows `failed → payment` |
+| Provider error | Error toast with provider message |
+| Network error | Retry with exponential backoff |
+
+## Related pages
+
+<Cards>
+  <Card title="Stripe package" href="/docs/packages/payments/stripe" description="@prood/payment-stripe provider." />
+  <Card title="Easypay package" href="/docs/packages/payments/easypay" description="@prood/payment-easypay provider." />
+  <Card title="Ifthenpay package" href="/docs/packages/payments/ifthenpay" description="@prood/payment-ifthenpay provider." />
+  <Card title="Payment integration" href="/docs/guides/payment-integration" description="Setup guide for all providers." />
+</Cards>

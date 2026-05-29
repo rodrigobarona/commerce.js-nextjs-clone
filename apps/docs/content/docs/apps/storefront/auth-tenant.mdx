@@ -1,0 +1,156 @@
+---
+title: Auth & Tenant Resolution
+description: Customer authentication and host-based tenant resolution in the storefront.
+---
+
+The storefront handles two cross-cutting concerns: **customer authentication** (Better Auth) and **tenant resolution** (which merchant store to display).
+
+## Customer authentication
+
+### Setup
+
+Better Auth is configured in `lib/auth/server.ts`:
+
+| Setting | Value |
+| --- | --- |
+| Provider | Email/password |
+| Database | Neon via Drizzle (`lib/auth/db.ts`, `lib/auth/schema.ts`) |
+| Tables | `user`, `session`, `account`, `verification` |
+| Organization plugin | **Not enabled** — customers are not org members |
+
+### Auth seam
+
+`lib/auth/index.ts` provides a provider-agnostic interface:
+
+```ts
+export async function getSession() { ... }
+export async function getCurrentUser() { ... }
+```
+
+This allows swapping to WorkOS AuthKit or Clerk via `AUTH_PROVIDER` without changing page code.
+
+### Protected routes
+
+Account pages check for an active session:
+
+```ts
+// app/account/page.tsx
+const session = await getSession()
+if (!session) redirect('/login')
+```
+
+Orders are scoped to the authenticated customer via the API session cookie.
+
+### API routes
+
+Better Auth handler at `/api/auth/[...all]` handles:
+
+- `POST /api/auth/sign-up/email` — registration
+- `POST /api/auth/sign-in/email` — login
+- `POST /api/auth/sign-out` — logout
+- Session cookie management
+
+## Tenant resolution
+
+### How it works
+
+`lib/tenant.ts` → `resolveTenantId()`:
+
+```ts
+export async function resolveTenantId(): Promise<string> {
+  const host = headers().get('host') ?? ''
+
+  // 1. Custom domain lookup
+  const domain = await lookupTenantDomain(host)
+  if (domain) return domain.organizationId
+
+  // 2. Subdomain: {slug}.{NEXT_PUBLIC_PLATFORM_DOMAIN}
+  const slug = extractSubdomain(host, PLATFORM_DOMAIN)
+  if (slug) {
+    const org = await lookupOrgBySlug(slug)
+    if (org) return org.id
+  }
+
+  // 3. Fallback
+  if (process.env.DEFAULT_TENANT_ORG_ID) {
+    return process.env.DEFAULT_TENANT_ORG_ID
+  }
+
+  notFound() // production: unmatched host → 404
+}
+```
+
+### Resolution priority
+
+| Priority | Source | Example |
+| --- | --- | --- |
+| 1 | Custom domain (verified) | `shop.merchant.com` → org from `tenant_domain` |
+| 2 | Platform subdomain | `merchant.example.com` → org by slug `merchant` |
+| 3 | Default tenant | `localhost:3000` → `org_demo` (dev only) |
+| 4 | Not found | Unmatched host in production → 404 |
+
+### Database lookup
+
+`lib/tenant-db.ts` queries the shared Neon database:
+
+```sql
+-- Custom domain
+SELECT organization_id FROM tenant_domain
+WHERE domain = $1 AND verified = true
+
+-- Subdomain slug
+SELECT id FROM organization WHERE slug = $1
+```
+
+These tables are managed by the dashboard (Domains page) and pushed via `pnpm db:auth`.
+
+### Caching
+
+Tenant resolution is cached with `'use cache'` and a tag keyed by host. Domain changes in the dashboard invalidate the cache on next request.
+
+### Forwarding to API
+
+The storefront API client forwards the `Host` header to the Commerce API:
+
+```ts
+// lib/commerce-api.ts
+headers: async () => ({
+  cookie: (await headers()).get('cookie') ?? '',
+  host: (await headers()).get('host') ?? '',
+})
+```
+
+The API uses this header for tenant-scoped storefront routes when no session or API key is present.
+
+## Multi-tenant catalog caching
+
+Each tenant's catalog is cached independently:
+
+```ts
+// In @prood/commerce catalog fetchers
+cacheTag(`products-${orgId}`)
+cacheTag(`categories-${orgId}`)
+cacheTag(`store-${orgId}`)
+```
+
+A product update in the dashboard for org A does not invalidate org B's cache.
+
+## Development setup
+
+For local development without DNS:
+
+1. Set `DEFAULT_TENANT_ORG_ID=org_demo` in `.env.local`
+2. Access [http://localhost:3000](http://localhost:3000) — serves the demo store
+3. To test subdomain resolution locally, add to `/etc/hosts`:
+   ```
+   127.0.0.1 merchant.localhost
+   ```
+   And set `NEXT_PUBLIC_PLATFORM_DOMAIN=localhost`
+
+## Related pages
+
+<Cards>
+  <Card title="Multi-tenant platform" href="/docs/architecture/multi-tenant" description="RLS, organizations, and isolation." />
+  <Card title="Dashboard domains" href="/docs/apps/dashboard/domains" description="Custom domain setup." />
+  <Card title="API authentication" href="/docs/apps/api/authentication" description="How the API resolves tenant from Host." />
+</Cards>

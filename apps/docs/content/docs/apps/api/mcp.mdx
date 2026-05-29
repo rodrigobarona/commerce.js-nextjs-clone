@@ -1,0 +1,146 @@
+---
+title: MCP Server
+description: Model Context Protocol server exposing Commerce API operations as tools for AI agents.
+---
+
+The Commerce API exposes a **Model Context Protocol (MCP)** server at `/mcp`, allowing AI agents and LLM applications to interact with commerce data through standardized tools.
+
+## Endpoint
+
+```
+POST /mcp
+Content-Type: application/json
+Authorization: Bearer {jwt} | x-api-key: {key}
+```
+
+Uses streamable HTTP transport via `mcp-handler`.
+
+## Available tools
+
+MCP tools mirror the REST API endpoints. Each tool maps to an OpenAPI `operationId`:
+
+### Catalog tools
+
+| Tool | REST equivalent | Description |
+| --- | --- | --- |
+| `listProducts` | `GET /v1/products` | Search and list products |
+| `getProduct` | `GET /v1/products/{id}` | Get product by ID |
+| `listCategories` | `GET /v1/categories` | List categories |
+| `getStore` | `GET /v1/store` | Get store info |
+
+### Cart tools
+
+| Tool | REST equivalent | Description |
+| --- | --- | --- |
+| `createCart` | `POST /v1/carts` | Create a new cart |
+| `getCart` | `GET /v1/carts/{id}` | Get cart details |
+| `addCartItem` | `POST /v1/carts/{id}/items` | Add item to cart |
+| `updateCartItem` | `PATCH /v1/carts/{id}/items/{itemId}` | Update item quantity |
+| `removeCartItem` | `DELETE /v1/carts/{id}/items/{itemId}` | Remove item |
+| `applyCartCoupon` | `POST /v1/carts/{id}/coupon` | Apply coupon |
+| `removeCartCoupon` | `DELETE /v1/carts/{id}/coupon` | Remove coupon |
+| `setCartShippingAddress` | `POST /v1/carts/{id}/shipping-address` | Set shipping address |
+| `listCartShippingMethods` | `GET /v1/carts/{id}/shipping-methods` | List shipping options |
+| `listCartPaymentMethods` | `GET /v1/carts/{id}/payment-methods` | List payment options |
+| `placeOrder` | `POST /v1/carts/{id}/place-order` | Place order from cart |
+
+### Admin tools
+
+| Tool | REST equivalent | Description |
+| --- | --- | --- |
+| `adminListProducts` | `GET /v1/admin/products` | List all products |
+| `adminCreateProduct` | `POST /v1/admin/products` | Create product |
+| `adminUpdateProduct` | `PATCH /v1/admin/products/{id}` | Update product |
+| `adminDeleteProduct` | `DELETE /v1/admin/products/{id}` | Delete product |
+| `adminListOrders` | `GET /v1/admin/orders` | List orders |
+| `adminGetOrder` | `GET /v1/admin/orders/{id}` | Get order detail |
+| `adminFulfillOrder` | `POST /v1/admin/orders/{id}/fulfill` | Fulfill order |
+| `adminRefundOrder` | `POST /v1/admin/orders/{id}/refund` | Refund order |
+| `adminListCustomers` | `GET /v1/admin/customers` | List customers |
+| `adminGetDashboardStats` | `GET /v1/admin/dashboard/stats` | Dashboard statistics |
+| `adminUpdateStore` | `PATCH /v1/admin/store` | Update store settings |
+
+## Authentication
+
+MCP requests use the same authentication as REST:
+
+| Method | Header | Scopes |
+| --- | --- | --- |
+| Agent JWT | `Authorization: Bearer {jwt}` | From capability grants |
+| API key | `x-api-key: {key}` | From key metadata |
+
+The MCP handler resolves the caller via `resolve-caller.ts` and sets context in AsyncLocalStorage for tool execution.
+
+## Implementation
+
+```ts
+// apps/api/lib/mcp/handler.ts
+import { createMcpHandler } from 'mcp-handler'
+import { tools } from './tools'
+
+export const mcpHandler = createMcpHandler({
+  tools,
+  authenticate: async (request) => {
+    const caller = await resolveCaller(request)
+    mcpContext.enterWith({ caller })
+    return caller
+  },
+})
+```
+
+Each tool in `lib/mcp/tools.ts` calls the same `commerce-service.ts` functions as REST route handlers:
+
+```ts
+{
+  name: 'listProducts',
+  description: 'Search and list products in the catalog',
+  inputSchema: { ... },
+  handler: async (input) => {
+    const { caller } = mcpContext.getStore()!
+    return listProducts(caller.orgId, input)
+  },
+}
+```
+
+## Connecting an MCP client
+
+### Cursor / Claude Desktop
+
+Add to your MCP config:
+
+```json
+{
+  "mcpServers": {
+    "prood-commerce": {
+      "url": "http://localhost:3005/mcp",
+      "headers": {
+        "x-api-key": "pk_your_api_key"
+      }
+    }
+  }
+}
+```
+
+### Programmatic
+
+Use the `@modelcontextprotocol/sdk` client:
+
+```ts
+import { Client } from '@modelcontextprotocol/sdk/client/index.js'
+
+const client = new Client({ name: 'my-agent', version: '1.0.0' })
+await client.connect(transport)
+
+const result = await client.callTool({
+  name: 'listProducts',
+  arguments: { query: 'shirt', limit: 5 },
+})
+```
+
+## Related pages
+
+<Cards>
+  <Card title="Agent Auth" href="/docs/apps/api/agent-auth" description="Agent registration and capability grants." />
+  <Card title="Authentication" href="/docs/apps/api/authentication" description="Caller resolution for MCP and REST." />
+  <Card title="OpenAPI reference" href="/docs/api" description="REST endpoint schemas." />
+</Cards>

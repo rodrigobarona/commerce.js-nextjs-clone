@@ -1,0 +1,102 @@
+---
+title: Team Management
+description: Organization members, roles, and invitations in the dashboard.
+---
+
+The dashboard **Team** page manages organization membership using Better Auth's organization plugin.
+
+## Organization model
+
+Each merchant store is a Better Auth **organization**:
+
+| Concept | Description |
+| --- | --- |
+| Organization | A merchant store (tenant) |
+| Member | A user belonging to an organization |
+| Role | `owner`, `admin`, or `member` |
+| Invitation | Pending invite to join an organization |
+
+When a merchant registers, Better Auth creates:
+
+1. A `user` record
+2. An `organization` record (the store)
+3. A `member` record linking the user as `owner`
+
+## Team page
+
+**Route:** `/team`
+
+Displays:
+
+- Current organization name and slug
+- Member list with roles
+- Pending invitations
+- Invite form (email + role)
+
+### Member roles
+
+| Role | Permissions |
+| --- | --- |
+| `owner` | Full access — manage team, delete org, all admin operations |
+| `admin` | Full admin access — products, orders, integrations, domains |
+| `member` | Read-only access (future fine-grained permissions) |
+
+### Inviting members
+
+```ts
+// Server action
+await auth.api.createInvitation({
+  body: {
+    email: 'colleague@example.com',
+    role: 'admin',
+    organizationId: activeOrgId,
+  },
+})
+```
+
+The invited user receives an email (when email provider is configured) or can accept via a direct link.
+
+## Organization switching
+
+If a user belongs to multiple organizations, they can switch the active org:
+
+```ts
+await auth.api.setActiveOrganization({
+  body: { organizationId: newOrgId },
+})
+```
+
+The session's `activeOrganizationId` updates, and all subsequent admin API calls scope to the new org.
+
+## API scoping
+
+The Commerce API resolves the tenant from the session's active organization:
+
+```ts
+// apps/api/lib/resolve-caller.ts
+const session = await auth.api.getSession({ headers })
+const orgId = session.session.activeOrganizationId
+// → scopes: ['admin', 'storefront']
+```
+
+All admin endpoints (`/v1/admin/*`) require the `admin` scope, which is granted when a valid session with an active organization is present.
+
+## Auth tables
+
+Better Auth organization plugin creates:
+
+| Table | Purpose |
+| --- | --- |
+| `organization` | Store records (id, name, slug) |
+| `member` | User ↔ organization membership with role |
+| `invitation` | Pending invitations |
+
+These are pushed via `pnpm db:auth` alongside core auth tables.
+
+## Related pages
+
+<Cards>
+  <Card title="Multi-tenant platform" href="/docs/architecture/multi-tenant" description="How organizations map to tenants." />
+  <Card title="API authentication" href="/docs/apps/api/authentication" description="Session-based auth and scopes." />
+  <Card title="Merchant onboarding" href="/docs/guides/merchant-onboarding" description="First-time merchant setup." />
+</Cards>

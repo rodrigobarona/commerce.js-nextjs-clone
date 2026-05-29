@@ -1,0 +1,83 @@
+---
+title: Dashboard
+description: The merchant admin dashboard — products, orders, integrations, domains, and team management.
+---
+
+`apps/dashboard` is the **merchant admin** application. Merchants sign in, select an active organization (their store), and manage products, orders, customers, payment integrations, and custom domains.
+
+**Port:** 3002 · **Framework:** Next.js 16 · **Auth:** Better Auth + organization plugin
+
+## Architecture
+
+```
+Dashboard page
+  ├─ Server Component → admin-api.ts → @prood/api-client → API /v1/admin/*
+  ├─ Server Action → admin-api.ts → API /v1/admin/*
+  └─ Direct DB (integrations/domains only) → @prood/commerce.withTenant()
+```
+
+Most data operations go through the Commerce API. Integration credentials and domain records are managed directly via Drizzle (encrypted at rest).
+
+## Features
+
+| Section | Route | Status | Description |
+| --- | --- | --- | --- |
+| Overview | `/` | Live | Dashboard stats — revenue, orders, customers |
+| Products | `/products` | Live | List, create, edit products with variants and images |
+| Orders | `/orders` | Live | List, detail, fulfill, refund |
+| Customers | `/customers` | Live | Customer list and detail |
+| Integrations | `/integrations` | Live | Payment and service provider configuration |
+| Domains | `/domains` | Live | Custom domain setup with Vercel + DNS |
+| Team | `/team` | Live | Organization members and invitations |
+| Settings | `/settings` | Live | Store name, currency, contact info |
+| API Keys | `/settings/api-keys` | Live | Programmatic API access keys |
+| Analytics | `/analytics` | Placeholder | Future analytics dashboard |
+| Billing | `/billing` | Placeholder | Future subscription billing |
+
+## Auth & organization
+
+Merchants authenticate with email/password. Better Auth's **organization plugin** enables multi-store management:
+
+- Registration creates a user + first organization
+- `session.activeOrganizationId` determines which store's data is shown
+- Organization switching updates the active org in the session
+- All admin API calls are scoped to the active organization
+
+```ts
+// lib/admin.ts
+export async function withActiveOrg<T>(fn: (orgId: string) => Promise<T>) {
+  const orgId = await requireActiveOrg()
+  return withTenant(orgId, fn)
+}
+```
+
+## Navigation
+
+Sidebar groups defined in `lib/nav.ts`:
+
+| Group | Items |
+| --- | --- |
+| **Store** | Overview, Products, Orders, Customers |
+| **Platform** | Domains, Integrations, Analytics |
+| **Account** | Team, Settings, API Keys, Billing |
+
+## Configuration
+
+| Variable | Purpose |
+| --- | --- |
+| `DATABASE_URL` | Auth + integration_config + tenant_domain tables |
+| `COMMERCE_API_URL` | Admin API client base URL |
+| `BETTER_AUTH_SECRET`, `BETTER_AUTH_URL` | Merchant auth (default `http://localhost:3002`) |
+| `INTEGRATION_ENCRYPTION_KEY` | Encrypt provider credentials at rest |
+| `VERCEL_TOKEN`, `VERCEL_PROJECT_ID`, `VERCEL_TEAM_ID` | Custom domain provisioning |
+| `NEXT_PUBLIC_PLATFORM_DOMAIN` | Shown on domains page for subdomain preview |
+
+## Related pages
+
+<Cards>
+  <Card title="Products" href="/docs/apps/dashboard/products" description="Product CRUD, variants, and inventory." />
+  <Card title="Orders" href="/docs/apps/dashboard/orders" description="Order management, fulfillment, and refunds." />
+  <Card title="Integrations" href="/docs/apps/dashboard/integrations" description="Payment provider credentials per tenant." />
+  <Card title="Domains" href="/docs/apps/dashboard/domains" description="Custom domain setup and verification." />
+  <Card title="Team" href="/docs/apps/dashboard/team" description="Organization members and invitations." />
+</Cards>
