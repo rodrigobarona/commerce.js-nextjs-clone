@@ -1,27 +1,24 @@
 import Link from "next/link"
 import { UserIcon } from "@phosphor-icons/react/dist/ssr"
 import type { Category } from "@prood/commerce/types"
-import { getCategories, getStoreInfo } from "@prood/commerce"
+import { fetchCategories, fetchStoreInfo } from "@/lib/commerce-data"
 import { Button } from "@prood/ui/components/button"
 import { localized } from "@prood/ui/lib/commerce"
 import { CartButton } from "@/components/layout/cart-button"
 import { MobileMenu, type NavLink } from "@/components/layout/mobile-menu"
 import { Search } from "@/components/layout/search"
 import { ThemeToggle } from "@/components/layout/theme-toggle"
-import { resolveTenantId } from "@/lib/tenant"
-
 export async function Header() {
-  const tenantId = await resolveTenantId()
   let categories: Category[] = []
   let storeName = "Commerce"
 
   try {
-    categories = await getCategories(undefined, tenantId)
+    categories = await fetchCategories()
   } catch {
     // DB unavailable (e.g. during build without DATABASE_URL) — render shell only.
   }
   try {
-    const store = await getStoreInfo(tenantId)
+    const store = await fetchStoreInfo()
     if (store) storeName = localized(store.name) || storeName
   } catch {
     // ignore — fall back to default name

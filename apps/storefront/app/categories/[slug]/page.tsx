@@ -1,9 +1,8 @@
 import { notFound } from "next/navigation"
 import type { Category, Product } from "@prood/commerce/types"
-import { getCategories, getProducts } from "@prood/commerce"
 import { localized } from "@prood/ui/lib/commerce"
 import { ConnectedProductGrid } from "@/components/commerce/connected-product-grid"
-import { resolveTenantId } from "@/lib/tenant"
+import { fetchCategories, fetchProductList } from "@/lib/commerce-data"
 
 function findBySlug(categories: Category[], slug: string): Category | null {
   for (const category of categories) {
@@ -17,8 +16,7 @@ function findBySlug(categories: Category[], slug: string): Category | null {
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
   try {
-    const tenantId = await resolveTenantId()
-    const category = findBySlug(await getCategories(undefined, tenantId), slug)
+    const category = findBySlug(await fetchCategories(), slug)
     if (category) return { title: localized(category.name) }
   } catch {
     /* ignore */
@@ -32,11 +30,10 @@ export default async function CategoryPage({
   params: Promise<{ slug: string }>
 }) {
   const { slug } = await params
-  const tenantId = await resolveTenantId()
 
   let category: Category | null = null
   try {
-    category = findBySlug(await getCategories(undefined, tenantId), slug)
+    category = findBySlug(await fetchCategories(), slug)
   } catch {
     /* DB unavailable */
   }
@@ -44,10 +41,10 @@ export default async function CategoryPage({
 
   let products: Product[] = []
   try {
-    const result = await getProducts(
-      { categoryId: category.id, perPage: 24 },
-      tenantId,
-    )
+    const result = await fetchProductList({
+      categoryId: category.id,
+      perPage: 24,
+    })
     products = result.products.items
   } catch {
     /* DB unavailable */

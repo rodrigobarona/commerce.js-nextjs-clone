@@ -1,8 +1,7 @@
 import Link from "next/link"
 import { notFound } from "next/navigation"
 import type { Product } from "@prood/commerce/types"
-import { getProduct } from "@prood/commerce"
-import { resolveTenantId } from "@/lib/tenant"
+import { fetchProductBySlug } from "@/lib/commerce-data"
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -19,8 +18,7 @@ import { AddToCart } from "@/components/commerce/add-to-cart"
 
 async function loadProduct(slug: string): Promise<Product | null> {
   try {
-    const tenantId = await resolveTenantId()
-    return await getProduct({ slug }, tenantId)
+    return await fetchProductBySlug(slug)
   } catch {
     return null
   }

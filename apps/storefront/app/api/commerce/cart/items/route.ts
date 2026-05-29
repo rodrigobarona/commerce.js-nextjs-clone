@@ -1,9 +1,8 @@
 import { NextResponse } from "next/server"
 import { z } from "zod"
-import { addToCart, createCart, revalidateProducts } from "@prood/commerce"
 import { errorResponse } from "@/lib/api"
 import { getCartId, setCartId } from "@/lib/cart-cookie"
-import { resolveTenantId } from "@/lib/tenant"
+import { getCommerceApi } from "@/lib/commerce-api"
 
 const addSchema = z.object({
   productId: z.string().min(1),
@@ -14,25 +13,35 @@ const addSchema = z.object({
 export async function POST(request: Request) {
   try {
     const input = addSchema.parse(await request.json())
-    const tenantId = await resolveTenantId()
+    const api = await getCommerceApi()
 
-    let id = await getCartId()
+    let id = (await getCartId()) ?? ""
     if (!id) {
-      const cart = await createCart(tenantId)
+      const created = await api.POST("/carts")
+      if (created.error || !created.data) throw created.error
+      const cart = created.data as { id: string }
       id = cart.id
       await setCartId(id)
     }
 
+    const add = async (cartId: string) => {
+      const { data, error } = await api.POST("/carts/{id}/items", {
+        params: { path: { id: cartId } },
+        body: input,
+      })
+      if (error) throw error
+      return data
+    }
+
     try {
-      const cart = await addToCart(id, input, tenantId)
-      revalidateProducts(tenantId)
+      const cart = await add(id)
       return NextResponse.json({ cart })
     } catch {
-      // Cart expired/deleted — create a fresh one and retry once.
-      const fresh = await createCart(tenantId)
+      const created = await api.POST("/carts")
+      if (created.error || !created.data) throw created.error
+      const fresh = created.data as { id: string }
       await setCartId(fresh.id)
-      const cart = await addToCart(fresh.id, input, tenantId)
-      revalidateProducts(tenantId)
+      const cart = await add(fresh.id)
       return NextResponse.json({ cart })
     }
   } catch (err) {

@@ -33,18 +33,30 @@ function schema(def: z.ZodType) {
   return z.toJSONSchema(def)
 }
 
+function pathParametersFromTemplate(pathTemplate: string): object[] {
+  return [...pathTemplate.matchAll(/\{([^}]+)\}/g)].map(([, name]) => ({
+    name,
+    in: "path",
+    required: true,
+    schema: { type: "string" },
+  }))
+}
+
 function pathItem(
   method: string,
   summary: string,
   operationId: string,
   options: {
+    pathTemplate?: string
     query?: z.ZodType
     body?: z.ZodType
     scope: "storefront" | "admin"
     responses?: Record<string, { description: string }>
   }
 ) {
-  const parameters: object[] = []
+  const parameters: object[] = options.pathTemplate
+    ? pathParametersFromTemplate(options.pathTemplate)
+    : []
   if (options.query) {
     const json = schema(options.query) as {
       properties?: Record<string, { type?: string; enum?: string[] }>
@@ -123,6 +135,7 @@ export function buildOpenApiDocument() {
         query: searchProductsQuery,
       }),
       "/products/{id}": pathItem("GET", "Get product by id", "getProduct", {
+        pathTemplate: "/products/{id}",
         scope: "storefront",
       }),
       "/categories": pathItem("GET", "List categories", "listCategories", {
@@ -140,32 +153,39 @@ export function buildOpenApiDocument() {
         responses: { "201": { description: "Cart created" } },
       }),
       "/carts/{id}": pathItem("GET", "Get cart", "getCart", {
+        pathTemplate: "/carts/{id}",
         scope: "storefront",
       }),
       "/carts/{id}/items": pathItem("POST", "Add cart item", "addCartItem", {
+        pathTemplate: "/carts/{id}/items",
         scope: "storefront",
         body: addToCartBody,
         responses: { "201": { description: "Item added" } },
       }),
       "/carts/{id}/items/{itemId}": {
         ...pathItem("PATCH", "Update cart item quantity", "updateCartItem", {
+          pathTemplate: "/carts/{id}/items/{itemId}",
           scope: "storefront",
           body: updateCartItemBody,
         }),
         ...pathItem("DELETE", "Remove cart item", "removeCartItem", {
+          pathTemplate: "/carts/{id}/items/{itemId}",
           scope: "storefront",
         }),
       },
       "/carts/{id}/coupon": {
         ...pathItem("POST", "Apply coupon", "applyCartCoupon", {
+          pathTemplate: "/carts/{id}/coupon",
           scope: "storefront",
           body: couponBody,
         }),
         ...pathItem("DELETE", "Remove coupon", "removeCartCoupon", {
+          pathTemplate: "/carts/{id}/coupon",
           scope: "storefront",
         }),
       },
       "/orders/{id}": pathItem("GET", "Get order by id", "getOrder", {
+        pathTemplate: "/orders/{id}",
         scope: "storefront",
       }),
       "/admin/products": {
@@ -181,13 +201,16 @@ export function buildOpenApiDocument() {
       },
       "/admin/products/{id}": {
         ...pathItem("GET", "Get product (admin)", "adminGetProduct", {
+          pathTemplate: "/admin/products/{id}",
           scope: "admin",
         }),
         ...pathItem("PATCH", "Update product", "adminUpdateProduct", {
+          pathTemplate: "/admin/products/{id}",
           scope: "admin",
           body: updateProductBody,
         }),
         ...pathItem("DELETE", "Delete product", "adminDeleteProduct", {
+          pathTemplate: "/admin/products/{id}",
           scope: "admin",
           responses: { "204": { description: "Deleted" } },
         }),
@@ -199,10 +222,12 @@ export function buildOpenApiDocument() {
       }),
       "/admin/categories/{id}": {
         ...pathItem("PATCH", "Update category", "adminUpdateCategory", {
+          pathTemplate: "/admin/categories/{id}",
           scope: "admin",
           body: updateCategoryBody,
         }),
         ...pathItem("DELETE", "Delete category", "adminDeleteCategory", {
+          pathTemplate: "/admin/categories/{id}",
           scope: "admin",
           responses: { "204": { description: "Deleted" } },
         }),
@@ -212,9 +237,11 @@ export function buildOpenApiDocument() {
         query: adminListOrdersQuery,
       }),
       "/admin/orders/{id}": pathItem("GET", "Get order (admin)", "adminGetOrder", {
+        pathTemplate: "/admin/orders/{id}",
         scope: "admin",
       }),
       "/admin/orders/{id}/fulfill": pathItem("POST", "Fulfill order", "adminFulfillOrder", {
+        pathTemplate: "/admin/orders/{id}/fulfill",
         scope: "admin",
         body: fulfillOrderBody,
       }),
@@ -223,6 +250,7 @@ export function buildOpenApiDocument() {
         query: adminListQuery,
       }),
       "/admin/customers/{id}": pathItem("GET", "Get customer", "adminGetCustomer", {
+        pathTemplate: "/admin/customers/{id}",
         scope: "admin",
       }),
       "/admin/store": {

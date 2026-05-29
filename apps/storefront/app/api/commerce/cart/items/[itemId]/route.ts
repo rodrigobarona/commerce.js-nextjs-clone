@@ -1,24 +1,27 @@
 import { NextResponse } from "next/server"
 import { z } from "zod"
-import { CommerceError, removeFromCart, revalidateProducts, updateCartItem } from "@prood/commerce"
+import { CommerceError } from "@prood/commerce"
 import { errorResponse } from "@/lib/api"
 import { getCartId } from "@/lib/cart-cookie"
-import { resolveTenantId } from "@/lib/tenant"
+import { getCommerceApi } from "@/lib/commerce-api"
 
-const updateSchema = z.object({ quantity: z.number().int().positive() })
+const updateSchema = z.object({ quantity: z.number().int().nonnegative() })
 
 type Ctx = { params: Promise<{ itemId: string }> }
 
 export async function PUT(request: Request, { params }: Ctx) {
   try {
-    const id = await getCartId()
-    if (!id) throw new CommerceError("No active cart", "NOT_FOUND", 404)
+    const cartId = await getCartId()
+    if (!cartId) throw new CommerceError("No active cart", "NOT_FOUND", 404)
     const { itemId } = await params
     const { quantity } = updateSchema.parse(await request.json())
-    const tenantId = await resolveTenantId()
-    const cart = await updateCartItem(id, itemId, quantity, tenantId)
-    revalidateProducts(tenantId)
-    return NextResponse.json({ cart })
+    const api = await getCommerceApi()
+    const { data, error } = await api.PATCH("/carts/{id}/items/{itemId}", {
+      params: { path: { id: cartId, itemId } },
+      body: { quantity },
+    })
+    if (error) throw error
+    return NextResponse.json({ cart: data })
   } catch (err) {
     return errorResponse(err)
   }
@@ -26,13 +29,15 @@ export async function PUT(request: Request, { params }: Ctx) {
 
 export async function DELETE(_request: Request, { params }: Ctx) {
   try {
-    const id = await getCartId()
-    if (!id) throw new CommerceError("No active cart", "NOT_FOUND", 404)
+    const cartId = await getCartId()
+    if (!cartId) throw new CommerceError("No active cart", "NOT_FOUND", 404)
     const { itemId } = await params
-    const tenantId = await resolveTenantId()
-    const cart = await removeFromCart(id, itemId, tenantId)
-    revalidateProducts(tenantId)
-    return NextResponse.json({ cart })
+    const api = await getCommerceApi()
+    const { data, error } = await api.DELETE("/carts/{id}/items/{itemId}", {
+      params: { path: { id: cartId, itemId } },
+    })
+    if (error) throw error
+    return NextResponse.json({ cart: data })
   } catch (err) {
     return errorResponse(err)
   }

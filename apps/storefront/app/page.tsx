@@ -1,33 +1,34 @@
 import Image from "next/image"
 import Link from "next/link"
 import type { Category, Product } from "@prood/commerce/types"
-import { getCategories, getProducts, getStoreInfo } from "@prood/commerce"
 import { HeroBanner } from "@prood/ui/components/hero-banner"
 import { localized } from "@prood/ui/lib/commerce"
 import { ConnectedProductGrid } from "@/components/commerce/connected-product-grid"
-import { resolveTenantId } from "@/lib/tenant"
+import {
+  fetchCategories,
+  fetchProductList,
+  fetchStoreInfo,
+} from "@/lib/commerce-data"
 
 export default async function HomePage() {
-  const tenantId = await resolveTenantId()
-
   let products: Product[] = []
   let categories: Category[] = []
   let storeName = "Commerce"
   let tagline: string | undefined
 
   try {
-    const result = await getProducts({ perPage: 8 }, tenantId)
+    const result = await fetchProductList({ perPage: 8 })
     products = result.products.items
   } catch {
     /* DB unavailable */
   }
   try {
-    categories = await getCategories(undefined, tenantId)
+    categories = await fetchCategories()
   } catch {
     /* DB unavailable */
   }
   try {
-    const store = await getStoreInfo(tenantId)
+    const store = await fetchStoreInfo()
     if (store) {
       storeName = localized(store.name) || storeName
       tagline = store.description ? localized(store.description) : undefined

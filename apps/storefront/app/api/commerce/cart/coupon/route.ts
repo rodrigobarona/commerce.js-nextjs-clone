@@ -1,20 +1,24 @@
 import { NextResponse } from "next/server"
 import { z } from "zod"
-import { CommerceError, applyCoupon, removeCoupon } from "@prood/commerce"
+import { CommerceError } from "@prood/commerce"
 import { errorResponse } from "@/lib/api"
 import { getCartId } from "@/lib/cart-cookie"
-import { resolveTenantId } from "@/lib/tenant"
+import { getCommerceApi } from "@/lib/commerce-api"
 
 const couponSchema = z.object({ code: z.string().min(1) })
 
 export async function POST(request: Request) {
   try {
-    const id = await getCartId()
-    if (!id) throw new CommerceError("No active cart", "NOT_FOUND", 404)
+    const cartId = await getCartId()
+    if (!cartId) throw new CommerceError("No active cart", "NOT_FOUND", 404)
     const { code } = couponSchema.parse(await request.json())
-    const tenantId = await resolveTenantId()
-    const cart = await applyCoupon(id, code, tenantId)
-    return NextResponse.json({ cart })
+    const api = await getCommerceApi()
+    const { data, error } = await api.POST("/carts/{id}/coupon", {
+      params: { path: { id: cartId } },
+      body: { code },
+    })
+    if (error) throw error
+    return NextResponse.json({ cart: data })
   } catch (err) {
     return errorResponse(err)
   }
@@ -22,11 +26,14 @@ export async function POST(request: Request) {
 
 export async function DELETE() {
   try {
-    const id = await getCartId()
-    if (!id) throw new CommerceError("No active cart", "NOT_FOUND", 404)
-    const tenantId = await resolveTenantId()
-    const cart = await removeCoupon(id, tenantId)
-    return NextResponse.json({ cart })
+    const cartId = await getCartId()
+    if (!cartId) throw new CommerceError("No active cart", "NOT_FOUND", 404)
+    const api = await getCommerceApi()
+    const { data, error } = await api.DELETE("/carts/{id}/coupon", {
+      params: { path: { id: cartId } },
+    })
+    if (error) throw error
+    return NextResponse.json({ cart: data })
   } catch (err) {
     return errorResponse(err)
   }

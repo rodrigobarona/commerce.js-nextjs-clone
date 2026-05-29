@@ -1,9 +1,8 @@
 import Link from "next/link"
 import type { Product, SearchParams } from "@prood/commerce/types"
-import { getProducts } from "@prood/commerce"
 import { Button } from "@prood/ui/components/button"
 import { ConnectedProductGrid } from "@/components/commerce/connected-product-grid"
-import { resolveTenantId } from "@/lib/tenant"
+import { fetchProductList } from "@/lib/commerce-data"
 
 export const metadata = { title: "Products" }
 
@@ -29,21 +28,17 @@ export default async function ProductsPage({
   const sp = await searchParams
   const page = Number(sp.page) || 1
   const perPage = 12
-  const tenantId = await resolveTenantId()
-
   let products: Product[] = []
   let total = 0
   try {
-    const result = await getProducts(
-      {
-        query: sp.q,
-        categoryId: sp.category,
-        page,
-        perPage,
-        sort: parseSort(sp.sort),
-      },
-      tenantId,
-    )
+    const result = await fetchProductList({
+      query: sp.q,
+      categoryId: sp.category,
+      page,
+      perPage,
+      sortField: parseSort(sp.sort)?.field,
+      sortDirection: parseSort(sp.sort)?.direction,
+    })
     products = result.products.items
     total = result.products.total
   } catch {

@@ -16,6 +16,7 @@
   "dependencies": {
     "@neondatabase/serverless": "^1.1.0",
     "@phosphor-icons/react": "^2.1.10",
+    "@prood/api-client": "workspace:*",
     "@prood/commerce": "workspace:*",
     "@prood/ui": "workspace:*",
     "better-auth": "^1.6.11",
