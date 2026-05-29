@@ -13,6 +13,14 @@ pnpm add @prood/storage-vercel-blob
 
 Selected automatically when `STORAGE_PROVIDER=vercel-blob` (default).
 
+## StorageProvider interface
+
+| Method | Purpose |
+| --- | --- |
+| `upload()` | Store a file and return public URL + key |
+| `delete()` | Remove an object by key |
+| `getSignedUrl()` | Optional time-limited URL (Blob uses public URLs) |
+
 ## Configuration
 
 | Variable | Required | Description |
@@ -70,5 +78,6 @@ const result = await storage.upload({
 
 <Cards>
   <Card title="@prood/commerce storage" href="/docs/packages/commerce" description="uploadForTenant helper." />
+  <Card title="Storage overview" href="/docs/packages/storage" description="Provider selection and tenant namespacing." />
   <Card title="@prood/storage-s3" href="/docs/packages/storage/s3" description="Alternative S3-compatible provider." />
 </Cards>

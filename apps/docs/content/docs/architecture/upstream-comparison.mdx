@@ -1,0 +1,63 @@
+---
+title: Upstream Comparison
+description: How this Next.js monorepo relates to the original Commerce.js Nuxt reference implementation.
+---
+
+This repository is a **Next.js 16 port** of the upstream [Commerce.js](https://github.com/commerce-js/commerce.js) Nuxt monorepo. The package names and domain model are shared; the application architecture differs.
+
+## What changed
+
+| Area | Upstream (Nuxt) | This repo (Next.js) |
+| --- | --- | --- |
+| **Storefront** | Nuxt 3 + `@prood/nuxt` composables | Next.js App Router + `@prood/api-client` |
+| **Commerce access** | Direct `@prood/core` / adapter imports | HTTP via `apps/api` |
+| **Hosted checkout** | `apps/hosted-checkout` (Nuxt, in-memory sessions) | `apps/checkout` (Next.js, Upstash Redis) |
+| **Admin** | Partial / cloud dashboard | `apps/dashboard` (full merchant admin) |
+| **API surface** | Auto-generated Nuxt server routes | OpenAPI REST + MCP + Agent Auth |
+| **Multi-tenancy** | Platform adapter RLS | Same RLS + Better Auth organizations + host resolution |
+
+## Package mapping
+
+| Upstream | This repo | Notes |
+| --- | --- | --- |
+| `@prood/core` | `@prood/commerce` + `apps/api` | Orchestration split into API layer |
+| `@prood/nuxt` | — (replaced) | Use `@prood/api-client` instead |
+| `@prood/hosted-checkout` | `@prood/checkout-host` + `apps/checkout` | Redis-backed sessions |
+| `@prood/platform` | `@prood/platform` | Same Neon Postgres engine |
+| `@prood/types` | `@prood/types` | Shared unified model |
+| `@prood/checkout` | `@prood/checkout` | Same state machine |
+| `@prood/payment-*` | `@prood/payment-*` | Stripe/Easypay/Ifthenpay (Tap in upstream) |
+
+## Migration mental model
+
+```mermaid
+flowchart LR
+  subgraph nuxt [Upstream Nuxt app]
+    NC[useCommerce composable]
+    CORE[@prood/core]
+    ADAPTER[CommerceAdapter]
+    NC --> CORE --> ADAPTER
+  end
+
+  subgraph next [This Next.js app]
+    RSC[Server Component / BFF]
+    CLIENT[@prood/api-client]
+    API[apps/api]
+    COM[@prood/commerce]
+    RSC --> CLIENT --> API --> COM --> ADAPTER2[CommerceAdapter]
+  end
+```
+
+When porting upstream examples:
+
+- Replace `createCommerce()` calls with API client methods
+- Replace `@prood/nuxt` server routes with `apps/api/app/v1/*` handlers
+- Replace hosted checkout redirects with `CHECKOUT_URL` + `@prood/checkout-host`
+
+## Related pages
+
+<Cards>
+  <Card title="API-centric architecture" href="/docs/architecture/api-centric" description="Why commerce goes through apps/api." />
+  <Card title="Checkout flow" href="/docs/architecture/checkout-flow" description="State machine and payment lifecycle." />
+  <Card title="Checkout app" href="/docs/apps/checkout" description="Hosted payment surface." />
+</Cards>

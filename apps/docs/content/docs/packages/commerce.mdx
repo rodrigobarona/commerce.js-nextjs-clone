@@ -127,22 +127,24 @@ Read via `getCommerceConfig()`:
 
 ## Module structure
 
-```
-packages/commerce/src/
-├── index.ts          # Public exports
-├── env.ts            # Configuration reader
-├── adapter.ts        # Adapter factory
-├── catalog.ts        # Product/category fetchers (cached)
-├── cart.ts           # Cart operations
-├── checkout.ts       # Place order
-├── orders.ts          # Order queries
-├── admin.ts           # Admin API wrapper
-├── payments.ts        # Provider factory + webhook verification
-├── integrations.ts    # Load/decrypt integration config
-├── crypto.ts          # encryptConfig / decryptConfig
-├── storage.ts         # uploadForTenant
-├── errors.ts          # Error helpers
-└── revalidate.ts      # Cache tag invalidation
+```mermaid
+flowchart TB
+  IDX[index.ts]
+  ENV[env.ts]
+  ADAPTER[adapter.ts]
+  CATALOG[catalog.ts]
+  CART[cart.ts]
+  CHECKOUT[checkout.ts]
+  ORDERS[orders.ts]
+  ADMIN[admin.ts]
+  PAYMENTS[payments.ts]
+  INTEGRATIONS[integrations.ts]
+  CRYPTO[crypto.ts]
+  STORAGE[storage.ts]
+  ERRORS[errors.ts]
+  REVAL[revalidate.ts]
+
+  IDX --> ENV & ADAPTER & CATALOG & CART & CHECKOUT & ORDERS & ADMIN & PAYMENTS & INTEGRATIONS & CRYPTO & STORAGE & ERRORS & REVAL
 ```
 
 ## Related pages

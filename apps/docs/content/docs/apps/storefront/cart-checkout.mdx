@@ -11,18 +11,22 @@ The storefront cart uses a **cookie-backed cart ID** with BFF routes for client-
 
 When a customer first adds an item:
 
-```
-Client: POST /api/commerce/cart/items  { productId, variantId, quantity }
-  │
-  BFF: reads commerce_cart_id cookie
-  │     ├─ no cookie → API POST /v1/carts (create cart)
-  │     └─ has cookie → API GET /v1/carts/{id} (verify exists)
-  │
-  BFF: API POST /v1/carts/{id}/items  { productId, variantId, quantity }
-  │
-  BFF: sets commerce_cart_id cookie (HTTP-only, 30-day TTL, SameSite=Lax)
-  │
-  Client: receives updated cart JSON
+```mermaid
+sequenceDiagram
+  participant C as Client
+  participant BFF as Storefront BFF
+  participant API as Commerce API
+
+  C->>BFF: POST /api/commerce/cart/items
+  BFF->>BFF: Read commerce_cart_id cookie
+  alt No cookie
+    BFF->>API: POST /v1/carts
+  else Has cookie
+    BFF->>API: GET /v1/carts/{id}
+  end
+  BFF->>API: POST /v1/carts/{id}/items
+  BFF->>BFF: Set HTTP-only cookie
+  BFF-->>C: Updated cart JSON
 ```
 
 ### 2. Cart cookie

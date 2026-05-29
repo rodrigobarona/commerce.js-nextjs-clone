@@ -20,19 +20,24 @@ description: The REST API server — catalog, cart, orders, admin, webhooks, MCP
 
 ## Architecture
 
-```
-HTTP Request
-  │
-  resolve-caller.ts
-  ├─ Bearer JWT → Agent Auth → org + scopes
-  ├─ x-api-key → API key metadata → org + scopes
-  ├─ Session cookie → activeOrganizationId → admin + storefront scopes
-  └─ Host header → tenant domain lookup → storefront scope
-  │
-  requireCaller(scope)
-  │
-  commerce-service.ts
-  └─ @prood/commerce.withTenant(orgId) → business logic
+```mermaid
+flowchart TB
+  REQ[HTTP Request]
+  RESOLVE[resolve-caller.ts]
+  JWT[Bearer JWT]
+  KEY[x-api-key]
+  SESS[Session cookie]
+  HOST[Host header]
+  AUTH[requireCaller scope]
+  SVC[commerce-service.ts]
+  COM["@prood/commerce.withTenant(orgId)"]
+
+  REQ --> RESOLVE
+  RESOLVE --> JWT
+  RESOLVE --> KEY
+  RESOLVE --> SESS
+  RESOLVE --> HOST
+  RESOLVE --> AUTH --> SVC --> COM
 ```
 
 ## Service layer

@@ -18,26 +18,25 @@ Prood ships five deployable Next.js applications, each with a distinct role in t
 
 ## Interaction diagram
 
-```
-                    ┌─────────────┐
-                    │  apps/web   │  Marketing CTAs → storefront / docs
-                    └─────────────┘
+```mermaid
+flowchart TB
+  WEB[apps/web<br/>Marketing site]
 
-┌──────────────┐         ┌──────────────┐
-│  storefront  │──BFF───►│   apps/api   │◄──── admin-api ──── dashboard
-│   :3000      │──HTTP──►│   :3005      │
-└──────┬───────┘         └──────┬───────┘
-       │                        │
-       │ CHECKOUT_URL           │ @prood/commerce
-       ▼                        ▼
-┌──────────────┐         ┌──────────────┐
-│   checkout   │─webhook►│    Neon      │
-│   :3004      │         │   Postgres   │
-└──────────────┘         └──────────────┘
-       │
-       ▼
-  Upstash Redis
-  (checkout sessions)
+  SF[storefront :3000]
+  DB[dashboard :3002]
+  API[apps/api :3005]
+  CHK[checkout :3004]
+  NEON[(Neon Postgres)]
+  REDIS[(Upstash Redis)]
+
+  WEB -.->|CTAs| SF
+
+  SF -->|BFF + HTTP| API
+  DB -->|admin-api| API
+  SF -->|CHECKOUT_URL| CHK
+  CHK -->|webhooks| API
+  API --> NEON
+  CHK --> REDIS
 ```
 
 ## Auth split

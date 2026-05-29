@@ -46,13 +46,48 @@ const provider = new EasypayPaymentProvider({
 | **MB WAY** | Push notification | Phone number input; customer confirms on phone |
 | **Credit card** | Redirect | Redirect to Easypay hosted payment page |
 
+## Selecting a method
+
+Pass `metadata.method` on `createSession()` (defaults to `mb`):
+
+| `metadata.method` | Flow |
+| --- | --- |
+| `mb` | Multibanco reference (entity + reference) |
+| `mbw` | MB WAY push notification |
+| `cc` | Redirect to Easypay hosted card page |
+
+```ts
+const session = await provider.createSession({
+  amount: 29.99,
+  currency: 'EUR',
+  orderId: 'ord_456',
+  metadata: { method: 'mb' },
+})
+```
+
+Easypay confirms payments asynchronously via notifications. Use `confirmSession()` after redirect, but treat webhooks as the authoritative completion signal for reference payments.
+
+## Factory usage
+
+```ts
+import { getPaymentProvider } from '@prood/commerce'
+
+const provider = await getPaymentProvider('easypay', orgId)
+```
+
 ## Payment flow
 
-1. `createSession({ method: 'multibanco' })` → creates Easypay charge
-2. Reference numbers returned for Multibanco (entity, reference, amount)
-3. Customer pays asynchronously
-4. Easypay webhook notifies payment completion
-5. Order status updated via webhook handler
+```mermaid
+flowchart TD
+  A[createSession] --> B{method?}
+  B -->|mb / mbw| C[Reference or MB WAY UI]
+  B -->|cc| D[Redirect to Easypay]
+  C --> E[Customer pays async]
+  D --> F[confirmSession on return]
+  E --> G[Webhook notifies API]
+  F --> G
+  G --> H[Order confirmed]
+```
 
 ## Webhook setup
 

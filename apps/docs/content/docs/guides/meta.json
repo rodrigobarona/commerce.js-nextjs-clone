@@ -1,9 +1,4 @@
 {
   "title": "Guides",
-  "pages": [
-    "deployment",
-    "payment-integration",
-    "webhook-setup",
-    "merchant-onboarding"
-  ]
+  "pages": ["index", "deployment", "payment-integration", "webhook-setup", "merchant-onboarding"]
 }

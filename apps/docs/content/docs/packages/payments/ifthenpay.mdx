@@ -35,6 +35,35 @@ const provider = new IfthenpayPaymentProvider({
 
 Each key corresponds to a payment method enabled in your Ifthenpay backoffice.
 
+## Selecting a method
+
+Pass `metadata.method` on `createSession()` (defaults to `multibanco`):
+
+| `metadata.method` | Key used | Result |
+| --- | --- | --- |
+| `multibanco` | `mbKey` | Entity + reference in `providerData` |
+| `mbway` | `mbwayKey` | MB WAY push; `providerData.requestId` |
+| `creditcard` | `ccKey` | Redirect to Ifthenpay hosted card page |
+
+```ts
+const session = await provider.createSession({
+  amount: 49.9,
+  currency: 'EUR',
+  orderId: 'ord_123',
+  metadata: { method: 'mbway', phone: '912345678' },
+})
+```
+
+Reference-based methods (Multibanco) confirm asynchronously — the webhook callback is the source of truth, not a synchronous capture.
+
+## Factory usage
+
+```ts
+import { getPaymentProvider } from '@prood/commerce'
+
+const provider = await getPaymentProvider('ifthenpay', orgId)
+```
+
 ## Payment methods
 
 | Method | Key | Flow |

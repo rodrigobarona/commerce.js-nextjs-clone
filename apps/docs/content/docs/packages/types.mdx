@@ -137,20 +137,22 @@ import type {
 
 ## Package structure
 
-```
-packages/types/src/
-├── index.ts           # Re-exports everything
-├── product.ts         # Product, Variant, Option
-├── cart.ts            # Cart, CartItem, Totals
-├── order.ts           # Order, OrderItem, Status
-├── customer.ts        # Customer, Address
-├── store.ts           # StoreInfo
-├── adapter.ts         # CommerceAdapter interfaces
-├── payment.ts         # PaymentProvider interface
-├── storage.ts         # StorageProvider interface
-├── error.ts           # CommerceError, toErrorResponse
-├── admin.ts           # Admin input/output types
-└── specialized/       # Auction, rental, wholesale, etc.
+```mermaid
+flowchart TB
+  IDX[index.ts]
+  PRODUCT[product.ts]
+  CART[cart.ts]
+  ORDER[order.ts]
+  CUSTOMER[customer.ts]
+  STORE[store.ts]
+  ADAPTER[adapter.ts]
+  PAYMENT[payment.ts]
+  STORAGE[storage.ts]
+  ERROR[error.ts]
+  ADMIN[admin.ts]
+  SPEC[specialized/]
+
+  IDX --> PRODUCT & CART & ORDER & CUSTOMER & STORE & ADAPTER & PAYMENT & STORAGE & ERROR & ADMIN & SPEC
 ```
 
 ## Related pages

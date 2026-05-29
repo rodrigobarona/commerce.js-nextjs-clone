@@ -7,40 +7,41 @@ Prood is organized as a **layered architecture** where each package has a single
 
 ## System diagram
 
-```
-┌─────────────────────────────────────────────────────────────────────────┐
-│                           Client surfaces                                │
-├──────────────┬──────────────┬──────────────┬────────────────────────────┤
-│  Storefront  │  Dashboard   │   Checkout   │  Agents / MCP / API keys   │
-│   :3000      │   :3002      │   :3004      │                            │
-└──────┬───────┴──────┬───────┴──────┬───────┴──────────────┬─────────────┘
-       │              │              │                      │
-       │ @prood/      │ @prood/      │ @prood/              │ Bearer JWT /
-       │ api-client   │ api-client   │ checkout-host        │ x-api-key /
-       │              │ + commerce*  │                      │ session cookie
-       ▼              ▼              ▼                      ▼
-┌─────────────────────────────────────────────────────────────────────────┐
-│                         apps/api  (:3005)                                │
-│  REST /v1/*  ·  OpenAPI  ·  MCP  ·  Agent Auth  ·  Webhook ingress    │
-│  resolveCaller() → orgId + scopes → commerce-service.ts                 │
-└──────────────────────────────┬──────────────────────────────────────────┘
-                               │
-                               ▼
-┌─────────────────────────────────────────────────────────────────────────┐
-│                      @prood/commerce (server-only)                       │
-│  catalog · cart · checkout · orders · admin · payments · integrations   │
-│  withTenant(orgId) → adapter + provider factory + cache tags            │
-└──────────────────────────────┬──────────────────────────────────────────┘
-                               │
-                               ▼
-┌─────────────────────────────────────────────────────────────────────────┐
-│                      @prood/platform (Drizzle + Neon)                   │
-│  CommerceAdapter · AdminAPI · RLS · seed · migrate                      │
-└──────────────────────────────┬──────────────────────────────────────────┘
-                               │
-                               ▼
-                        Neon Postgres
-                   (forced RLS per organization_id)
+```mermaid
+flowchart TB
+  subgraph surfaces [Client surfaces]
+    direction LR
+    SF["Storefront :3000"]
+    DB["Dashboard :3002"]
+    CHK["Checkout :3004"]
+    AGT["Agents / MCP / API keys"]
+  end
+
+  subgraph api [apps/api :3005]
+    REST["REST /v1/* · OpenAPI · MCP · Agent Auth"]
+    RESOLVE["resolveCaller() → orgId + scopes"]
+    SVC[commerce-service.ts]
+    REST --> RESOLVE --> SVC
+  end
+
+  subgraph commerce ["@prood/commerce"]
+    DOM["catalog · cart · checkout · orders · admin · payments"]
+    TENANT["withTenant(orgId) · cache tags"]
+    DOM --> TENANT
+  end
+
+  subgraph platform ["@prood/platform"]
+    ENG["CommerceAdapter · AdminAPI · RLS · migrate"]
+  end
+
+  NEON[(Neon Postgres<br/>forced RLS per organization_id)]
+
+  SF -->|@prood/api-client| api
+  DB -->|@prood/api-client + commerce*| api
+  CHK -->|@prood/checkout-host| api
+  AGT -->|JWT / API key / session| api
+
+  SVC --> commerce --> platform --> NEON
 ```
 
 \* Dashboard uses `@prood/commerce` directly only for integration config encryption and domain management helpers — all catalog/order CRUD goes through the API.
@@ -74,7 +75,7 @@ Swapping Stripe for Easypay requires changing the provider instantiation — not
 
 ### API-centric data access
 
-In the upstream Nuxt reference, storefronts imported `@prood/core` directly. This Next.js stack routes **all commerce operations through `apps/api`**:
+In the upstream [Commerce.js Nuxt reference](https://github.com/commerce-js/commerce.js), storefronts imported `@prood/core` directly. This Next.js stack routes **all commerce operations through `apps/api`**:
 
 | Benefit | Explanation |
 | --- | --- |
@@ -125,7 +126,7 @@ Payment UI is intentionally separated from the storefront:
 3. **Redis** persists checkout sessions between redirect hops
 4. **Webhooks** reconcile async payment results back to order status
 
-This mirrors the upstream `hosted-checkout` pattern but uses Next.js + Upstash instead of Nuxt + in-memory sessions.
+This mirrors the upstream [hosted-checkout](https://github.com/commerce-js/commerce.js) pattern but uses Next.js + Upstash instead of Nuxt + in-memory sessions. See [Upstream comparison](/docs/architecture/upstream-comparison).
 
 ## Caching strategy
 

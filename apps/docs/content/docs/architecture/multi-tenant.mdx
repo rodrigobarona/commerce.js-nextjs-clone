@@ -7,10 +7,14 @@ Prood runs as a **white-label, multi-tenant commerce platform**: one deployment 
 
 ## Tenant model
 
-```
-Better Auth organization (tenant)
-   └─ withTenant(orgId)  →  SET app.current_org_id  (per-request transaction)
-        └─ Forced RLS filters every row by organization_id
+```mermaid
+flowchart TB
+  ORG["Better Auth organization (tenant)"]
+  WT["withTenant(orgId)"]
+  SET["SET app.current_org_id<br/>(per-request transaction)"]
+  RLS["Forced RLS filters every row<br/>by organization_id"]
+
+  ORG --> WT --> SET --> RLS
 ```
 
 | Surface | Tenant source | Mechanism |

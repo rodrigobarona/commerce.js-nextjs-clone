@@ -9,25 +9,25 @@ description: The standalone hosted checkout application for payment processing w
 
 ## Architecture
 
-```
-Storefront startCheckout()
-  │
-  POST /api/sessions  (x-checkout-secret)
-  │
-  @prood/checkout-host
-  ├─ Creates CheckoutSession (state machine)
-  ├─ Saves snapshot to Upstash Redis
-  └─ Returns { id, payUrl }
-  │
-  Customer → /pay/{id}
-  ├─ loadSession(id) from Redis
-  ├─ Rebuild PaymentProvider with tenant credentials
-  └─ Render payment UI (Stripe Element or reference)
-  │
-  Customer pays → POST /api/sessions/{id}/pay
-  │
-  Webhook → POST /api/webhooks/{provider}/{org}
-  └─ forwardPaymentWebhook() → Commerce API
+```mermaid
+sequenceDiagram
+  participant SF as Storefront
+  participant CHK as Checkout app
+  participant REDIS as Upstash Redis
+  participant PP as Payment provider
+  participant API as Commerce API
+
+  SF->>CHK: POST /api/sessions
+  CHK->>CHK: Create CheckoutSession
+  CHK->>REDIS: Save snapshot
+  CHK-->>SF: payUrl
+
+  Note over CHK: Customer visits /pay/{id}
+  CHK->>REDIS: loadSession()
+  CHK->>PP: Rebuild provider with tenant credentials
+  CHK->>PP: submitPayment()
+  PP->>API: Webhook forwarded
+  API->>API: Update order status
 ```
 
 ## Key dependencies

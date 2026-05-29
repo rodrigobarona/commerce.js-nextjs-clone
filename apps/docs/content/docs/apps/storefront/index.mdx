@@ -11,11 +11,23 @@ description: The customer-facing Next.js 16 storefront — catalog, cart, checko
 
 The storefront is a **thin client** of the Commerce API. It does not import `@prood/commerce` directly — all catalog, cart, and order operations go through `@prood/api-client`.
 
-```
-Browser
-  ├─ Server Components → commerce-data.ts → @prood/api-client → API
-  ├─ Client Components → CartProvider → BFF /api/commerce/cart/* → API
-  └─ Server Actions → startCheckout() → API + Checkout app
+```mermaid
+flowchart LR
+  SC[Server Components]
+  CD[commerce-data.ts]
+  API[@prood/api-client]
+  SVC[Commerce API]
+
+  CC[Client Components]
+  BFF["BFF /api/commerce/cart/*"]
+
+  SA[startCheckout server action]
+  CHK[Checkout app]
+
+  SC --> CD --> API --> SVC
+  CC --> BFF --> API
+  SA --> API
+  SA --> CHK
 ```
 
 ### Key dependencies

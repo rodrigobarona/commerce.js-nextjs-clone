@@ -52,21 +52,24 @@ Dynamic form rendered from the provider registry in `lib/providers.ts`. Each pro
 
 ## How credentials flow
 
-```
-Dashboard save
-  │
-  ├─ encryptConfig(values) → AES-256-GCM with INTEGRATION_ENCRYPTION_KEY
-  │
-  └─ INSERT/UPDATE integration_config (organization_id, provider, config)
+```mermaid
+flowchart TB
+  subgraph save [Dashboard save]
+    ENC[encryptConfig]
+    DB[(integration_config)]
+    ENC --> DB
+  end
 
-Checkout pay / API webhook
-  │
-  ├─ loadIntegrationConfig(orgId, provider)
-  │
-  ├─ decryptConfig(stored) → provider constructor params
-  │
-  └─ getPaymentProvider(providerId, decryptedConfig)
-       └─ env vars used as fallback for any missing field
+  subgraph runtime [Checkout pay / API webhook]
+    LOAD[loadIntegrationConfig]
+    DEC[decryptConfig]
+    FACTORY[getPaymentProvider]
+    ENV[Env var fallback]
+    LOAD --> DEC --> FACTORY
+    ENV -.-> FACTORY
+  end
+
+  DB --> LOAD
 ```
 
 ## Storage schema

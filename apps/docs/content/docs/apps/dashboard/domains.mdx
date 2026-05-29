@@ -14,14 +14,17 @@ The dashboard **Domains** page lets merchants connect custom domains to their st
 
 ## Subdomain (automatic)
 
-When a merchant registers, their organization gets a slug (e.g. `acme-store`). The storefront is automatically available at:
+When a merchant registers, their organization gets a slug (e.g. `acme-store`). The storefront is automatically available at `{slug}.{NEXT_PUBLIC_PLATFORM_DOMAIN}` — no dashboard action required.
 
-```
-{slug}.{NEXT_PUBLIC_PLATFORM_DOMAIN}
-→ acme-store.example.com
+```mermaid
+flowchart LR
+  REG[Register org slug acme-store] --> URL["acme-store.example.com"]
+  URL --> TENANT[storefront/lib/tenant.ts]
+  TENANT --> ORG[Resolve org_acme-store]
+  ORG --> API["GET /v1/products (scoped)"]
 ```
 
-No dashboard action required — subdomain resolution happens in `apps/storefront/lib/tenant.ts`.
+Subdomain resolution happens in `apps/storefront/lib/tenant.ts`.
 
 ## Custom domain setup
 

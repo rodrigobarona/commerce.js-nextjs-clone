@@ -1,4 +1,4 @@
 {
   "title": "Storage Providers",
-  "pages": ["vercel-blob", "s3"]
+  "pages": ["index", "vercel-blob", "s3"]
 }

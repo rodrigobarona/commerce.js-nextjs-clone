@@ -7,26 +7,32 @@ Prood packages are organized by responsibility. Applications compose them — no
 
 ## Package dependency graph
 
-```
-@prood/types          (interfaces only — no dependencies)
-    │
-    ├── @prood/platform      (Neon Postgres engine)
-    │       └── implements CommerceAdapter + AdminAPI
-    │
-    ├── @prood/commerce      (server data layer)
-    │       └── wraps platform + payment/storage providers
-    │
-    ├── @prood/checkout      (state machine)
-    │       └── uses PaymentProvider from types
-    │
-    ├── @prood/checkout-host (Redis session host)
-    │       └── uses checkout + commerce
-    │
-    ├── @prood/payment-*     (gateway providers)
-    ├── @prood/storage-*     (file upload providers)
-    │
-    ├── @prood/api-client    (typed HTTP client)
-    └── @prood/ui            (React components)
+```mermaid
+flowchart TB
+  TYPES["@prood/types<br/>(interfaces only)"]
+
+  PLATFORM["@prood/platform<br/>Neon Postgres engine"]
+  COMMERCE["@prood/commerce<br/>server data layer"]
+  CHECKOUT["@prood/checkout<br/>state machine"]
+  HOST["@prood/checkout-host<br/>Redis session host"]
+  PAY["@prood/payment-*"]
+  STORE["@prood/storage-*"]
+  CLIENT["@prood/api-client"]
+  UI["@prood/ui"]
+
+  TYPES --> PLATFORM
+  TYPES --> COMMERCE
+  TYPES --> CHECKOUT
+  TYPES --> PAY
+  TYPES --> STORE
+  TYPES --> CLIENT
+  TYPES --> UI
+
+  PLATFORM --> COMMERCE
+  CHECKOUT --> HOST
+  COMMERCE --> HOST
+  PAY --> COMMERCE
+  STORE --> COMMERCE
 ```
 
 ## Core stack
@@ -36,25 +42,25 @@ Prood packages are organized by responsibility. Applications compose them — no
 | [`@prood/types`](/docs/packages/types) | 0.3.0 | Unified data model — 20+ domain types, adapter and provider interfaces |
 | [`@prood/platform`](/docs/packages/platform) | 0.5.4 | Built-in commerce engine — Neon Postgres, Drizzle, RLS, Admin API |
 | [`@prood/commerce`](/docs/packages/commerce) | 0.0.0 | Server-only data layer — caching, tenant scope, provider factory |
-| [`@prood/checkout`](/docs/packages/checkout) | — | Framework-agnostic checkout state machine |
-| [`@prood/checkout-host`](/docs/packages/checkout-host) | — | Next.js session host with Upstash Redis |
+| [`@prood/checkout`](/docs/packages/checkout) | 2.0.0 | Framework-agnostic checkout state machine |
+| [`@prood/checkout-host`](/docs/packages/checkout-host) | 0.0.0 | Next.js session host with Upstash Redis |
 
 ## Client & UI
 
-| Package | Description |
-| --- | --- |
-| [`@prood/api-client`](/docs/packages/api-client) | Typed OpenAPI fetch client |
-| [`@prood/ui`](/docs/packages/ui) | shadcn/Radix + 33+ commerce components |
+| Package | Version | Description |
+| --- | --- | --- |
+| [`@prood/api-client`](/docs/packages/api-client) | 0.0.0 | Typed OpenAPI fetch client |
+| [`@prood/ui`](/docs/packages/ui) | 0.0.0 | shadcn/Radix + 33+ commerce components |
 
 ## Providers
 
-| Package | Description |
-| --- | --- |
-| [`@prood/payment-stripe`](/docs/packages/payments/stripe) | Stripe Payment Element via PaymentIntents |
-| [`@prood/payment-easypay`](/docs/packages/payments/easypay) | Portugal — Multibanco, MB WAY, card |
-| [`@prood/payment-ifthenpay`](/docs/packages/payments/ifthenpay) | Portugal — Multibanco, MB WAY, credit card |
-| [`@prood/storage-vercel-blob`](/docs/packages/storage/vercel-blob) | Vercel Blob storage provider |
-| [`@prood/storage-s3`](/docs/packages/storage/s3) | S3-compatible storage (AWS, R2, MinIO) |
+| Package | Version | Description |
+| --- | --- | --- |
+| [`@prood/payment-stripe`](/docs/packages/payments/stripe) | 0.1.0 | Stripe Payment Element via PaymentIntents |
+| [`@prood/payment-easypay`](/docs/packages/payments/easypay) | 0.1.0 | Portugal — Multibanco, MB WAY, card |
+| [`@prood/payment-ifthenpay`](/docs/packages/payments/ifthenpay) | 0.1.0 | Portugal — Multibanco, MB WAY, credit card |
+| [`@prood/storage-vercel-blob`](/docs/packages/storage/vercel-blob) | 0.1.0 | Vercel Blob storage provider |
+| [`@prood/storage-s3`](/docs/packages/storage/s3) | 0.2.0 | S3-compatible storage (AWS, R2, MinIO) |
 
 ## Tooling (private)
 
@@ -80,5 +86,7 @@ Prood packages are organized by responsibility. Applications compose them — no
   <Card title="@prood/types" href="/docs/packages/types" description="Unified domain model and interfaces." />
   <Card title="@prood/platform" href="/docs/packages/platform" description="Built-in Postgres commerce engine." />
   <Card title="@prood/commerce" href="/docs/packages/commerce" description="Server data layer and provider factory." />
+  <Card title="Payment providers" href="/docs/packages/payments" description="Stripe, Easypay, Ifthenpay." />
+  <Card title="Storage providers" href="/docs/packages/storage" description="Vercel Blob and S3." />
   <Card title="@prood/ui" href="/docs/packages/ui" description="Shared React components." />
 </Cards>

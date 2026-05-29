@@ -46,15 +46,13 @@ Read-only methods (`GET`) can be auto-granted to new agent hosts. Mutating metho
 
 ## Agent registration flow
 
-```
-1. Agent discovers config at /.well-known/agent-configuration
-2. Agent registers at POST /api/auth/agent/register
-   → receives agent ID and credentials
-3. Agent requests capabilities (e.g. listProducts, adminCreateProduct)
-4. Merchant approves via device authorization UI
-   → AGENT_DEVICE_AUTH_PAGE (default /device/capabilities)
-5. Agent receives JWT with granted capabilities
-6. Agent calls /v1/* with Authorization: Bearer {jwt}
+```mermaid
+flowchart LR
+  A["1. Discover<br/>.well-known/agent-configuration"] --> B["2. Register<br/>POST /api/auth/agent/register"]
+  B --> C["3. Request capabilities"]
+  C --> D["4. Merchant approves<br/>device authorization UI"]
+  D --> E["5. Receive JWT"]
+  E --> F["6. Call /v1/*<br/>Authorization: Bearer"]
 ```
 
 ## Calling the REST API directly
@@ -75,9 +73,18 @@ curl -H "Authorization: Bearer eyJ..." \
 
 When capabilities run through the default execute endpoint, the plugin proxies HTTP to the public API base URL:
 
-```
-POST /api/auth/agent/capabilities/execute
-→ proxies to {API_PUBLIC_URL}/v1/{operationPath}
+```mermaid
+sequenceDiagram
+  participant Agent
+  participant Auth as apps/api auth plugin
+  participant API as apps/api /v1/*
+
+  Agent->>Auth: POST /api/auth/agent/capabilities/execute
+  Auth->>Auth: Validate agent JWT + grant
+  Auth->>API: Proxy with AGENT_PROXY_API_KEY
+  Note over Auth,API: {API_PUBLIC_URL}/v1/{operationPath}
+  API-->>Auth: Response
+  Auth-->>Agent: Response
 ```
 
 ### Required environment variables

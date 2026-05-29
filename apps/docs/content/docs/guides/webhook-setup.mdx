@@ -7,24 +7,18 @@ Payment webhooks are essential for async payment methods (Multibanco, MB WAY) an
 
 ## Webhook architecture
 
-```
-Payment provider
-  │
-  POST https://pay.example.com/api/webhooks/{provider}/{orgId}
-  │
-  Checkout app (apps/checkout)
-  │   ├─ Reads raw body + signature
-  │   └─ forwardPaymentWebhook()
-  │
-  POST https://api.example.com/v1/webhooks/payments/{provider}?org={orgId}
-  Header: x-checkout-secret
-  │
-  Commerce API (apps/api)
-  │   ├─ verifyPaymentWebhook(payload, sig, provider, org)
-  │   │     └─ Uses tenant's stored webhook secret
-  │   └─ Update order status
-  │
-  Order: pending → confirmed (or failed)
+```mermaid
+sequenceDiagram
+  participant PP as Payment provider
+  participant CHK as Checkout app
+  participant API as Commerce API
+  participant ORD as Order
+
+  PP->>CHK: POST /api/webhooks/{provider}/{orgId}
+  CHK->>CHK: Verify signature
+  CHK->>API: forwardPaymentWebhook()
+  API->>API: verifyPaymentWebhook()
+  API->>ORD: pending → confirmed / failed
 ```
 
 ## Why webhooks matter
@@ -131,13 +125,18 @@ https://pay.example.com/api/webhooks/stripe/_
 
 ## Webhook verification flow
 
-```ts
-// @prood/commerce — verifyPaymentWebhook()
-1. Load integration_config for (orgId, provider)
-2. Decrypt stored webhookSecret
-3. Fall back to env var if not configured
-4. provider.verifyWebhook({ payload, signature })
-5. Return { valid, status, sessionId, amount }
+```mermaid
+flowchart TD
+  A[Incoming webhook] --> B[Load integration_config for orgId + provider]
+  B --> C[Decrypt stored webhookSecret]
+  C --> D{Secret found?}
+  D -->|No| E[Fall back to env var]
+  D -->|Yes| F[Use decrypted secret]
+  E --> G[provider.verifyWebhook]
+  F --> G
+  G --> H{Valid?}
+  H -->|Yes| I[Return status, sessionId, amount]
+  H -->|No| J[Reject with 401]
 ```
 
 ## Direct API webhooks

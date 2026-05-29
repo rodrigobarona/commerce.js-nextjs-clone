@@ -71,23 +71,24 @@ Navigate to **Orders** to see the order you just placed. You can fulfill, refund
 
 ## What happened under the hood
 
-```
-Customer browser
-    │
-    ├─► Storefront BFF (/api/commerce/cart/*)
-    │       └─► API /v1/carts/*  (Host header → tenant)
-    │
-    ├─► startCheckout() server action
-    │       ├─► API POST /v1/carts/{id}/place-order
-    │       └─► Checkout POST /api/sessions  (x-checkout-secret)
-    │
-    ├─► Checkout /pay/{id}
-    │       └─► @prood/checkout-host → Redis session
-    │       └─► Payment provider (Stripe/Easypay/Ifthenpay)
-    │
-    └─► Webhook → Checkout /api/webhooks/{provider}/{org}
-            └─► API /v1/webhooks/payments/{provider}
-                    └─► Order status updated
+```mermaid
+sequenceDiagram
+  participant C as Customer browser
+  participant SF as Storefront
+  participant API as Commerce API
+  participant CHK as Checkout app
+  participant PP as Payment provider
+
+  C->>SF: Browse / cart / checkout
+  SF->>API: BFF → /v1/carts/*
+  C->>SF: startCheckout()
+  SF->>API: POST place-order
+  SF->>CHK: POST /api/sessions
+  C->>CHK: /pay/{id}
+  CHK->>PP: Process payment
+  PP->>CHK: Webhook
+  CHK->>API: Forward webhook
+  API->>API: Update order status
 ```
 
 ## API quick test

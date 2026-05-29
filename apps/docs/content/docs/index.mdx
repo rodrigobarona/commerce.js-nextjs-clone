@@ -41,10 +41,24 @@ Prood is a **commerce-agnostic**, **multi-tenant** toolkit. Each merchant runs a
 
 ## How data flows
 
-```
-Storefront / Dashboard  ──HTTP──►  apps/api  ──►  @prood/commerce  ──►  @prood/platform (Neon)
-       │                                                                  │
-       └── CHECKOUT_URL ──►  apps/checkout  ──webhooks──►  apps/api
+```mermaid
+flowchart TB
+  subgraph clients [Client apps]
+    SF[Storefront]
+    DB[Dashboard]
+  end
+
+  API[apps/api]
+  COM["@prood/commerce"]
+  PLAT["@prood/platform"]
+  DBN[(Neon Postgres)]
+  CHK[apps/checkout]
+
+  SF -->|HTTP| API
+  DB -->|HTTP| API
+  SF -->|CHECKOUT_URL| CHK
+  CHK -->|webhooks| API
+  API --> COM --> PLAT --> DBN
 ```
 
 The **storefront** and **dashboard** never talk to the database for commerce data directly. They call the **Commerce API** via `@prood/api-client`. Only `apps/api` (and dashboard integration helpers) invoke `@prood/commerce`, which scopes every query to the active tenant with `withTenant()`.
@@ -57,7 +71,7 @@ Each merchant store is a Better Auth organization. The storefront resolves the t
 
 ### API-centric architecture
 
-Unlike the upstream Nuxt reference (where apps imported `@prood/core` directly), this Next.js stack routes all commerce operations through `apps/api`. Benefits:
+Unlike the upstream [Commerce.js Nuxt reference](https://github.com/commerce-js/commerce.js) (where apps imported `@prood/core` directly), this Next.js stack routes all commerce operations through `apps/api`. See [Upstream comparison](/docs/architecture/upstream-comparison). Benefits:
 
 - Single auth and tenant resolution layer
 - OpenAPI contract for humans, agents, and MCP tools

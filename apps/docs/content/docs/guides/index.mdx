@@ -1,0 +1,20 @@
+---
+title: Guides
+description: Operational guides for deploying Prood, configuring payments, webhooks, and onboarding merchants.
+---
+
+These guides cover production deployment and day-to-day platform operations. They complement the architecture and application reference docs with step-by-step workflows.
+
+<Cards>
+  <Card title="Deployment" href="/docs/guides/deployment" description="Deploy all apps to Vercel with Neon, Upstash Redis, and shared secrets." />
+  <Card title="Payment integration" href="/docs/guides/payment-integration" description="Configure Stripe, Easypay, or Ifthenpay globally or per tenant." />
+  <Card title="Webhook setup" href="/docs/guides/webhook-setup" description="Point provider webhooks at the checkout app and verify signatures." />
+  <Card title="Merchant onboarding" href="/docs/guides/merchant-onboarding" description="Register a merchant, add products, payments, and a custom domain." />
+</Cards>
+
+## Recommended order
+
+1. [Deployment](/docs/guides/deployment) — get all apps running in production
+2. [Payment integration](/docs/guides/payment-integration) — configure at least one gateway
+3. [Webhook setup](/docs/guides/webhook-setup) — required for async payments and 3DS safety nets
+4. [Merchant onboarding](/docs/guides/merchant-onboarding) — onboard the first live store

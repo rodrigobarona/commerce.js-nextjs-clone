@@ -7,8 +7,13 @@ This guide walks through onboarding a new merchant from registration to a live s
 
 ## Overview
 
-```
-Register → Configure store → Add products → Set up payments → Add domain → Go live
+```mermaid
+flowchart LR
+  A[Register] --> B[Configure store]
+  B --> C[Add products]
+  C --> D[Set up payments]
+  D --> E[Add domain]
+  E --> F[Go live]
 ```
 
 Estimated time: 30–60 minutes (excluding DNS propagation).
@@ -86,14 +91,14 @@ See [Webhook setup](/docs/guides/webhook-setup) for provider-specific instructio
 
 ### Subdomain (automatic)
 
-The store is immediately available at:
+The store is immediately available on the platform subdomain — no dashboard action required:
 
+```mermaid
+flowchart LR
+  SLUG[org slug acme-store] --> HOST["acme-store.example.com"]
+  HOST --> SF[Storefront tenant.ts]
+  SF --> LIVE[Catalog + checkout live]
 ```
-https://{slug}.{NEXT_PUBLIC_PLATFORM_DOMAIN}
-→ https://acme-store.example.com
-```
-
-No dashboard action required.
 
 ### Custom domain
 

@@ -23,24 +23,37 @@ The storefront uses Next.js App Router with server components for catalog pages 
 
 ### Layout structure
 
-```
-app/
-├── layout.tsx              # Root layout — providers, header, footer
-├── page.tsx                # Home
-├── products/
-│   ├── page.tsx            # Product listing
-│   └── [slug]/page.tsx     # Product detail
-├── categories/[slug]/page.tsx
-├── cart/page.tsx
-├── checkout/
-│   ├── page.tsx
-│   └── actions.ts          # startCheckout() server action
-├── order-confirmation/page.tsx
-├── login/page.tsx
-├── register/page.tsx
-└── account/
-    ├── page.tsx
-    └── orders/page.tsx
+```mermaid
+flowchart TB
+  APP[app/]
+  LAYOUT[layout.tsx]
+  HOME[page.tsx]
+  PRODUCTS[products/]
+  PLIST[page.tsx listing]
+  PDETAIL["[slug]/page.tsx detail"]
+  CATS["categories/[slug]"]
+  CART[cart/]
+  CHECKOUT[checkout/]
+  CPAGE[page.tsx]
+  CACTIONS[actions.ts]
+  CONF[order-confirmation/]
+  LOGIN[login/]
+  REG[register/]
+  ACCT[account/]
+  ORDERS[orders/]
+
+  APP --> LAYOUT
+  APP --> HOME
+  APP --> PRODUCTS --> PLIST
+  PRODUCTS --> PDETAIL
+  APP --> CATS
+  APP --> CART
+  APP --> CHECKOUT --> CPAGE
+  CHECKOUT --> CACTIONS
+  APP --> CONF
+  APP --> LOGIN
+  APP --> REG
+  APP --> ACCT --> ORDERS
 ```
 
 ## API routes (BFF)

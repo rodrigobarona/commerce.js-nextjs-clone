@@ -7,19 +7,28 @@ Prood deploys as **separate Vercel projects** sharing a single Neon Postgres dat
 
 ## Deployment architecture
 
-```
-Vercel Projects:
-├── storefront     → *.merchant.com, *.platform.com (multi-tenant domains)
-├── dashboard      → admin.example.com
-├── checkout       → pay.example.com
-├── api            → api.example.com
-├── docs           → docs.example.com
-└── web            → example.com
+```mermaid
+flowchart TB
+  subgraph vercel [Vercel projects]
+    SF[storefront<br/>*.merchant.com]
+    DB[dashboard<br/>admin.example.com]
+    CHK[checkout<br/>pay.example.com]
+    API[api<br/>api.example.com]
+    DOCS[docs<br/>docs.example.com]
+    WEB[web<br/>example.com]
+  end
 
-Shared services:
-├── Neon Postgres  → DATABASE_URL (all apps except checkout/docs/web)
-├── Upstash Redis  → checkout sessions
-└── Vercel Blob    → product image storage (optional)
+  subgraph shared [Shared services]
+    NEON[(Neon Postgres)]
+    REDIS[(Upstash Redis)]
+    BLOB[(Vercel Blob)]
+  end
+
+  SF --> NEON
+  DB --> NEON
+  API --> NEON
+  CHK --> REDIS
+  API --> BLOB
 ```
 
 ## Prerequisites

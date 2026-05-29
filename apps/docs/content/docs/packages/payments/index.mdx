@@ -1,0 +1,47 @@
+---
+title: Payment Providers
+description: Pluggable payment gateways implementing the PaymentProvider interface — Stripe, Easypay, and Ifthenpay.
+---
+
+All payment providers implement the same `PaymentProvider` interface from `@prood/types`. The checkout state machine and `@prood/commerce` factory work with any registered provider.
+
+## Available providers
+
+| Provider | Region | Methods | Doc |
+| --- | --- | --- | --- |
+| **Stripe** | Global | Cards via Payment Element | [Stripe](/docs/packages/payments/stripe) |
+| **Easypay** | Portugal | Multibanco, MB WAY, card | [Easypay](/docs/packages/payments/easypay) |
+| **Ifthenpay** | Portugal | Multibanco, MB WAY, card | [Ifthenpay](/docs/packages/payments/ifthenpay) |
+
+## How providers are loaded
+
+```mermaid
+flowchart LR
+  ENV[Env vars] --> FACTORY[getPaymentProvider]
+  DASH[Dashboard integration_config] --> DEC[decryptConfig]
+  DEC --> FACTORY
+  FACTORY --> PP[PaymentProvider instance]
+  PP --> CHK[Checkout /pay]
+  PP --> WH[Webhook verification]
+```
+
+Per-tenant credentials from the dashboard **override** env fallbacks field-by-field. See [Payment integration guide](/docs/guides/payment-integration).
+
+## Interface
+
+Every provider implements:
+
+| Method | Purpose |
+| --- | --- |
+| `createSession()` | Start a charge / PaymentIntent / reference |
+| `confirmSession()` | Verify after redirect or async completion |
+| `refund()` | Full or partial refund |
+| `verifyWebhook()` | Validate provider signature on webhook payload |
+
+## Related pages
+
+<Cards>
+  <Card title="Payment integration" href="/docs/guides/payment-integration" description="End-to-end setup guide." />
+  <Card title="Checkout payments" href="/docs/apps/checkout/payments" description="Payment UI in the checkout app." />
+  <Card title="Dashboard integrations" href="/docs/apps/dashboard/integrations" description="Per-tenant credential storage." />
+</Cards>

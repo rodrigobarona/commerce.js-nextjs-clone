@@ -125,20 +125,21 @@ URL: https://pay.example.com/api/webhooks/ifthenpay/{orgId}
 
 ## How credentials flow at runtime
 
-```
-Checkout /pay/{sessionId}
-  │
-  loadSession(id) → snapshot.tenantId = 'org_abc'
-  │
-  loadIntegrationConfig('org_abc', 'stripe')
-  │   └─ decryptConfig(stored) → { secretKey, webhookSecret, publishableKey }
-  │
-  getPaymentProvider('stripe', decryptedConfig)
-  │   └─ missing fields fall back to env vars
-  │
-  StripePaymentProvider({ secretKey, webhookSecret, publishableKey })
-  │
-  submitPayment() → Stripe API with tenant's credentials
+```mermaid
+flowchart TB
+  PAY["Checkout /pay/{sessionId}"]
+  LOAD[loadSession]
+  TENANT["tenantId from snapshot"]
+  CFG[loadIntegrationConfig]
+  DEC[decryptConfig]
+  FACTORY[getPaymentProvider]
+  ENV[Env fallback]
+  PP[StripePaymentProvider]
+  API[submitPayment → provider API]
+
+  PAY --> LOAD --> TENANT --> CFG --> DEC --> FACTORY
+  ENV -.-> FACTORY
+  FACTORY --> PP --> API
 ```
 
 ## Switching providers

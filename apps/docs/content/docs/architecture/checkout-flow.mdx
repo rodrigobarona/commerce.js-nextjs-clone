@@ -9,6 +9,22 @@ In this monorepo, checkout sessions are hosted by `@prood/checkout-host` in `app
 
 ## State machine
 
+```mermaid
+stateDiagram-v2
+  [*] --> idle
+  idle --> info: setCustomerInfo()
+  info --> shipping: setShippingAddress()
+  info --> payment: submitPayment() pickup/none
+  shipping --> payment: submitPayment()
+  payment --> confirming: confirmPayment()
+  payment --> complete: captured
+  payment --> failed: declined
+  confirming --> complete: provider OK
+  confirming --> failed: provider error
+  failed --> payment: retry
+  complete --> [*]
+```
+
 The checkout flow adapts dynamically based on the **fulfillment type** set during session creation:
 
 | Fulfillment | Flow | Skips |
@@ -34,32 +50,32 @@ Invalid transitions throw errors — the state machine prevents skipping steps.
 
 ## End-to-end flow in Prood
 
-```
-Storefront /checkout page
-    │
-    ├─ Customer fills address + contact info
-    │
-    ├─ startCheckout() server action
-    │     ├─ API: POST /v1/carts/{id}/place-order  → creates order
-    │     └─ Checkout: POST /api/sessions           → creates Redis session
-    │
-    ├─ Redirect to checkout /pay/{sessionId}
-    │     ├─ loadSession() from Redis
-    │     ├─ Rebuild PaymentProvider with tenant credentials
-    │     └─ Render Stripe Element or reference payment UI
-    │
-    ├─ Customer pays
-    │     ├─ POST /api/sessions/{id}/pay
-    │     └─ Provider creates charge / payment intent
-    │
-    ├─ 3DS redirect (if required)
-    │     └─ POST /api/sessions/{id}/confirm
-    │
-    ├─ Webhook (async safety net)
-    │     └─ POST /api/webhooks/{provider}/{org}
-    │           └─ forwardPaymentWebhook() → API
-    │
-    └─ Redirect to storefront /order-confirmation
+```mermaid
+sequenceDiagram
+  participant C as Customer
+  participant SF as Storefront
+  participant API as Commerce API
+  participant CHK as Checkout app
+  participant PP as Payment provider
+  participant WH as Webhooks
+
+  C->>SF: Fill checkout form
+  SF->>API: POST /v1/carts/{id}/place-order
+  API-->>SF: Order created
+  SF->>CHK: POST /api/sessions
+  CHK-->>SF: payUrl
+  SF->>C: Redirect to /pay/{sessionId}
+  CHK->>CHK: loadSession() from Redis
+  CHK->>C: Render payment UI
+  C->>CHK: Submit payment
+  CHK->>PP: createSession / charge
+  opt 3DS required
+    PP->>C: Redirect for verification
+    C->>CHK: POST /api/sessions/{id}/confirm
+  end
+  PP->>WH: Async webhook
+  WH->>API: forwardPaymentWebhook()
+  CHK->>C: Redirect to order confirmation
 ```
 
 ## Step-by-step API usage

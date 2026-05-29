@@ -94,34 +94,33 @@ pnpm --filter docs dev          # :3003
 
 ## Monorepo structure
 
-```
-commerce.js-nextjs-clone/
-├── apps/
-│   ├── storefront/       # Customer storefront (Next.js 16)
-│   ├── dashboard/        # Merchant admin dashboard
-│   ├── checkout/         # Hosted payment app
-│   ├── api/              # Commerce REST API + MCP + Agent Auth
-│   ├── docs/             # Fumadocs documentation (this site)
-│   └── web/              # Marketing landing page
-├── packages/
-│   ├── types/            # @prood/types — unified domain model
-│   ├── platform/         # @prood/platform — Neon Postgres engine
-│   ├── commerce/         # @prood/commerce — server data layer
-│   ├── checkout/         # @prood/checkout — state machine
-│   ├── checkout-host/    # @prood/checkout-host — Redis session host
-│   ├── api-client/       # @prood/api-client — typed HTTP client
-│   ├── ui/               # @prood/ui — shared components
-│   ├── payment-stripe/   # Stripe Payment Element provider
-│   ├── payment-easypay/  # Portugal — Multibanco, MB WAY, card
-│   ├── payment-ifthenpay/# Portugal — Multibanco, MB WAY, card
-│   ├── storage-vercel-blob/
-│   ├── storage-s3/
-│   ├── eslint-config/
-│   └── typescript-config/
-├── .env.example          # Template for all env vars
-├── pnpm-workspace.yaml
-├── turbo.json
-└── package.json
+```mermaid
+flowchart TB
+  ROOT[commerce.js-nextjs-clone]
+
+  subgraph apps [apps/]
+    SF[storefront]
+    DB[dashboard]
+    CHK[checkout]
+    API[api]
+    DOCS[docs]
+    WEB[web]
+  end
+
+  subgraph packages [packages/]
+    TYPES[types]
+    PLATFORM[platform]
+    COMMERCE[commerce]
+    CHPKG[checkout]
+    HOST[checkout-host]
+    CLIENT[api-client]
+    UI[ui]
+    PAY[payment-*]
+    STORE[storage-*]
+  end
+
+  ROOT --> apps
+  ROOT --> packages
 ```
 
 ## Build and quality scripts

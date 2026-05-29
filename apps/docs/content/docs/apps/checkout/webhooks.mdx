@@ -27,24 +27,19 @@ POST https://pay.example.com/api/webhooks/ifthenpay/_
 
 ## Flow
 
-```
-Payment provider
-  │
-  POST /api/webhooks/{provider}/{org}
-  │
-  Checkout app
-  ├─ Read raw body + signature headers
-  │
-  @prood/checkout-host forwardPaymentWebhook()
-  │
-  POST {COMMERCE_API_URL}/webhooks/payments/{provider}?org={org}
-  Header: x-checkout-secret: {CHECKOUT_API_SECRET}
-  │
-  Commerce API
-  ├─ verifyPaymentWebhook(payload, signature, provider, org)
-  │     └─ Uses tenant's stored webhook secret (or env fallback)
-  │
-  └─ Update order status (pending → confirmed / failed)
+```mermaid
+sequenceDiagram
+  participant PP as Payment provider
+  participant CHK as Checkout app
+  participant HOST as checkout-host
+  participant API as Commerce API
+
+  PP->>CHK: POST /api/webhooks/{provider}/{org}
+  CHK->>CHK: Read body + signature
+  CHK->>HOST: forwardPaymentWebhook()
+  HOST->>API: POST /v1/webhooks/payments/{provider}
+  API->>API: verifyPaymentWebhook()
+  API->>API: Update order status
 ```
 
 ## Per-tenant verification

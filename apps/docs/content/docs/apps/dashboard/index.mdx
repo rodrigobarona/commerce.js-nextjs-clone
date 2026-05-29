@@ -9,11 +9,20 @@ description: The merchant admin dashboard — products, orders, integrations, do
 
 ## Architecture
 
-```
-Dashboard page
-  ├─ Server Component → admin-api.ts → @prood/api-client → API /v1/admin/*
-  ├─ Server Action → admin-api.ts → API /v1/admin/*
-  └─ Direct DB (integrations/domains only) → @prood/commerce.withTenant()
+```mermaid
+flowchart TB
+  PAGE[Dashboard page]
+  SC[Server Component]
+  SA[Server Action]
+  ADMIN[admin-api.ts]
+  API[@prood/api-client]
+  REST["API /v1/admin/*"]
+  DB["Direct DB<br/>integrations & domains"]
+  COM["@prood/commerce.withTenant()"]
+
+  PAGE --> SC --> ADMIN --> API --> REST
+  PAGE --> SA --> ADMIN
+  PAGE --> DB --> COM
 ```
 
 Most data operations go through the Commerce API. Integration credentials and domain records are managed directly via Drizzle (encrypted at rest).

@@ -3,7 +3,7 @@ title: API-Centric Architecture
 description: Why Prood routes all commerce operations through apps/api and how callers authenticate.
 ---
 
-Unlike the upstream Nuxt reference (where storefronts imported `@prood/core` directly), the Next.js stack uses an **API-centric architecture**: all commerce reads and writes go through `apps/api`, and client applications use `@prood/api-client`.
+Unlike the upstream [Commerce.js Nuxt reference](https://github.com/commerce-js/commerce.js) (where storefronts imported `@prood/core` directly), the Next.js stack uses an **API-centric architecture**: all commerce reads and writes go through `apps/api`, and client applications use `@prood/api-client`. See [Upstream comparison](/docs/architecture/upstream-comparison).
 
 ## Why an API layer?
 
@@ -20,33 +20,34 @@ The storefront and dashboard are **thin clients**. They render UI and call HTTP 
 
 ## Request flow
 
-```
-Browser / Agent
-    │
-    ├─ Storefront BFF (optional)
-    │     /api/commerce/cart/*  →  forwards cookies + Host to API
-    │
-    ├─ Dashboard server action
-    │     admin-api.ts  →  API /v1/admin/*  (session cookie)
-    │
-    ├─ Direct API call
-    │     curl / fetch  →  API /v1/*
-    │
-    └─ MCP / Agent Auth
-          /mcp  or  Bearer JWT  →  API /v1/*
-                │
-                ▼
-        apps/api/lib/resolve-caller.ts
-                │
-                ├─ Bearer JWT (Agent Auth) → org from agent metadata
-                ├─ x-api-key → org + scopes from key metadata
-                ├─ Session cookie → activeOrganizationId → admin + storefront scopes
-                └─ Host header → tenant subdomain/domain → storefront scope only
-                │
-                ▼
-        apps/api/lib/commerce-service.ts
-                │
-                └─ @prood/commerce.withTenant(orgId) → @prood/platform
+```mermaid
+flowchart TB
+  CLIENT["Browser / Agent"]
+
+  BFF["Storefront BFF<br/>/api/commerce/cart/*"]
+  DASH["Dashboard server action<br/>admin-api.ts"]
+  DIRECT["Direct API call<br/>curl / fetch"]
+  MCP["MCP / Agent Auth<br/>/mcp or Bearer JWT"]
+
+  RESOLVE["resolve-caller.ts"]
+  JWT["Bearer JWT → org from agent metadata"]
+  KEY["x-api-key → org + scopes"]
+  SESS["Session cookie → activeOrganizationId"]
+  HOST["Host header → tenant lookup"]
+
+  SVC["commerce-service.ts"]
+  PLATFORM["@prood/commerce.withTenant(orgId)<br/>→ @prood/platform"]
+
+  CLIENT --> BFF --> RESOLVE
+  CLIENT --> DASH --> RESOLVE
+  CLIENT --> DIRECT --> RESOLVE
+  CLIENT --> MCP --> RESOLVE
+
+  RESOLVE --> JWT
+  RESOLVE --> KEY
+  RESOLVE --> SESS
+  RESOLVE --> HOST
+  RESOLVE --> SVC --> PLATFORM
 ```
 
 ## When the storefront uses a BFF
@@ -101,10 +102,13 @@ Route handlers call `requireCaller('storefront')` or `requireCaller('admin')` to
 
 The API generates OpenAPI 3.1 from Zod schemas in `apps/api/lib/schemas.ts`:
 
-```
-GET /v1/openapi.json          → full spec
-GET /v1/products              → operationId: listProducts
-POST /v1/admin/products       → operationId: adminCreateProduct
+```mermaid
+flowchart LR
+  SPEC["GET /v1/openapi.json<br/>full spec"]
+  PROD["GET /v1/products<br/>listProducts"]
+  ADMIN["POST /v1/admin/products<br/>adminCreateProduct"]
+  SPEC --> PROD
+  SPEC --> ADMIN
 ```
 
 The docs site syncs this spec at build time (`pnpm sync:openapi`) and renders it via **Fumadocs OpenAPI** at `/docs/api/*`.

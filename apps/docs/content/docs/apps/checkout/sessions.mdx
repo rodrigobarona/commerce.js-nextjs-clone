@@ -7,10 +7,17 @@ Checkout sessions are managed by `@prood/checkout-host` and persisted in **Upsta
 
 ## Session lifecycle
 
-```
-CREATE → PAY → (CONFIRM) → COMPLETE
-   │       │       │           │
-   Redis   Redis   Redis       Redis (TTL expires)
+```mermaid
+stateDiagram-v2
+  [*] --> CREATE
+  CREATE --> PAY: customer visits /pay/{id}
+  PAY --> CONFIRM: 3DS / async
+  CONFIRM --> COMPLETE: payment captured
+  COMPLETE --> [*]: TTL expires
+
+  note right of CREATE: Persisted in Redis
+  note right of PAY: Persisted in Redis
+  note right of CONFIRM: Persisted in Redis
 ```
 
 ## API routes
