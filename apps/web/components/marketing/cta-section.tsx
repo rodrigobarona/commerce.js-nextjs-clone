@@ -8,8 +8,8 @@ import { siteConfig } from "@/lib/site"
 export function CtaSection() {
   return (
     <SectionShell variant="glow">
-      <SectionContainer className="py-24 md:py-32">
-        <div className="surface-panel mx-auto max-w-4xl overflow-hidden rounded-[24px] px-6 py-16 text-center sm:px-12 sm:py-20">
+      <SectionContainer className="relative py-24 md:py-32">
+        <div className="geo-frame mx-auto max-w-4xl px-6 py-16 text-center sm:px-12 sm:py-20">
           <p className="section-eyebrow">Ready when you are</p>
           <h2 className="section-title mx-auto mt-4 max-w-2xl">Start selling on Prood today</h2>
           <p className="section-description mx-auto mt-4 max-w-xl">
@@ -24,7 +24,7 @@ export function CtaSection() {
                 <ArrowRightIcon data-icon="inline-end" aria-hidden />
               </Link>
             </Button>
-            <Button size="lg" variant="outline" asChild>
+            <Button size="lg" variant="outline" className="rounded-lg" asChild>
               <Link href={`${siteConfig.docsUrl}/docs/guides/for-merchants`}>Merchant guide</Link>
             </Button>
           </div>

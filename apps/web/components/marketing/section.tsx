@@ -1,3 +1,4 @@
+import { GeometricBackdrop } from "@/components/marketing/geometric-backdrop"
 import { cn } from "@/lib/utils"
 
 export function SectionShell({
@@ -9,26 +10,33 @@ export function SectionShell({
   id?: string
   className?: string
   children: React.ReactNode
-  variant?: "default" | "muted" | "glow"
+  variant?: "default" | "muted" | "glow" | "geometric"
 }) {
+  const hasBackdrop = variant === "glow" || variant === "geometric"
+
   return (
     <section
       id={id}
       className={cn(
-        "relative scroll-mt-16",
+        "relative scroll-mt-16 overflow-hidden",
         variant === "muted" && "border-y border-border/50 bg-muted/15",
-        variant === "glow" && "overflow-hidden",
         className
       )}
     >
       {variant === "glow" ? (
         <>
           <div className="marketing-glow pointer-events-none absolute inset-0" aria-hidden />
+          <GeometricBackdrop />
           <div className="relative">{children}</div>
         </>
-      ) : (
-        children
-      )}
+      ) : null}
+      {variant === "geometric" ? (
+        <>
+          <GeometricBackdrop />
+          <div className="relative">{children}</div>
+        </>
+      ) : null}
+      {!hasBackdrop ? children : null}
     </section>
   )
 }
@@ -68,7 +76,7 @@ export function SectionHeader({
         className
       )}
     >
-      <p className="section-eyebrow">{eyebrow}</p>
+      <p className={cn("section-eyebrow", align === "center" && "[&::before]:hidden")}>{eyebrow}</p>
       <h2 className="section-title mt-4">{title}</h2>
       {description ? (
         <p className="section-description mt-4">{description}</p>
@@ -81,15 +89,18 @@ export function MarketingCard({
   className,
   children,
   hover = false,
+  geometric = false,
 }: {
   className?: string
   children: React.ReactNode
   hover?: boolean
+  /** L-bracket corners (blueprint / Linear aesthetic) */
+  geometric?: boolean
 }) {
   return (
     <article
       className={cn(
-        "surface-card rounded-2xl p-6 md:p-8",
+        geometric ? "geo-card p-6 md:p-8" : "surface-card rounded-2xl p-6 md:p-8",
         hover && "surface-card-hover transition-[border-color,background-color,box-shadow] duration-300",
         className
       )}

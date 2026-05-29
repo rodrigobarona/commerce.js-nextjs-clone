@@ -1,7 +1,8 @@
 import Link from "next/link"
 import { GlobeIcon, LinkSimpleIcon } from "@phosphor-icons/react/dist/ssr"
 
-import { MarketingCard, SectionContainer, SectionHeader, SectionShell } from "@/components/marketing/section"
+import { BentoCell, BentoGrid } from "@/components/marketing/bento-grid"
+import { SectionContainer, SectionHeader, SectionShell } from "@/components/marketing/section"
 import { Button } from "@/components/ui/button"
 import { siteConfig } from "@/lib/site"
 
@@ -17,9 +18,9 @@ export function StorefrontSection() {
           description="Every store gets yourname.prood.app automatically. Connect shop.yourbrand.com when you are ready for a custom domain."
         />
 
-        <div className="mt-14 grid gap-6 lg:grid-cols-2">
-          <MarketingCard hover className="flex flex-col gap-4">
-            <div className="flex size-10 items-center justify-center rounded-xl bg-brand-muted/40">
+        <BentoGrid className="mt-14 grid-cols-1 lg:grid-cols-2">
+          <BentoCell accent className="flex flex-col gap-4">
+            <div className="flex size-10 items-center justify-center border border-border bg-muted">
               <LinkSimpleIcon className="size-5 text-brand" weight="duotone" aria-hidden />
             </div>
             <h3 className="text-[17px] font-semibold tracking-[-0.02em]">Platform subdomain</h3>
@@ -28,10 +29,10 @@ export function StorefrontSection() {
               Included on Free. Share this URL while you build; customers can browse, cart, and checkout
               immediately.
             </p>
-          </MarketingCard>
+          </BentoCell>
 
-          <MarketingCard hover className="flex flex-col gap-4">
-            <div className="flex size-10 items-center justify-center rounded-xl bg-brand-muted/40">
+          <BentoCell className="flex flex-col gap-4">
+            <div className="flex size-10 items-center justify-center border border-border bg-muted">
               <GlobeIcon className="size-5 text-brand" weight="duotone" aria-hidden />
             </div>
             <h3 className="text-[17px] font-semibold tracking-[-0.02em]">Custom domain</h3>
@@ -40,11 +41,11 @@ export function StorefrontSection() {
               Available on Grow and above. Add DNS from the dashboard; SSL provisioning via Vercel when
               configured in production.
             </p>
-          </MarketingCard>
-        </div>
+          </BentoCell>
+        </BentoGrid>
 
         <div className="mt-10 flex flex-wrap gap-3">
-          <Button variant="outline" asChild>
+          <Button variant="outline" className="rounded-lg" asChild>
             <Link href={siteConfig.storefrontUrl} target="_blank" rel="noopener noreferrer">
               View demo storefront
             </Link>
