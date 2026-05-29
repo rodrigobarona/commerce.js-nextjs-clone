@@ -12,15 +12,16 @@
     "db:migrate": "turbo db:migrate:seed --filter=@prood/platform",
     "db:auth": "pnpm --filter storefront db:push",
     "db:setup": "pnpm db:migrate && pnpm db:auth",
-    "env:link": "bash scripts/link-env.sh"
+    "env:link": "bash scripts/link-env.sh",
+    "catalog:apply": "node scripts/apply-catalog.mjs"
   },
   "devDependencies": {
     "@prood/eslint-config": "workspace:*",
     "@prood/typescript-config": "workspace:*",
-    "prettier": "^3.8.3",
-    "prettier-plugin-tailwindcss": "^0.8.0",
-    "turbo": "^2.9.15",
-    "typescript": "^5"
+    "prettier": "catalog:",
+    "prettier-plugin-tailwindcss": "catalog:",
+    "turbo": "catalog:",
+    "typescript": "catalog:"
   },
   "packageManager": "pnpm@10.33.4",
   "engines": {

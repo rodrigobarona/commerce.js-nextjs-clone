@@ -29,14 +29,14 @@
   },
   "dependencies": {
     "@prood/types": "workspace:*",
-    "@neondatabase/serverless": "^1.0.2",
-    "bcrypt-ts": "^5.0.3",
-    "drizzle-orm": "^0.45.1"
+    "@neondatabase/serverless": "catalog:",
+    "bcrypt-ts": "catalog:",
+    "drizzle-orm": "catalog:"
   },
   "devDependencies": {
-    "@types/node": "^24",
-    "drizzle-kit": "^0.31.9",
-    "typescript": "^5.7.0",
-    "vitest": "^4.0.0"
+    "@types/node": "catalog:",
+    "drizzle-kit": "catalog:",
+    "typescript": "catalog:",
+    "vitest": "catalog:"
   }
 }

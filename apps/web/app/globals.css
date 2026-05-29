@@ -7,6 +7,9 @@
 @theme inline {
     --font-heading: var(--font-sans);
     --font-sans: var(--font-sans);
+    --color-brand: var(--brand);
+    --color-brand-foreground: var(--brand-foreground);
+    --color-brand-muted: var(--brand-muted);
     --color-sidebar-ring: var(--sidebar-ring);
     --color-sidebar-border: var(--sidebar-border);
     --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -48,6 +51,9 @@
 }
 
 :root {
+    --brand: oklch(0.62 0.19 255);
+    --brand-foreground: oklch(0.985 0 0);
+    --brand-muted: oklch(0.62 0.19 255 / 12%);
     --background: oklch(1 0 0);
     --foreground: oklch(0.145 0 0);
     --card: oklch(1 0 0);
@@ -83,9 +89,12 @@
 }
 
 .dark {
-    --background: oklch(0.145 0 0);
-    --foreground: oklch(0.985 0 0);
-    --card: oklch(0.205 0 0);
+    --brand: oklch(0.74 0.14 255);
+    --brand-foreground: oklch(0.12 0.02 255);
+    --brand-muted: oklch(0.74 0.14 255 / 16%);
+    --background: oklch(0.115 0.012 265);
+    --foreground: oklch(0.97 0.004 265);
+    --card: oklch(0.155 0.012 265);
     --card-foreground: oklch(0.985 0 0);
     --popover: oklch(0.205 0 0);
     --popover-foreground: oklch(0.985 0 0);
@@ -122,11 +131,86 @@
     }
   body {
     @apply bg-background text-foreground;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
     }
   button:not(:disabled), [role="button"]:not(:disabled) {
     cursor: pointer;
     }
   html {
-    @apply font-sans;
+    @apply font-sans scroll-smooth;
     }
+  ::selection {
+    background: oklch(from var(--brand) l c h / 28%);
+    color: var(--foreground);
+    }
+}
+
+@layer components {
+  .section-eyebrow {
+    @apply text-[13px] font-medium tracking-[0.02em] text-brand;
+  }
+
+  .section-title {
+    @apply text-[clamp(1.875rem,4vw,2.5rem)] font-semibold tracking-[-0.03em] text-balance;
+  }
+
+  .section-description {
+    @apply text-[17px] leading-7 text-muted-foreground text-pretty;
+  }
+
+  .surface-card {
+    border: 1px solid oklch(from var(--border) l c h / 80%);
+    background: oklch(from var(--card) l c h / 72%);
+    box-shadow:
+      0 0 0 1px oklch(from var(--foreground) l c h / 2%) inset,
+      0 1px 2px oklch(from var(--background) l c h / 40%);
+  }
+
+  .surface-card-hover:hover {
+    border-color: oklch(from var(--brand) l c h / 28%);
+    background: oklch(from var(--brand-muted) l c h / 35%);
+    box-shadow:
+      0 0 0 1px oklch(from var(--brand) l c h / 10%) inset,
+      0 12px 40px -24px oklch(from var(--brand) l c h / 35%);
+  }
+
+  .surface-panel {
+    border: 1px solid oklch(from var(--border) l c h / 80%);
+    background: oklch(from var(--background) l c h / 55%);
+    backdrop-filter: blur(16px);
+    box-shadow:
+      0 0 0 1px oklch(from var(--foreground) l c h / 3%) inset,
+      0 24px 80px -40px oklch(from var(--background) l c h / 90%);
+  }
+
+  .text-gradient-brand {
+    background: linear-gradient(
+      115deg,
+      oklch(from var(--brand) l c h) 0%,
+      oklch(from var(--brand) calc(l + 0.08) calc(c + 0.02) h) 45%,
+      oklch(from var(--foreground) l c h) 100%
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+}
+
+@layer utilities {
+  .marketing-grid {
+    background-image:
+      linear-gradient(to right, oklch(from var(--border) l c h / 35%) 1px, transparent 1px),
+      linear-gradient(to bottom, oklch(from var(--border) l c h / 35%) 1px, transparent 1px);
+    background-size: 48px 48px;
+    mask-image: radial-gradient(ellipse 85% 70% at 50% 0%, black 20%, transparent 100%);
+  }
+
+  .marketing-glow {
+    background:
+      radial-gradient(ellipse 90% 60% at 50% -30%, var(--brand-muted), transparent 65%),
+      radial-gradient(ellipse 50% 40% at 100% 0%, oklch(from var(--brand) l c h / 10%), transparent 70%),
+      radial-gradient(ellipse 40% 30% at 0% 20%, oklch(from var(--brand) l c h / 6%), transparent 70%);
+  }
 }

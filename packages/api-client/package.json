@@ -11,12 +11,12 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "openapi-fetch": "^0.17.0"
+    "openapi-fetch": "catalog:"
   },
   "devDependencies": {
     "@prood/typescript-config": "workspace:*",
-    "@types/node": "^24",
-    "openapi-typescript": "^7.13.0",
-    "typescript": "^5"
+    "@types/node": "catalog:",
+    "openapi-typescript": "catalog:",
+    "typescript": "catalog:"
   }
 }

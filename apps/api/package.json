@@ -14,29 +14,29 @@
     "db:push": "drizzle-kit push"
   },
   "dependencies": {
-    "@better-auth/agent-auth": "0.5.1",
-    "@better-auth/api-key": "1.6.11",
-    "@modelcontextprotocol/sdk": "^1.26.0",
-    "@neondatabase/serverless": "^1.1.0",
+    "@better-auth/agent-auth": "catalog:",
+    "@better-auth/api-key": "catalog:",
+    "@modelcontextprotocol/sdk": "catalog:",
+    "@neondatabase/serverless": "catalog:",
     "@prood/commerce": "workspace:*",
     "@prood/types": "workspace:*",
-    "better-auth": "^1.6.11",
-    "drizzle-orm": "^0.45.2",
-    "mcp-handler": "^1.1.0",
-    "next": "16.2.6",
-    "react": "19.2.4",
-    "react-dom": "19.2.4",
-    "zod": "^4.4.3"
+    "better-auth": "catalog:",
+    "drizzle-orm": "catalog:",
+    "mcp-handler": "catalog:",
+    "next": "catalog:",
+    "react": "catalog:",
+    "react-dom": "catalog:",
+    "zod": "catalog:"
   },
   "devDependencies": {
     "@prood/eslint-config": "workspace:^",
     "@prood/typescript-config": "workspace:*",
-    "@types/node": "^24",
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
-    "drizzle-kit": "^0.31.9",
-    "eslint": "^9",
-    "typescript": "^5"
+    "@types/node": "catalog:",
+    "@types/react": "catalog:",
+    "@types/react-dom": "catalog:",
+    "drizzle-kit": "catalog:",
+    "eslint": "catalog:",
+    "typescript": "catalog:"
   },
   "engines": {
     "node": ">=24"

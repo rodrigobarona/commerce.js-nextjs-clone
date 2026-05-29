@@ -12,7 +12,7 @@
   },
   "dependencies": {
     "@prood/checkout": "workspace:*",
-    "@neondatabase/serverless": "^1.1.0",
+    "@neondatabase/serverless": "catalog:",
     "@prood/payment-easypay": "workspace:*",
     "@prood/payment-ifthenpay": "workspace:*",
     "@prood/payment-stripe": "workspace:*",
@@ -20,16 +20,16 @@
     "@prood/storage-s3": "workspace:*",
     "@prood/storage-vercel-blob": "workspace:*",
     "@prood/types": "workspace:*",
-    "server-only": "^0.0.1",
-    "zod": "^4.4.3"
+    "server-only": "catalog:",
+    "zod": "catalog:"
   },
   "peerDependencies": {
     "next": ">=16.0.0"
   },
   "devDependencies": {
-    "@types/node": "^24",
+    "@types/node": "catalog:",
     "@prood/typescript-config": "workspace:*",
-    "next": "16.2.6",
-    "typescript": "^5"
+    "next": "catalog:",
+    "typescript": "catalog:"
   }
 }
