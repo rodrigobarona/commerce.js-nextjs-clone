@@ -149,6 +149,48 @@ importers:
         specifier: ^8.60.0
         version: 8.60.0(eslint@9.39.4(jiti@2.7.0))(typescript@5.9.3)
 
+  packages/payment-easypay:
+    dependencies:
+      '@commercejs/types':
+        specifier: workspace:*
+        version: link:../types
+    devDependencies:
+      '@types/node':
+        specifier: ^24
+        version: 24.12.4
+      typescript:
+        specifier: ^5.7.0
+        version: 5.9.3
+
+  packages/payment-ifthenpay:
+    dependencies:
+      '@commercejs/types':
+        specifier: workspace:*
+        version: link:../types
+    devDependencies:
+      '@types/node':
+        specifier: ^24
+        version: 24.12.4
+      typescript:
+        specifier: ^5.7.0
+        version: 5.9.3
+
+  packages/payment-stripe:
+    dependencies:
+      '@commercejs/types':
+        specifier: workspace:*
+        version: link:../types
+      stripe:
+        specifier: '>=18'
+        version: 22.2.0(@types/node@24.12.4)
+    devDependencies:
+      '@types/node':
+        specifier: ^24
+        version: 24.12.4
+      typescript:
+        specifier: ^5.7.0
+        version: 5.9.3
+
   packages/platform:
     dependencies:
       '@commercejs/types':
@@ -4877,6 +4919,15 @@ packages:
   strip-json-comments@3.1.1:
     resolution: {integrity: sha512-6fPc+R4ihwqP6N/aIv2f1gMH8lOVtWQHoqC4yK6oSDVVocumAsfCqjkXnqiYMhmMwS/mEHLp7Vehlt3ql6lEig==}
     engines: {node: '>=8'}
+
+  stripe@22.2.0:
+    resolution: {integrity: sha512-WFGpMOom9QZqso1kcnSwJsCdC1QHDlMoCOxBZRf3JraMzhkfw7dgSdD2a1CFZrqC+mzAfqeEtYILrZhWKIDruA==}
+    engines: {node: '>=18'}
+    peerDependencies:
+      '@types/node': '>=18'
+    peerDependenciesMeta:
+      '@types/node':
+        optional: true
 
   styled-jsx@5.1.6:
     resolution: {integrity: sha512-qSVyDTeMotdvQYoHWLNGwRFJHC+i+ZvdBRYosOFgC+Wg1vx4frN2/RG/NA7SYqqvKNLf39P2LSRA2pu6n0XYZA==}
@@ -9961,6 +10012,10 @@ snapshots:
   strip-final-newline@4.0.0: {}
 
   strip-json-comments@3.1.1: {}
+
+  stripe@22.2.0(@types/node@24.12.4):
+    optionalDependencies:
+      '@types/node': 24.12.4
 
   styled-jsx@5.1.6(react@19.2.4):
     dependencies:

@@ -1,0 +1,40 @@
+/** Easypay payment method codes. */
+export type EasypayMethod = 'mb' | 'mbw' | 'cc' | 'dd'
+
+/** Configuration for {@link EasypayPaymentProvider}. */
+export interface EasypayConfig {
+  /** Easypay AccountId (UUID). */
+  accountId: string
+  /** Easypay API key. */
+  apiKey: string
+  /**
+   * API base URL. Defaults to production (`https://api.prod.easypay.pt`).
+   * Use `https://api.test.easypay.pt` for sandbox.
+   */
+  baseUrl?: string
+  /** Default method when none is supplied via `metadata.method`. Defaults to `mb`. */
+  defaultMethod?: EasypayMethod
+  /** Optional phone country indicative for MB WAY (defaults to `+351`). */
+  phoneIndicative?: string
+}
+
+/** Shape of the Easypay single-payment method block (partial). */
+export interface EasypayMethodBlock {
+  type?: string
+  entity?: string
+  reference?: string
+  url?: string
+  status?: string
+  expiration_time?: string
+}
+
+/** Shape of an Easypay single-payment response (partial). */
+export interface EasypaySinglePayment {
+  id?: string
+  method?: EasypayMethodBlock
+  status?: string | string[]
+  payment_status?: string
+  currency?: string
+  value?: number
+  transactions?: unknown[]
+}
