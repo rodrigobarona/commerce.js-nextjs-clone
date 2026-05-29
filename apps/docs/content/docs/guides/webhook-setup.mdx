@@ -1,0 +1,170 @@
+---
+title: Webhook Setup
+description: Configure payment provider webhooks for async payment confirmation and order reconciliation.
+---
+
+Payment webhooks are essential for async payment methods (Multibanco, MB WAY) and as a safety net for card payments (3DS failures, browser closes). This guide covers webhook configuration for all supported providers.
+
+## Webhook architecture
+
+```
+Payment provider
+  │
+  POST https://pay.example.com/api/webhooks/{provider}/{orgId}
+  │
+  Checkout app (apps/checkout)
+  │   ├─ Reads raw body + signature
+  │   └─ forwardPaymentWebhook()
+  │
+  POST https://api.example.com/v1/webhooks/payments/{provider}?org={orgId}
+  Header: x-checkout-secret
+  │
+  Commerce API (apps/api)
+  │   ├─ verifyPaymentWebhook(payload, sig, provider, org)
+  │   │     └─ Uses tenant's stored webhook secret
+  │   └─ Update order status
+  │
+  Order: pending → confirmed (or failed)
+```
+
+## Why webhooks matter
+
+| Scenario | Without webhook | With webhook |
+| --- | --- | --- |
+| Customer closes browser during 3DS | Order stuck as `pending` | Webhook confirms payment |
+| Multibanco payment (async) | No way to detect payment | Webhook fires when customer pays at ATM |
+| MB WAY timeout | Order stuck | Webhook on phone confirmation |
+| Network error on confirm | Order stuck | Webhook as safety net |
+
+## Stripe webhooks
+
+### 1. Create webhook endpoint
+
+In Stripe Dashboard → Developers → Webhooks → Add endpoint:
+
+```
+Endpoint URL: https://pay.example.com/api/webhooks/stripe/{orgId}
+```
+
+Replace `{orgId}` with the merchant's organization ID (e.g. `org_demo`).
+
+### 2. Select events
+
+| Event | Purpose |
+| --- | --- |
+| `payment_intent.succeeded` | Payment captured |
+| `payment_intent.payment_failed` | Payment declined |
+| `charge.refunded` | Refund processed |
+
+### 3. Copy signing secret
+
+After creating the endpoint, copy the **Signing secret** (`whsec_...`).
+
+### 4. Configure in dashboard
+
+Dashboard → Integrations → Stripe → Webhook secret: `whsec_...`
+
+Or set globally: `STRIPE_WEBHOOK_SECRET=whsec_...`
+
+### 5. Test locally
+
+Use Stripe CLI for local webhook testing:
+
+```bash
+stripe listen --forward-to localhost:3004/api/webhooks/stripe/org_demo
+stripe trigger payment_intent.succeeded
+```
+
+## Easypay webhooks
+
+### 1. Configure in Easypay panel
+
+Log in to Easypay merchant panel → Settings → Notifications:
+
+```
+Notification URL: https://pay.example.com/api/webhooks/easypay/{orgId}
+```
+
+### 2. Events
+
+Easypay sends notifications for:
+
+- Payment received (Multibanco, MB WAY, card)
+- Payment expired
+- Refund processed
+
+### 3. Sandbox testing
+
+Use `EASYPAY_BASE_URL=https://api.test.easypay.pt` and configure test webhook URL similarly.
+
+## Ifthenpay webhooks
+
+### 1. Configure in backoffice
+
+Log in to Ifthenpay backoffice → Configurações → Callback URL:
+
+```
+Callback URL: https://pay.example.com/api/webhooks/ifthenpay/{orgId}
+```
+
+### 2. Anti-phishing verification
+
+Ifthenpay includes an anti-phishing key in webhook payloads. The provider verifies this against `IFTHENPAY_ANTIPHISHING_KEY` (or tenant config).
+
+## Per-tenant webhook URLs
+
+Each merchant gets their own webhook URL with their org ID:
+
+```
+https://pay.example.com/api/webhooks/stripe/org_merchant_a
+https://pay.example.com/api/webhooks/stripe/org_merchant_b
+https://pay.example.com/api/webhooks/easypay/org_merchant_a
+```
+
+This ensures webhook verification uses the correct tenant's stored secret.
+
+For platform-wide (env-only) webhooks, use `_` as the org:
+
+```
+https://pay.example.com/api/webhooks/stripe/_
+```
+
+## Webhook verification flow
+
+```ts
+// @prood/commerce — verifyPaymentWebhook()
+1. Load integration_config for (orgId, provider)
+2. Decrypt stored webhookSecret
+3. Fall back to env var if not configured
+4. provider.verifyWebhook({ payload, signature })
+5. Return { valid, status, sessionId, amount }
+```
+
+## Direct API webhooks
+
+Alternatively, route webhooks directly to the API (bypassing checkout):
+
+```
+POST https://api.example.com/v1/webhooks/payments/stripe?org={orgId}
+Header: x-checkout-secret: {CHECKOUT_API_SECRET}
+```
+
+This is useful if you prefer a single webhook ingress point.
+
+## Troubleshooting
+
+| Issue | Check |
+| --- | --- |
+| 401 on webhook | `x-checkout-secret` mismatch between checkout and API |
+| Signature verification fails | Webhook secret in dashboard doesn't match provider dashboard |
+| Order not updating | Check API logs for webhook processing errors |
+| Wrong tenant updated | Verify org ID in webhook URL matches the merchant |
+| Webhook not received | Check provider dashboard for delivery logs and retry |
+
+## Related pages
+
+<Cards>
+  <Card title="Checkout webhooks" href="/docs/apps/checkout/webhooks" description="Checkout app webhook routes." />
+  <Card title="Payment integration" href="/docs/guides/payment-integration" description="Provider setup." />
+  <Card title="Checkout flow" href="/docs/architecture/checkout-flow" description="Sync-on-return vs webhook strategy." />
+</Cards>
