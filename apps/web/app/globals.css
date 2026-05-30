@@ -77,7 +77,7 @@
     --chart-3: oklch(0.439 0 0);
     --chart-4: oklch(0.371 0 0);
     --chart-5: oklch(0.269 0 0);
-    --radius: 0.25rem;
+    --radius: 0.625rem;
     --sidebar: oklch(0.985 0 0);
     --sidebar-foreground: oklch(0.145 0 0);
     --sidebar-primary: oklch(0.205 0 0);
@@ -212,6 +212,35 @@
 
   .text-gradient-brand {
     color: var(--brand);
+  }
+
+  .font-display {
+    font-family: var(--font-display), var(--font-sans), ui-sans-serif, system-ui, sans-serif;
+  }
+
+  .marketing-panel {
+    border: 1px solid oklch(from var(--border) l c h / 85%);
+    border-radius: var(--radius-xl);
+    background: var(--card);
+    box-shadow:
+      0 1px 2px oklch(from var(--foreground) l c h / 4%),
+      0 8px 24px oklch(from var(--foreground) l c h / 4%);
+  }
+
+  .marketing-mock-chrome {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    border-bottom: 1px solid oklch(from var(--border) l c h / 90%);
+    padding: 0.75rem 1rem;
+  }
+
+  .marketing-mock-dot {
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 9999px;
+    border: 1px solid oklch(from var(--border) l c h / 90%);
+    background: oklch(from var(--muted) l c h / 100%);
   }
 }
 

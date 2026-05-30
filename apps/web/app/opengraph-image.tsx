@@ -1,6 +1,6 @@
 import { ImageResponse } from "next/og"
 
-import { siteConfig } from "@/lib/site"
+import { heroCopy, siteConfig } from "@/lib/site"
 
 export const alt = siteConfig.tagline
 export const size = { width: 1200, height: 630 }
@@ -17,8 +17,8 @@ export default function Image() {
           flexDirection: "column",
           justifyContent: "center",
           padding: 80,
-          background: "#000000",
-          color: "#ffffff",
+          background: "#fafafa",
+          color: "#0a0a0a",
           fontFamily: "system-ui, sans-serif",
         }}
       >
@@ -27,7 +27,7 @@ export default function Image() {
             fontSize: 28,
             fontWeight: 600,
             letterSpacing: "-0.02em",
-            color: "#34d59a",
+            color: "#16a34a",
           }}
         >
           {siteConfig.name}
@@ -35,25 +35,25 @@ export default function Image() {
         <div
           style={{
             marginTop: 24,
-            fontSize: 56,
-            fontWeight: 700,
+            fontSize: 52,
+            fontWeight: 600,
             letterSpacing: "-0.04em",
             lineHeight: 1.1,
             maxWidth: 900,
           }}
         >
-          {siteConfig.tagline}
+          {heroCopy.title} {heroCopy.titleAccent}
         </div>
         <div
           style={{
             marginTop: 28,
-            fontSize: 24,
+            fontSize: 22,
             lineHeight: 1.5,
-            color: "rgba(255, 255, 255, 0.65)",
+            color: "rgba(10, 10, 10, 0.65)",
             maxWidth: 820,
           }}
         >
-          Launch on yourname.prood.app · Modern dashboard · Payments & AI-ready APIs
+          Custom domain on Free · BYO Stripe · No Prood fee on sales at launch
         </div>
       </div>
     ),

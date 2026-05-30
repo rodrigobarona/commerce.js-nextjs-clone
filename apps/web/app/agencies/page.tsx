@@ -3,10 +3,12 @@ import Link from "next/link"
 import { ArrowRightIcon } from "@phosphor-icons/react/dist/ssr"
 
 import { CtaSection } from "@/components/marketing/cta-section"
+import { MultiStoreMock } from "@/components/marketing/mocks/multi-store-mock"
+import { PricingCardsGrid } from "@/components/marketing/pricing-cards"
 import { MarketingCard, SectionContainer, SectionHeader, SectionShell } from "@/components/marketing/section"
-import { PricingCards } from "@/components/marketing/pricing-cards"
 import { MarketingPageShell } from "@/components/marketing-page-shell"
 import { Button } from "@/components/ui/button"
+import { getMarketingTier } from "@/lib/pricing"
 import { agencyHighlights, siteConfig } from "@/lib/site"
 
 export const metadata: Metadata = {
@@ -39,28 +41,33 @@ export default function AgenciesPage() {
     <MarketingPageShell>
       <SectionShell variant="glow">
         <SectionContainer className="pt-24 md:pt-32">
-          <SectionHeader
-            eyebrow="For agencies"
-            title="Modern commerce infrastructure for every client"
-            description="Stop rebuilding storefronts and checkout for each engagement. Prood gives each client a real store—with data isolation, their own payments, and domains you control from one workflow."
-          />
-          <div className="mt-10 flex flex-wrap gap-3">
-            <Button variant="brand" size="lg" asChild>
-              <Link href={siteConfig.registerUrl}>
-                Start with a client store
-                <ArrowRightIcon data-icon="inline-end" aria-hidden />
-              </Link>
-            </Button>
-            <Button variant="outline" size="lg" asChild>
-              <Link href={`${siteConfig.docsUrl}/docs/guides/for-agencies`}>Agency guide</Link>
-            </Button>
+          <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
+            <div>
+              <SectionHeader
+                eyebrow="For agencies"
+                title="Modern commerce infrastructure for every client"
+                description="Stop rebuilding storefronts and checkout for each engagement. Prood gives each client a real store—with data isolation, their own payments, and domains you control from one workflow."
+              />
+              <div className="mt-10 flex flex-wrap gap-3">
+                <Button variant="brand" size="lg" asChild>
+                  <Link href={siteConfig.registerUrl}>
+                    Start with a client store
+                    <ArrowRightIcon data-icon="inline-end" aria-hidden />
+                  </Link>
+                </Button>
+                <Button variant="outline" size="lg" asChild>
+                  <Link href={`${siteConfig.docsUrl}/docs/guides/for-agencies`}>Agency guide</Link>
+                </Button>
+              </div>
+            </div>
+            <MultiStoreMock />
           </div>
         </SectionContainer>
       </SectionShell>
 
       <SectionShell>
         <SectionContainer>
-          <div className="grid gap-6 md:grid-cols-2">
+          <div className="grid gap-6 md:grid-cols-3">
             {agencyHighlights.map((item) => (
               <MarketingCard key={item.title} hover>
                 <h3 className="text-[17px] font-semibold tracking-[-0.02em]">{item.title}</h3>
@@ -80,7 +87,7 @@ export default function AgenciesPage() {
           />
           <ol className="mt-12 grid gap-6 sm:grid-cols-2">
             {agencyWorkflow.map((step, index) => (
-              <li key={step.title} className="surface-card rounded-2xl p-6">
+              <li key={step.title} className="marketing-panel p-6">
                 <span className="font-mono text-[11px] text-brand">Step {index + 1}</span>
                 <h3 className="mt-3 text-[16px] font-semibold">{step.title}</h3>
                 <p className="mt-2 text-[14px] leading-7 text-muted-foreground">{step.description}</p>
@@ -100,7 +107,7 @@ export default function AgenciesPage() {
           />
           <div className="mt-12 flex justify-center">
             <div className="w-full max-w-md">
-              <PricingCards tiers={["agency"]} />
+              <PricingCardsGrid tiers={[getMarketingTier("agency", "monthly")]} />
             </div>
           </div>
           <p className="mx-auto mt-8 max-w-lg text-center text-[14px] text-muted-foreground">

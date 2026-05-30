@@ -1,7 +1,7 @@
 import Link from "next/link"
-import { ArrowRightIcon, BuildingsIcon } from "@phosphor-icons/react/dist/ssr"
+import { ArrowRightIcon } from "@phosphor-icons/react/dist/ssr"
 
-import { BentoCell, BentoGrid } from "@/components/marketing/bento-grid"
+import { MultiStoreMock } from "@/components/marketing/mocks/multi-store-mock"
 import { SectionContainer, SectionHeader, SectionShell } from "@/components/marketing/section"
 import { Button } from "@/components/ui/button"
 import { agencyHighlights } from "@/lib/site"
@@ -10,13 +10,20 @@ export function AgenciesTeaserSection() {
   return (
     <SectionShell variant="muted">
       <SectionContainer>
-        <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)] lg:items-start lg:gap-12">
+        <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
           <div>
             <SectionHeader
               eyebrow="For agencies"
               title="Launch many client stores on one platform"
               description="Each client gets isolated data, their own subdomain or domain, and their own payment credentials—without rebuilding infrastructure every time."
             />
+            <ul className="mt-8 space-y-4">
+              {agencyHighlights.map((item) => (
+                <li key={item.title} className="text-[14px] leading-7 text-muted-foreground">
+                  <span className="font-medium text-foreground">{item.title}.</span> {item.description}
+                </li>
+              ))}
+            </ul>
             <Button className="mt-8 rounded-lg" variant="brand" asChild>
               <Link href="/agencies">
                 Agency plans
@@ -24,22 +31,7 @@ export function AgenciesTeaserSection() {
               </Link>
             </Button>
           </div>
-
-          <BentoGrid className="grid-cols-1">
-            {agencyHighlights.map((item, index) => (
-              <BentoCell key={item.title} accent={index === 0}>
-                <div className="flex gap-4">
-                  <div className="flex size-10 shrink-0 items-center justify-center border border-border bg-muted">
-                    <BuildingsIcon className="size-5 text-brand" weight="duotone" aria-hidden />
-                  </div>
-                  <div>
-                    <h3 className="text-[15px] font-semibold tracking-[-0.02em]">{item.title}</h3>
-                    <p className="mt-1 text-[14px] leading-7 text-muted-foreground">{item.description}</p>
-                  </div>
-                </div>
-              </BentoCell>
-            ))}
-          </BentoGrid>
+          <MultiStoreMock />
         </div>
       </SectionContainer>
     </SectionShell>

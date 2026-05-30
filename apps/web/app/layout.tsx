@@ -1,4 +1,5 @@
 import { Geist, Geist_Mono } from "next/font/google"
+import { Newsreader } from "next/font/google"
 import type { Metadata } from "next"
 
 import "./globals.css"
@@ -11,6 +12,12 @@ const geist = Geist({ subsets: ["latin"], variable: "--font-sans" })
 const fontMono = Geist_Mono({
   subsets: ["latin"],
   variable: "--font-mono",
+})
+
+const newsreader = Newsreader({
+  subsets: ["latin"],
+  variable: "--font-display",
+  weight: ["400", "500", "600"],
 })
 
 export const metadata: Metadata = {
@@ -46,10 +53,10 @@ export default function RootLayout({
     <html
       lang="en"
       suppressHydrationWarning
-      className={cn("dark antialiased", fontMono.variable, "font-sans", geist.variable)}
+      className={cn("antialiased", fontMono.variable, "font-sans", geist.variable, newsreader.variable)}
     >
       <body>
-        <ThemeProvider defaultTheme="dark">{children}</ThemeProvider>
+        <ThemeProvider defaultTheme="light">{children}</ThemeProvider>
       </body>
     </html>
   )

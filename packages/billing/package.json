@@ -1,0 +1,19 @@
+{
+  "name": "@prood/billing",
+  "version": "0.1.0",
+  "description": "Prood platform plan definitions and entitlements",
+  "license": "MIT",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./plans": "./src/plans.ts",
+    "./marketing": "./src/marketing.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@prood/typescript-config": "workspace:*",
+    "typescript": "catalog:"
+  }
+}

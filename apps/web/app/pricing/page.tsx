@@ -2,7 +2,9 @@ import type { Metadata } from "next"
 import Link from "next/link"
 
 import { CtaSection } from "@/components/marketing/cta-section"
-import { PricingCards, PricingComparisonTable } from "@/components/marketing/pricing-cards"
+import { PricingComparisonTable } from "@/components/marketing/pricing-cards"
+import { PricingPlansSection } from "@/components/marketing/pricing-plans-section"
+import { PricingTrustSection } from "@/components/marketing/pricing-trust-section"
 import { SectionContainer, SectionHeader, SectionShell } from "@/components/marketing/section"
 import { MarketingPageShell } from "@/components/marketing-page-shell"
 import { pricingFaqs } from "@/lib/pricing"
@@ -11,7 +13,7 @@ import { pricingDisclaimer } from "@/lib/site"
 export const metadata: Metadata = {
   title: "Pricing",
   description:
-    "Start free on Prood with a subdomain store. Upgrade for custom domains, higher volume, team seats, and AI agent automation.",
+    "Launch your store free on Prood with a custom domain. Upgrade for higher volume, team seats, and AI agent automation—no platform fee on your sales.",
 }
 
 export default function PricingPage() {
@@ -22,14 +24,15 @@ export default function PricingPage() {
           <SectionHeader
             align="center"
             eyebrow="Pricing"
-            title="Plans that grow with your store"
-            description="Subscription billing in the dashboard is coming soon. Start on Free today—the limits below show what each plan will include."
+            title="Launch your store free. Pay when you outgrow limits."
+            description="No Prood fee on your sales at launch. You pay your payment provider directly. Custom domain included on Free—upgrade for volume, team, and AI automation."
+            className="font-display"
           />
           <p className="mx-auto mt-6 max-w-2xl text-center text-[13px] leading-6 text-muted-foreground">
             {pricingDisclaimer}
           </p>
           <div className="mt-14">
-            <PricingCards tiers={["free", "grow", "scale", "agency"]} />
+            <PricingPlansSection />
           </div>
         </SectionContainer>
       </SectionShell>
@@ -48,6 +51,19 @@ export default function PricingPage() {
       </SectionShell>
 
       <SectionShell>
+        <SectionContainer>
+          <SectionHeader
+            eyebrow="Why Prood"
+            title="Transparent pricing, no surprise platform fees"
+            description="We align with how modern platforms earn trust—generous launch tier, clear limits, and upgrades when you actually need them."
+          />
+          <div className="mt-10">
+            <PricingTrustSection />
+          </div>
+        </SectionContainer>
+      </SectionShell>
+
+      <SectionShell variant="muted">
         <SectionContainer>
           <SectionHeader eyebrow="FAQ" title="Common questions" />
           <dl className="mt-12 space-y-8">

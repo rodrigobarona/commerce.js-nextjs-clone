@@ -1,6 +1,6 @@
 ---
 title: For merchants
-description: What you can do on Prood today—launch a store, sell online, and grow to a custom domain.
+description: What you can do on Prood today—launch a store, sell online, and grow to higher volume and automation.
 ---
 
 Prood is built for anyone who wants to **sell products online** without assembling a fragmented stack. This page summarizes what works today and what is still on the roadmap.
@@ -11,11 +11,11 @@ Prood is built for anyone who wants to **sell products online** without assembli
 | --- | --- |
 | Register and create a store (organization) | Live |
 | Instant subdomain `{your-slug}.prood.app` | Live |
+| **One custom domain** on Free (verified DNS + SSL in production) | Live |
 | Product catalog with variants, images, inventory | Live |
 | Customer storefront (browse, cart, checkout) | Live |
 | Orders and customers in the dashboard | Live |
 | Stripe, Easypay, or Ifthenpay per store | Live |
-| Custom domain + SSL (production Vercel setup) | Live |
 | Team invites (owner, admin, member) | Live |
 | API keys for integrations | Live |
 
@@ -24,6 +24,7 @@ Prood is built for anyone who wants to **sell products online** without assembli
 | Capability | Status |
 | --- | --- |
 | Platform subscription billing (paid plans) | Planned |
+| Dashboard enforcement of plan limits | Planned |
 | Analytics dashboard | Placeholder UI |
 | Resend, SMTP, GA4 runtime | UI only today |
 | Fine-grained member permissions | Planned |
@@ -33,21 +34,23 @@ Prood is built for anyone who wants to **sell products online** without assembli
 1. [Register](https://admin.prood.app/register) on the dashboard (use your deployment URL in dev).
 2. Add a few [products](/docs/apps/dashboard/products).
 3. Connect [payments](/docs/apps/dashboard/integrations).
-4. Share your subdomain URL with test buyers.
+4. Share your subdomain URL—or [add a custom domain](/docs/apps/dashboard/domains)—with test buyers.
 5. Complete a test [checkout](/docs/apps/storefront/cart-checkout) and confirm the order in the dashboard.
 
 For the full checklist, see [Merchant onboarding](/docs/guides/merchant-onboarding).
 
-## When to upgrade (planned plans)
+## Plans (marketing)
 
-Marketing pricing on [prood.app/pricing](https://prood.app/pricing) describes intended tiers:
+Pricing on [prood.app/pricing](https://prood.app/pricing) describes intended tiers. **Custom domain is included on Free** (one verified domain). Paid plans add volume, team seats, and automation—not the ability to look on-brand.
 
-- **Free** — subdomain, limited products and orders, solo operator.
-- **Grow** — custom domain, Agent Auth, more team seats.
-- **Scale** — higher volume and priority support.
-- **Agency** — many isolated client stores.
+| Plan | Price | Highlights |
+| --- | --- | --- |
+| **Free** | $0 | 1 store, 1 custom domain, 50 products, 100 orders/mo, 1 seat |
+| **Grow** | $29/mo | Agent Auth, full API/MCP, 3 seats, 1,000 orders/mo |
+| **Scale** | $79/mo | Unlimited products & orders, 10 seats, priority support |
+| **Agency** | Custom | 10+ stores, dedicated support |
 
-Subscription billing in the dashboard is not live yet—you can run on Free while limits are being rolled out.
+Subscription billing in the dashboard is not live yet—limits are informational until enforcement rolls out. See [Billing](/docs/apps/dashboard/index#billing) in the dashboard docs.
 
 ## Related
 

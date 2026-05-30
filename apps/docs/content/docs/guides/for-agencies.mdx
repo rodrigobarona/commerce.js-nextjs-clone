@@ -10,7 +10,7 @@ Agencies use Prood to **launch many client stores** without rebuilding checkout,
 - **One store per client** — Each client is a separate Better Auth organization with Postgres row-level security.
 - **Instant staging URL** — `{client-slug}.prood.app` is available as soon as the org is created.
 - **Client-owned payments** — Stripe (or regional providers) are configured per store, not shared across clients.
-- **Custom domains** — Attach `shop.clientbrand.com` when the client goes live.
+- **Custom domains** — Each store can use its own domain (included on Free for one domain per store; more on Grow+).
 - **Team per store** — Invite client stakeholders without sharing your agency login.
 
 ## Recommended workflow
@@ -32,11 +32,11 @@ flowchart LR
 
 ## Agency plan (marketing)
 
-The [Agency pricing tier](https://prood.app/pricing) is intended for **10+ stores**, unlimited products/orders per store, and dedicated support. Contact hello@prood.com for portfolio pricing before dashboard billing is available.
+The [Agency pricing tier](https://prood.app/pricing) is intended for **10+ stores**, unlimited products/orders per store, unlimited custom domains, and dedicated support. Contact hello@prood.com for portfolio pricing before dashboard billing is available.
 
 ## Automation for power users
 
-On Grow plans and above (when billing launches), each store can use:
+On **Grow** plans and above (when billing launches), each store can use:
 
 - [REST API](/docs/api) and [MCP](/docs/apps/api/mcp) for catalog and order automation
 - [Agent Auth](/docs/apps/api/agent-auth) for approved AI assistants

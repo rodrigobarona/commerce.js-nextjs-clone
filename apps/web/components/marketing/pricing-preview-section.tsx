@@ -1,7 +1,7 @@
 import Link from "next/link"
 import { ArrowRightIcon } from "@phosphor-icons/react/dist/ssr"
 
-import { PricingCards } from "@/components/marketing/pricing-cards"
+import { PricingPreviewCards } from "@/components/marketing/pricing-plans-section"
 import { SectionContainer, SectionHeader, SectionShell } from "@/components/marketing/section"
 import { Button } from "@/components/ui/button"
 import { pricingDisclaimer } from "@/lib/site"
@@ -14,7 +14,7 @@ export function PricingPreviewSection() {
           align="center"
           eyebrow="Pricing"
           title="Start free. Upgrade when you grow."
-          description="A generous free tier for your first sales. Clear limits that nudge you toward custom domains, team seats, and AI automation."
+          description="Custom domain on Free. Pay for higher volume, team seats, and Agent Auth when billing goes live—not to launch your store."
         />
 
         <p className="mx-auto mt-6 max-w-2xl text-center text-[13px] leading-6 text-muted-foreground">
@@ -22,7 +22,7 @@ export function PricingPreviewSection() {
         </p>
 
         <div className="mt-12">
-          <PricingCards tiers={["free", "grow", "scale"]} />
+          <PricingPreviewCards />
         </div>
 
         <div className="mt-10 flex justify-center">

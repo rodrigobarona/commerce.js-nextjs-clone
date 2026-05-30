@@ -367,6 +367,9 @@ importers:
       '@prood/api-client':
         specifier: workspace:*
         version: link:../../packages/api-client
+      '@prood/billing':
+        specifier: workspace:*
+        version: link:../../packages/billing
       '@prood/commerce':
         specifier: workspace:*
         version: link:../../packages/commerce
@@ -583,6 +586,9 @@ importers:
       '@phosphor-icons/react':
         specifier: 'catalog:'
         version: 2.1.10(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
+      '@prood/billing':
+        specifier: workspace:*
+        version: link:../../packages/billing
       class-variance-authority:
         specifier: 'catalog:'
         version: 0.7.1
@@ -654,6 +660,15 @@ importers:
       openapi-typescript:
         specifier: 'catalog:'
         version: 7.13.0(typescript@5.9.3)
+      typescript:
+        specifier: 'catalog:'
+        version: 5.9.3
+
+  packages/billing:
+    devDependencies:
+      '@prood/typescript-config':
+        specifier: workspace:*
+        version: link:../typescript-config
       typescript:
         specifier: 'catalog:'
         version: 5.9.3

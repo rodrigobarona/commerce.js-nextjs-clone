@@ -26,14 +26,14 @@ const footerLinks = {
 
 export function SiteFooter() {
   return (
-    <footer className="border-t border-border/50">
+    <footer className="border-t border-border/60 bg-muted/15">
       <div className="mx-auto max-w-6xl px-6 py-20 md:py-24">
         <div className="grid gap-12 md:grid-cols-[minmax(0,1.35fr)_repeat(3,minmax(0,1fr))] md:gap-10">
           <div className="space-y-5">
             <Logo />
-            <p className="max-w-[20rem] text-[15px] leading-7 text-muted-foreground">
-              {siteConfig.tagline}. Launch on a subdomain, grow to your own domain, and sell with a
-              modern dashboard humans and AI can run together.
+            <p className="max-w-[22rem] text-[15px] leading-7 text-muted-foreground">
+              {siteConfig.tagline}. Launch free with a custom domain, run on your own payment keys,
+              and upgrade when volume, team, or automation need it—not to go live.
             </p>
           </div>
 
@@ -68,11 +68,9 @@ export function SiteFooter() {
           ))}
         </div>
 
-        <div className="mt-16 flex flex-col gap-3 border-t border-border/50 pt-8 text-[13px] text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
-          <p>© 2026 Prood. Sell your products online.</p>
-          <p className="font-mono text-[11px] tracking-[0.08em] uppercase">
-            Next.js · Neon · Vercel · Stripe
-          </p>
+        <div className="mt-16 flex flex-col gap-2 border-t border-border/50 pt-8 text-[13px] text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
+          <p>© 2026 Prood. No platform fee on your sales at launch.</p>
+          <p className="text-[12px]">hello@prood.com</p>
         </div>
       </div>
     </footer>

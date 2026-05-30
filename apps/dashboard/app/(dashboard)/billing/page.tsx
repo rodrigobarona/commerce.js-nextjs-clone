@@ -1,23 +1,39 @@
 import Link from "next/link"
 
+import { getPlanLimitsSummary, getActiveOrganizationPlan } from "@/lib/billing"
 import { PlaceholderPage } from "@/components/placeholder-page"
 
 const webUrl = process.env.NEXT_PUBLIC_WEB_URL ?? "http://localhost:3001"
 
 export const metadata = { title: "Billing" }
 
-export default function BillingPage() {
+export default async function BillingPage() {
+  const plan = await getActiveOrganizationPlan()
+  const planName = plan?.planName ?? "Free"
+  const limits = getPlanLimitsSummary(plan?.planId ?? "free")
+
   return (
     <PlaceholderPage
       title="Billing"
       description="Manage your platform subscription and payment method."
     >
-      <div className="mt-6 rounded-lg border border-border bg-muted/30 px-4 py-4 text-sm text-muted-foreground">
-        <p>
-          You are on the <strong className="text-foreground">Free</strong> plan. Subscription billing
-          is coming soon.
-        </p>
-        <p className="mt-2">
+      <div className="mt-6 space-y-4">
+        <div className="rounded-lg border border-border bg-muted/30 px-4 py-4 text-sm text-muted-foreground">
+          <p>
+            You are on the <strong className="text-foreground">{planName}</strong> plan
+            {plan?.planStatus && plan.planStatus !== "active" ? (
+              <> ({plan.planStatus})</>
+            ) : null}
+            . Subscription billing is coming soon—you can use all features while limits are
+            rolled out.
+          </p>
+          <ul className="mt-3 list-inside list-disc space-y-1 text-[13px]">
+            {limits.map((line) => (
+              <li key={line}>{line}</li>
+            ))}
+          </ul>
+        </div>
+        <p className="text-sm text-muted-foreground">
           <Link
             href={`${webUrl}/pricing`}
             className="font-medium text-foreground underline-offset-4 hover:underline"

@@ -38,8 +38,8 @@ export function StorefrontSection() {
             <h3 className="text-[17px] font-semibold tracking-[-0.02em]">Custom domain</h3>
             <p className="font-mono text-[15px] text-muted-foreground">shop.yourbrand.com</p>
             <p className="text-[14px] leading-7 text-muted-foreground">
-              Available on Grow and above. Add DNS from the dashboard; SSL provisioning via Vercel when
-              configured in production.
+              One custom domain included on Free. Add DNS from the dashboard; SSL provisioning via Vercel
+              when configured in production.
             </p>
           </BentoCell>
         </BentoGrid>

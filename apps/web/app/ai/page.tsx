@@ -1,12 +1,13 @@
 import type { Metadata } from "next"
 import Link from "next/link"
 
-import { AgentsSection } from "@/components/marketing/agents-section"
+import { AgentAuthMock } from "@/components/marketing/mocks/agent-auth-mock"
+import { SplitShowcase } from "@/components/marketing/split-showcase"
 import { CtaSection } from "@/components/marketing/cta-section"
 import { MarketingCard, SectionContainer, SectionHeader, SectionShell } from "@/components/marketing/section"
 import { MarketingPageShell } from "@/components/marketing-page-shell"
 import { Button } from "@/components/ui/button"
-import { siteConfig } from "@/lib/site"
+import { agentExamples, siteConfig } from "@/lib/site"
 
 export const metadata: Metadata = {
   title: "AI & agents",
@@ -35,19 +36,21 @@ export default function AiPage() {
     <MarketingPageShell>
       <SectionShell variant="glow">
         <SectionContainer className="pt-24 md:pt-32">
-          <SectionHeader
+          <SplitShowcase
             eyebrow="AI & automation"
             title="Commerce your humans and agents can share"
-            description="Prood is not an AI gimmick—it is a real store platform with APIs designed so assistants can help list orders, manage catalog, and automate workflows when you approve them. Available on Grow plans and above."
-          />
-          <div className="mt-10 flex flex-wrap gap-3">
-            <Button variant="brand" asChild>
-              <Link href={siteConfig.registerUrl}>Start free</Link>
-            </Button>
-            <Button variant="outline" asChild>
-              <Link href={`${siteConfig.docsUrl}/docs/apps/api/mcp`}>MCP documentation</Link>
-            </Button>
-          </div>
+            description="Prood is a real store platform with APIs designed so assistants can help list orders, manage catalog, and automate workflows when you approve them. Available on Grow plans and above."
+            visual={<AgentAuthMock />}
+          >
+            <div className="flex flex-wrap gap-3">
+              <Button variant="brand" asChild>
+                <Link href={siteConfig.registerUrl}>Start free</Link>
+              </Button>
+              <Button variant="outline" asChild>
+                <Link href={`${siteConfig.docsUrl}/docs/apps/api/mcp`}>MCP documentation</Link>
+              </Button>
+            </div>
+          </SplitShowcase>
         </SectionContainer>
       </SectionShell>
 
@@ -69,20 +72,24 @@ export default function AiPage() {
         </SectionContainer>
       </SectionShell>
 
-      <AgentsSection />
-
       <SectionShell variant="muted">
         <SectionContainer>
-          <MarketingCard>
-            <h3 className="text-[16px] font-semibold">Approval model</h3>
-            <p className="mt-3 text-[14px] leading-7 text-muted-foreground">
-              Read-only operations can auto-grant. Creating or changing products, orders, and other sensitive
-              data requires explicit merchant approval in Agent Auth—so automation stays under your control.
-            </p>
-            <Button className="mt-6" variant="outline" asChild>
-              <Link href={`${siteConfig.docsUrl}/docs/apps/api/agent-auth`}>Agent Auth guide</Link>
-            </Button>
-          </MarketingCard>
+          <SectionHeader
+            eyebrow="Examples"
+            title="What agents can do"
+            description="Read-only operations can auto-grant. Sensitive mutations require explicit approval."
+          />
+          <ul className="mt-10 space-y-6">
+            {agentExamples.map((ex) => (
+              <li key={ex.title} className="marketing-panel p-6">
+                <h3 className="text-[16px] font-semibold">{ex.title}</h3>
+                <p className="mt-2 text-[14px] leading-7 text-muted-foreground">{ex.description}</p>
+              </li>
+            ))}
+          </ul>
+          <Button className="mt-8" variant="outline" asChild>
+            <Link href={`${siteConfig.docsUrl}/docs/apps/api/agent-auth`}>Agent Auth guide</Link>
+          </Button>
         </SectionContainer>
       </SectionShell>
 

@@ -5,6 +5,7 @@ import { useState } from "react"
 import { ListIcon, XIcon } from "@phosphor-icons/react"
 
 import { Logo } from "@/components/logo"
+import { ThemeToggle } from "@/components/theme-toggle"
 import { Button } from "@/components/ui/button"
 import { navLinks, siteConfig } from "@/lib/site"
 import { cn } from "@/lib/utils"
@@ -40,7 +41,8 @@ export function SiteHeader({ className }: { className?: string }) {
           ))}
         </nav>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1 sm:gap-2">
+          <ThemeToggle />
           <Button variant="ghost" size="sm" className="hidden text-[13px] sm:inline-flex" asChild>
             <Link href={`${siteConfig.docsUrl}/docs`}>Docs</Link>
           </Button>
