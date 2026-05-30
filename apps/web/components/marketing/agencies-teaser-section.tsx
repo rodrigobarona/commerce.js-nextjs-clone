@@ -1,6 +1,7 @@
 import Link from "next/link"
 import { ArrowRightIcon } from "@phosphor-icons/react/dist/ssr"
 
+import { MockFrame } from "@/components/marketing/mocks/mock-chrome"
 import { MultiStoreMock } from "@/components/marketing/mocks/multi-store-mock"
 import { SectionContainer, SectionHeader, SectionShell } from "@/components/marketing/section"
 import { Button } from "@/components/ui/button"
@@ -31,7 +32,9 @@ export function AgenciesTeaserSection() {
               </Link>
             </Button>
           </div>
-          <MultiStoreMock />
+          <MockFrame>
+            <MultiStoreMock className="shadow-none" />
+          </MockFrame>
         </div>
       </SectionContainer>
     </SectionShell>

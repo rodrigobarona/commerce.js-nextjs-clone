@@ -12,9 +12,15 @@ export function PillarsSection() {
           description="Everything you need to sell online—without assembling checkout, admin, and domains from separate vendors."
         />
 
-        <div className="mt-12 grid gap-6 md:grid-cols-3">
-          {pillars.map((pillar) => (
-            <article key={pillar.title} className="marketing-panel p-6 md:p-7">
+        <div className="mt-12 grid gap-5 md:grid-cols-3 md:gap-6">
+          {pillars.map((pillar, index) => (
+            <article
+              key={pillar.title}
+              className="marketing-panel marketing-panel-interactive p-6 md:p-7"
+            >
+              <span className="geo-step-index mb-5" aria-hidden>
+                {String(index + 1).padStart(2, "0")}
+              </span>
               <h3 className="text-[17px] font-semibold tracking-[-0.02em]">{pillar.title}</h3>
               <p className="mt-3 text-[14px] leading-7 text-muted-foreground">{pillar.description}</p>
             </article>

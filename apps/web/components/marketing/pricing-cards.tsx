@@ -26,13 +26,14 @@ export function PricingTierCard({ tier }: { tier: MarketingTier }) {
       className={cn("flex flex-col", tier.highlighted && "outline outline-1 outline-foreground/15")}
     >
       {tier.badge ? (
-        <span className="mb-4 inline-flex w-fit border border-border bg-muted px-2.5 py-0.5 font-mono text-[10px] font-medium tracking-wide text-brand uppercase">
+        <span className="marketing-badge mb-4 w-fit py-1 text-[10px] font-semibold tracking-wide text-brand uppercase">
+          <span className="marketing-badge-dot" aria-hidden />
           {tier.badge}
         </span>
       ) : null}
       <h3 className="text-[18px] font-semibold tracking-[-0.02em]">{tier.name}</h3>
       <p className="mt-2 flex flex-wrap items-baseline gap-1">
-        <span className="text-[32px] font-semibold tracking-[-0.04em]">{tier.price}</span>
+        <span className="font-display text-[32px] font-medium tracking-[-0.04em]">{tier.price}</span>
         <span className="text-[13px] text-muted-foreground">{tier.period}</span>
       </p>
       {tier.annualNote ? (
@@ -74,7 +75,7 @@ export function PricingCardsGrid({ tiers }: { tiers: MarketingTier[] }) {
 
 export function PricingFreeBand({ tier }: { tier: MarketingTier }) {
   return (
-    <div className="surface-card rounded-2xl p-6 md:p-8">
+    <div className="marketing-panel rounded-2xl p-6 md:p-8">
       <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
         <div className="max-w-2xl">
           <p className="font-mono text-[11px] font-medium tracking-wide text-brand uppercase">

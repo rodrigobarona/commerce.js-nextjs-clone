@@ -1,3 +1,4 @@
+import { MockFrame } from "@/components/marketing/mocks/mock-chrome"
 import { CheckoutMock } from "@/components/marketing/mocks/checkout-mock"
 import { DomainsMock } from "@/components/marketing/mocks/domains-mock"
 import { StorefrontCatalogMock } from "@/components/marketing/mocks/storefront-catalog-mock"
@@ -27,7 +28,9 @@ export function HowItWorksSection() {
                   <h3 className="text-[17px] font-semibold tracking-[-0.02em]">{item.title}</h3>
                   <p className="mt-2 text-[14px] leading-7 text-muted-foreground">{item.description}</p>
                 </div>
-                <Mock className="mt-auto" />
+                <MockFrame className="mt-auto">
+                  <Mock className="shadow-none" />
+                </MockFrame>
               </li>
             )
           })}

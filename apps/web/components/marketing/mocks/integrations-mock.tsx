@@ -6,16 +6,22 @@ export function IntegrationsMock({ className }: { className?: string }) {
   return (
     <MockChrome title="Integrations" url="dashboard.prood.app/integrations" className={className}>
       <p className="sr-only">Example payment integrations per store</p>
-      <ul className="divide-y divide-border/60 p-1" aria-hidden>
-        {mockIntegrations.map((item) => (
-          <li key={item.id} className="flex items-center justify-between px-4 py-3">
-            <span className="text-[13px] font-medium">{item.name}</span>
+      <ul className="divide-y divide-border/50 p-1" aria-hidden>
+        {mockIntegrations.map((item, index) => (
+          <li
+            key={item.id}
+            className={cn(
+              "flex items-center justify-between px-4 py-3.5",
+              index === 0 && "bg-brand/[0.03]"
+            )}
+          >
+            <span className="text-[13px] font-semibold tracking-[-0.02em]">{item.name}</span>
             <span
               className={cn(
-                "rounded-full px-2 py-0.5 text-[10px] font-medium",
+                "rounded-full px-2.5 py-0.5 text-[10px] font-medium ring-1",
                 item.status === "Connected"
-                  ? "bg-brand/10 text-brand"
-                  : "bg-muted text-muted-foreground"
+                  ? "bg-brand/12 text-brand ring-brand/20"
+                  : "bg-muted text-muted-foreground ring-border/80"
               )}
             >
               {item.status}

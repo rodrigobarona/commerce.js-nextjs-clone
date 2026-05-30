@@ -1,5 +1,6 @@
 import Link from "next/link"
 
+import { MockFrame } from "@/components/marketing/mocks/mock-chrome"
 import { AgentAuthMock } from "@/components/marketing/mocks/agent-auth-mock"
 import { SplitShowcase } from "@/components/marketing/split-showcase"
 import { SectionContainer, SectionHeader, SectionShell } from "@/components/marketing/section"
@@ -44,8 +45,10 @@ export function AgentsSection({ compact = false }: { compact?: boolean }) {
           title="Commerce your humans and agents can share"
           description="Agent Auth, MCP, and REST on Grow plans and above—scoped per store with approval for mutations."
         />
-        <div className="mt-12">
-          <AgentAuthMock />
+        <div className="mt-12 max-w-xl">
+          <MockFrame>
+            <AgentAuthMock className="shadow-none" />
+          </MockFrame>
         </div>
       </SectionContainer>
     </SectionShell>

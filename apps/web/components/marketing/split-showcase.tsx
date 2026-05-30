@@ -1,3 +1,4 @@
+import { MockFrame } from "@/components/marketing/mocks/mock-chrome"
 import { cn } from "@/lib/utils"
 
 export function SplitShowcase({
@@ -7,6 +8,7 @@ export function SplitShowcase({
   description,
   children,
   visual,
+  framed = true,
   className,
 }: {
   reverse?: boolean
@@ -15,8 +17,15 @@ export function SplitShowcase({
   description: string
   children?: React.ReactNode
   visual: React.ReactNode
+  framed?: boolean
   className?: string
 }) {
+  const visualNode = framed ? (
+    <MockFrame className="w-full">{visual}</MockFrame>
+  ) : (
+    visual
+  )
+
   return (
     <div
       className={cn(
@@ -31,7 +40,7 @@ export function SplitShowcase({
         <p className="section-description mt-4">{description}</p>
         {children ? <div className="mt-8">{children}</div> : null}
       </div>
-      <div className="min-w-0">{visual}</div>
+      <div className="min-w-0">{visualNode}</div>
     </div>
   )
 }

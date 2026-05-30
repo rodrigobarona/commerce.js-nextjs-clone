@@ -12,15 +12,17 @@ export function MerchantPainSection() {
           description="Modern platforms give you the precious things early—then charge when volume, team, or automation actually matter."
         />
 
-        <div className="mt-14 grid gap-8 lg:grid-cols-2">
+        <div className="mt-14 grid gap-6 lg:grid-cols-2 lg:gap-8">
           <div className="marketing-panel p-6 md:p-8">
             <h3 className="text-[15px] font-semibold text-muted-foreground">Without a focused stack</h3>
-            <ul className="mt-6 space-y-6">
+            <ul className="marketing-list-divider mt-6">
               {merchantPainItems.map((item) => (
                 <li key={item.title}>
                   <div className="flex flex-wrap items-baseline justify-between gap-2">
-                    <p className="text-[15px] font-semibold">{item.title}</p>
-                    <p className="font-mono text-[11px] text-destructive/90">{item.timeCost}</p>
+                    <p className="text-[15px] font-semibold tracking-[-0.02em]">{item.title}</p>
+                    <p className="rounded-md bg-destructive/8 px-2 py-0.5 font-mono text-[11px] text-destructive/90">
+                      {item.timeCost}
+                    </p>
                   </div>
                   <p className="mt-1 text-[14px] leading-7 text-muted-foreground">{item.description}</p>
                 </li>
@@ -28,14 +30,16 @@ export function MerchantPainSection() {
             </ul>
           </div>
 
-          <div className="marketing-panel border-brand/20 bg-brand/5 p-6 md:p-8">
+          <div className="marketing-panel border-brand/25 bg-gradient-to-br from-brand/8 via-card to-card p-6 shadow-[var(--marketing-shadow)] md:p-8">
             <h3 className="text-[15px] font-semibold">With Prood</h3>
-            <ul className="mt-6 space-y-6">
+            <ul className="marketing-list-divider mt-6">
               {merchantGainItems.map((item) => (
                 <li key={item.title}>
                   <div className="flex flex-wrap items-baseline justify-between gap-2">
-                    <p className="text-[15px] font-semibold">{item.title}</p>
-                    <p className="font-mono text-[11px] text-brand">{item.timeCost}</p>
+                    <p className="text-[15px] font-semibold tracking-[-0.02em]">{item.title}</p>
+                    <p className="rounded-md bg-brand/12 px-2 py-0.5 font-mono text-[11px] text-brand">
+                      {item.timeCost}
+                    </p>
                   </div>
                   <p className="mt-1 text-[14px] leading-7 text-muted-foreground">{item.description}</p>
                 </li>

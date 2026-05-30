@@ -62,12 +62,12 @@ function ProviderLogoRow({
       {providers.map((provider) => (
         <span
           key={provider.name}
-          className="rounded-full border border-border bg-muted/40 px-3 py-1.5 text-[13px] font-medium"
+          className="marketing-chip px-3 py-1.5 text-[13px] font-medium"
         >
           {provider.name}
         </span>
       ))}
-      <span className="rounded-full border border-dashed border-border px-3 py-1.5 text-[13px] text-muted-foreground">
+      <span className="rounded-full border border-dashed border-border/80 bg-transparent px-3 py-1.5 text-[13px] text-muted-foreground">
         More coming soon
       </span>
     </div>

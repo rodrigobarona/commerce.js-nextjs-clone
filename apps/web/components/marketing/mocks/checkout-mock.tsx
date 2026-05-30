@@ -1,4 +1,4 @@
-import { CreditCardIcon } from "@phosphor-icons/react/dist/ssr"
+import { CreditCardIcon, LockIcon } from "@phosphor-icons/react/dist/ssr"
 
 import { MockChrome } from "@/components/marketing/mocks/mock-chrome"
 
@@ -7,23 +7,28 @@ export function CheckoutMock({ className }: { className?: string }) {
     <MockChrome title="Checkout" url="checkout.prood.app" className={className}>
       <p className="sr-only">Example checkout with Stripe payment</p>
       <div className="space-y-4 p-5" aria-hidden>
-        <div className="flex items-center justify-between border-b border-border/60 pb-4">
+        <div className="flex items-center justify-between border-b border-border/50 pb-4">
           <span className="text-[13px] font-medium">Order total</span>
-          <span className="text-[15px] font-semibold">€86.00</span>
+          <span className="font-display text-[16px] font-medium tracking-[-0.02em]">€86.00</span>
         </div>
-        <div className="rounded-lg border border-border bg-muted/30 p-4">
+        <div className="rounded-xl border border-border/80 bg-muted/25 p-4 shadow-sm">
           <div className="flex items-center gap-3">
-            <div className="flex size-9 items-center justify-center rounded-md bg-background border border-border">
+            <div className="flex size-9 items-center justify-center rounded-lg border border-border bg-card shadow-sm">
               <CreditCardIcon className="size-4 text-brand" weight="duotone" />
             </div>
             <div>
-              <p className="text-[13px] font-medium">Stripe</p>
+              <p className="text-[13px] font-semibold tracking-[-0.02em]">Stripe</p>
               <p className="text-[11px] text-muted-foreground">Your keys · encrypted per store</p>
             </div>
           </div>
         </div>
-        <div className="h-9 rounded-lg bg-foreground/90" />
-        <p className="text-center text-[11px] text-muted-foreground">No Prood fee on this sale</p>
+        <div className="flex h-10 items-center justify-center gap-2 rounded-xl bg-foreground text-[13px] font-medium text-background shadow-sm">
+          Pay €86.00
+        </div>
+        <p className="flex items-center justify-center gap-1.5 text-center text-[11px] text-muted-foreground">
+          <LockIcon className="size-3" weight="bold" aria-hidden />
+          No Prood fee on this sale
+        </p>
       </div>
     </MockChrome>
   )

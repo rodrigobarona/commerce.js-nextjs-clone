@@ -19,7 +19,7 @@ export function SectionShell({
       id={id}
       className={cn(
         "relative scroll-mt-16 overflow-hidden",
-        variant === "muted" && "border-y border-border/50 bg-muted/15",
+        variant === "muted" && "marketing-section-muted",
         className
       )}
     >
