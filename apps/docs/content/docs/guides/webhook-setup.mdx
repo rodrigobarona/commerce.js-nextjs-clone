@@ -37,7 +37,7 @@ sequenceDiagram
 In Stripe Dashboard → Developers → Webhooks → Add endpoint:
 
 ```
-Endpoint URL: https://pay.example.com/api/webhooks/stripe/{orgId}
+Endpoint URL: https://checkout.example.com/api/webhooks/stripe/{orgId}
 ```
 
 Replace `{orgId}` with the merchant's organization ID (e.g. `org_demo`).
@@ -76,7 +76,7 @@ stripe trigger payment_intent.succeeded
 Log in to Easypay merchant panel → Settings → Notifications:
 
 ```
-Notification URL: https://pay.example.com/api/webhooks/easypay/{orgId}
+Notification URL: https://checkout.example.com/api/webhooks/easypay/{orgId}
 ```
 
 ### 2. Events
@@ -98,7 +98,7 @@ Use `EASYPAY_BASE_URL=https://api.test.easypay.pt` and configure test webhook UR
 Log in to Ifthenpay backoffice → Configurações → Callback URL:
 
 ```
-Callback URL: https://pay.example.com/api/webhooks/ifthenpay/{orgId}
+Callback URL: https://checkout.example.com/api/webhooks/ifthenpay/{orgId}
 ```
 
 ### 2. Anti-phishing verification
@@ -110,9 +110,9 @@ Ifthenpay includes an anti-phishing key in webhook payloads. The provider verifi
 Each merchant gets their own webhook URL with their org ID:
 
 ```
-https://pay.example.com/api/webhooks/stripe/org_merchant_a
-https://pay.example.com/api/webhooks/stripe/org_merchant_b
-https://pay.example.com/api/webhooks/easypay/org_merchant_a
+https://checkout.example.com/api/webhooks/stripe/org_merchant_a
+https://checkout.example.com/api/webhooks/stripe/org_merchant_b
+https://checkout.example.com/api/webhooks/easypay/org_merchant_a
 ```
 
 This ensures webhook verification uses the correct tenant's stored secret.
@@ -120,7 +120,7 @@ This ensures webhook verification uses the correct tenant's stored secret.
 For platform-wide (env-only) webhooks, use `_` as the org:
 
 ```
-https://pay.example.com/api/webhooks/stripe/_
+https://checkout.example.com/api/webhooks/stripe/_
 ```
 
 ## Webhook verification flow

@@ -13,6 +13,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@prood/ui/components/select"
+import { assertTeamSeatAvailableAction } from "@/app/(dashboard)/team/actions"
 import { organization } from "@/lib/auth/client"
 
 export function InviteMemberForm() {
@@ -24,6 +25,11 @@ export function InviteMemberForm() {
   function handleSubmit(event: React.FormEvent) {
     event.preventDefault()
     startTransition(async () => {
+      const limit = await assertTeamSeatAvailableAction()
+      if (limit.error) {
+        toast.error(limit.error)
+        return
+      }
       const { error } = await organization.inviteMember({
         email,
         role: role as "member" | "admin" | "owner",

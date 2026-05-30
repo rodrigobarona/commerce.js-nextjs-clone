@@ -1,18 +1,11 @@
 // ---------------------------------------------------------------------------
-// Customers domain — registration, auth, and address book
+// Customers domain — address book and profile fields (auth via Better Auth)
 // ---------------------------------------------------------------------------
 
-import { hashSync, compareSync } from 'bcrypt-ts'
-import type {
-  Customer,
-  Address,
-  RegisterInput,
-  UpdateCustomerInput,
-} from '@prood/types'
+import { CommerceError } from '@prood/types'
+import type { Customer, Address, UpdateCustomerInput } from '@prood/types'
 import {
-  findCustomerByEmail,
   findCustomerById,
-  createCustomer as dbCreateCustomer,
   updateCustomer as dbUpdateCustomer,
   findAddresses,
   findAddressById,
@@ -22,122 +15,107 @@ import {
 } from '../database/index.js'
 
 export function createCustomersDomain() {
-  /** Map DB row to Customer type */
-  async function mapCustomer(row: any): Promise<Customer> {
-    const addresses = await findAddresses(row.id)
+  let currentCustomerId: string | null = null
 
+  async function mapCustomer(row: {
+    id: string
+    firstName?: string | null
+    lastName?: string | null
+    phone?: string | null
+    defaultAddressId?: string | null
+    createdAt: Date | string
+    updatedAt: Date | string
+    userEmail?: string | null
+  }): Promise<Customer> {
+    const addresses = await findAddresses(row.id)
     return {
       id: row.id,
-      email: row.email,
+      email: row.userEmail ?? null,
       firstName: row.firstName ?? null,
       lastName: row.lastName ?? null,
       phone: row.phone ?? null,
       addresses: addresses.map(mapAddress),
       defaultAddressId: row.defaultAddressId ?? null,
-      createdAt: row.createdAt,
-      updatedAt: row.updatedAt,
+      createdAt: row.createdAt instanceof Date ? row.createdAt.toISOString() : row.createdAt,
+      updatedAt: row.updatedAt instanceof Date ? row.updatedAt.toISOString() : row.updatedAt,
     }
   }
 
-  function mapAddress(row: any): Address {
+  function mapAddress(row: Record<string, unknown>): Address {
     return {
-      id: row.id,
-      firstName: row.firstName,
-      lastName: row.lastName,
-      phone: row.phone ?? null,
-      street: row.street,
-      street2: row.street2 ?? null,
-      city: row.city,
-      state: row.state ?? null,
-      country: row.country,
-      postalCode: row.postalCode ?? null,
-      district: row.district ?? null,
-      nationalAddress: row.nationalAddress ?? null,
-      additionalNumber: row.additionalNumber ?? null,
-      isDefault: Boolean(row.isDefault),
+      id: String(row.id),
+      firstName: String(row.firstName ?? row.first_name),
+      lastName: String(row.lastName ?? row.last_name),
+      phone: (row.phone as string | null) ?? null,
+      street: String(row.street),
+      street2: (row.street2 as string | null) ?? null,
+      city: String(row.city),
+      state: (row.state as string | null) ?? null,
+      country: String(row.country),
+      postalCode: (row.postalCode as string | null) ?? (row.postal_code as string | null) ?? null,
+      district: (row.district as string | null) ?? null,
+      nationalAddress: (row.nationalAddress as string | null) ?? (row.national_address as string | null) ?? null,
+      additionalNumber: (row.additionalNumber as string | null) ?? (row.additional_number as string | null) ?? null,
+      isDefault: Boolean(row.isDefault ?? row.is_default),
     }
   }
 
-  // Track current customer (per-instance state — app manages sessions)
-  let currentCustomerId: string | null = null
+  function notSupported(method: string): never {
+    throw new CommerceError(
+      `${method} is handled by Better Auth — not the commerce adapter`,
+      'NOT_SUPPORTED',
+    )
+  }
 
   return {
-    async login(email: string, password: string): Promise<Customer> {
-      const row = await findCustomerByEmail(email)
-
-      if (!row) throw new Error('Invalid email or password')
-
-      const valid = compareSync(password, row.passwordHash)
-      if (!valid) throw new Error('Invalid email or password')
-
-      currentCustomerId = row.id
-      return mapCustomer(row)
+    login(_email: string, _password: string): Promise<Customer> {
+      return notSupported('login')
     },
 
-    async register(input: RegisterInput): Promise<Customer> {
-      // Check for existing email
-      const existing = await findCustomerByEmail(input.email)
-      if (existing) throw new Error('Email already registered')
-
-      const id = crypto.randomUUID()
-      const passwordHash = hashSync(input.password, 10)
-
-      await dbCreateCustomer({
-        id,
-        email: input.email,
-        passwordHash,
-        firstName: input.firstName ?? null,
-        lastName: input.lastName ?? null,
-        phone: input.phone ?? null,
-      })
-
-      currentCustomerId = id
-      const row = await findCustomerById(id)
-      return mapCustomer(row)
+    register(): Promise<Customer> {
+      return notSupported('register')
     },
 
     async getCustomer(): Promise<Customer> {
-      if (!currentCustomerId) throw new Error('Not authenticated')
+      if (!currentCustomerId) throw new CommerceError('Not authenticated', 'UNAUTHORIZED')
       const row = await findCustomerById(currentCustomerId)
-      if (!row) throw new Error('Customer not found')
+      if (!row) throw new CommerceError('Customer not found', 'NOT_FOUND')
       return mapCustomer(row)
     },
 
     async updateCustomer(input: UpdateCustomerInput): Promise<Customer> {
-      if (!currentCustomerId) throw new Error('Not authenticated')
+      if (!currentCustomerId) throw new CommerceError('Not authenticated', 'UNAUTHORIZED')
 
-      const updates: any = {}
-      if (input.email) updates.email = input.email
-      if (input.firstName) updates.firstName = input.firstName
-      if (input.lastName) updates.lastName = input.lastName
-      if (input.phone) updates.phone = input.phone
+      const updates: Record<string, unknown> = {}
+      if (input.firstName !== undefined) updates.firstName = input.firstName
+      if (input.lastName !== undefined) updates.lastName = input.lastName
+      if (input.phone !== undefined) updates.phone = input.phone
 
       await dbUpdateCustomer(currentCustomerId, updates)
       return this.getCustomer()
     },
 
-    async logout(): Promise<void> {
+    logout(): Promise<void> {
       currentCustomerId = null
+      return Promise.resolve()
     },
 
-    async forgotPassword(_email: string): Promise<void> {
-      // Stub — in a real implementation, this would send an email
+    forgotPassword(): Promise<void> {
+      return notSupported('forgotPassword')
     },
 
-    async resetPassword(_token: string, _newPassword: string): Promise<void> {
-      // Stub — in a real implementation, this would verify token and update password
+    resetPassword(): Promise<void> {
+      return notSupported('resetPassword')
     },
-
-    // ---- Address Book ----
 
     async getAddresses(): Promise<Address[]> {
-      if (!currentCustomerId) throw new Error('Not authenticated')
+      if (!currentCustomerId) throw new CommerceError('Not authenticated', 'UNAUTHORIZED')
       const rows = await findAddresses(currentCustomerId)
       return rows.map(mapAddress)
     },
 
     async addAddress(address: Omit<Address, 'id'>): Promise<Address> {
-      if (!currentCustomerId) throw new Error('Not authenticated')
+      if (!currentCustomerId) throw new CommerceError('Not authenticated', 'UNAUTHORIZED')
       const id = crypto.randomUUID()
 
       await dbCreateAddress({
@@ -158,17 +136,16 @@ export function createCustomersDomain() {
         isDefault: address.isDefault ?? false,
       })
 
-      // If this is the default address, update customer record
       if (address.isDefault) {
         await dbUpdateCustomer(currentCustomerId, { defaultAddressId: id })
       }
 
       const row = await findAddressById(id)
-      return mapAddress(row)
+      return mapAddress(row!)
     },
 
     async updateAddress(addressId: string, address: Partial<Omit<Address, 'id'>>): Promise<Address> {
-      const updates: any = {}
+      const updates: Record<string, unknown> = {}
       if (address.firstName != null) updates.firstName = address.firstName
       if (address.lastName != null) updates.lastName = address.lastName
       if (address.phone !== undefined) updates.phone = address.phone
@@ -182,16 +159,14 @@ export function createCustomersDomain() {
       if (address.isDefault != null) updates.isDefault = address.isDefault
 
       await dbUpdateAddress(addressId, updates)
-
       const row = await findAddressById(addressId)
-      return mapAddress(row)
+      return mapAddress(row!)
     },
 
     async deleteAddress(addressId: string): Promise<void> {
       await dbDeleteAddress(addressId)
     },
 
-    /** Set the current customer ID (for adapter-level auth management) */
     setCurrentCustomer(id: string | null) {
       currentCustomerId = id
     },

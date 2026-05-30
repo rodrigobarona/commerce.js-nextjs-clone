@@ -1,26 +1,20 @@
 # Plan entitlement enforcement
 
-This document describes where limits will be enforced when platform billing launches. **Hard blocks are not active until billing ships**—use dashboard warnings first, then enforcement.
-
-## Grandfathering (rollout)
-
-- Organizations with **more than one verified custom domain** on Free at enforcement start: keep domains active; show upgrade prompt for adding new domains.
-- Organizations above Free product/order/seat counts: **soft warning** for 30 days, then hard block on new creates (not deletion of existing data).
-- All existing orgs default to `plan_id = 'free'` via migration.
+Runtime limits from `@prood/billing` are enforced at the insertion points below. All organizations default to `plan_id = 'free'` until Stripe billing ships.
 
 ## Insertion points
 
 | Entitlement | Check | Location |
 | --- | --- | --- |
-| `maxProducts` | Count products before insert | `packages/platform` catalog `createProduct` (or dashboard action wrapping it) |
-| `maxOrdersPerMonth` | Count orders in calendar month before checkout complete | Order placement in `packages/platform` checkout/orders domain |
-| `maxTeamSeats` | Count members before invite accept | Dashboard team invite flow / Better Auth `member` hooks |
-| `maxCustomDomains` | Count verified domains before add | `apps/dashboard/lib/domains.ts` → `addDomainAction` |
+| `maxProducts` | Count products before insert | `apps/api/app/v1/admin/products/route.ts` |
+| `maxOrdersPerMonth` | Count orders in UTC calendar month before place-order | `apps/api/app/v1/carts/[id]/place-order/route.ts` |
+| `maxTeamSeats` | Count members + pending invitations before invite | `apps/dashboard/app/(dashboard)/team/actions.ts` |
+| `maxCustomDomains` | Count domains before add | `apps/dashboard/app/(dashboard)/domains/actions.ts` |
 | `maxStores` | Count orgs user owns or agency portfolio | Org creation + agency switcher (future) |
-| `agentAuthEnabled` | Block capability grants / agent JWT issuance | `apps/api` Agent Auth plugin configuration |
-| `apiWriteEnabled` | Restrict API key scopes to read-only on Free | `apps/api/lib/resolve-caller.ts` + API key creation |
+| `agentAuthEnabled` | Block agent JWT when disabled | `apps/api/lib/resolve-caller.ts` |
+| `apiWriteEnabled` | Restrict API keys with `admin` scope on Free | `apps/api/lib/resolve-caller.ts` |
 | `removeBranding` | Storefront/dashboard theme flag | Storefront layout when Prood branding is added |
-| `customAdminDomain` (planned) | Block admin white-label domain setup on Free/Grow | Dashboard domains UI — Scale / Agency only; see [Multi-tenant platform](/docs/architecture/multi-tenant) |
+| `customAdminDomain` (planned) | Block admin white-label domain setup on Free/Grow | Dashboard domains UI — Scale / Agency only |
 
 ## Reading plan from database
 
@@ -29,6 +23,8 @@ import { getEntitlements, type PlanId } from "@prood/billing"
 // organization.planId from auth schema (default 'free')
 const limits = getEntitlements(organization.planId as PlanId)
 ```
+
+Shared helpers: `apps/api/lib/enforcement.ts`, `packages/commerce/src/enforcement.ts` (`assertLimit`, `assertFeature`).
 
 ## Stripe (future)
 
@@ -42,5 +38,5 @@ const limits = getEntitlements(organization.planId as PlanId)
 | --- | --- |
 | `@prood/billing` entitlements | Done |
 | `organization.plan_id` columns | Done (schema) |
-| Runtime enforcement | Not started |
+| Runtime enforcement | Done (limits above) |
 | Stripe Billing | Not started |

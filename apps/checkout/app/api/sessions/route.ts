@@ -1,10 +1,11 @@
 import { NextResponse } from "next/server"
 import { z } from "zod"
-import { createCheckoutSession } from "@prood/checkout-host"
+import { buildCheckoutSessionUrl, createCheckoutSession, resolveCheckoutBaseUrl } from "@prood/checkout-host"
 import { errorResponse, requireApiSecret } from "@/lib/api"
 
 const createSchema = z.object({
   orderId: z.string().optional(),
+  customerId: z.string().min(1).optional(),
   amount: z.number().positive(),
   currency: z.string().min(3).max(3),
   returnUrl: z.string().url().optional(),
@@ -30,10 +31,9 @@ export async function POST(request: Request) {
     const body = createSchema.parse(await request.json())
     const result = await createCheckoutSession(body)
 
-    const checkoutUrl = process.env.CHECKOUT_URL ?? "http://localhost:3004"
     return NextResponse.json({
       ...result,
-      checkoutUrl: `${checkoutUrl}/pay/${result.sessionId}`,
+      checkoutUrl: buildCheckoutSessionUrl(resolveCheckoutBaseUrl(), result.sessionId),
     })
   } catch (err) {
     return errorResponse(err)

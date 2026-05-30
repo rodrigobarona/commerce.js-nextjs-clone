@@ -99,17 +99,12 @@ export async function startCheckout(input: StartCheckoutInput): Promise<Checkout
       },
       body: JSON.stringify({
         orderId: order.id,
+        customerId: order.customerId,
         amount: priceToMajorAmount(order.totals.total),
         currency: order.totals.total.currency,
         returnUrl: `${storefrontOrigin}/order-confirmation?orderId=${order.id}`,
         providerId,
         tenantId,
-        customerInfo: {
-          email: input.email,
-          firstName: address.firstName,
-          lastName: address.lastName,
-          phone: address.phone ?? undefined,
-        },
         fulfillment: "none",
       }),
     })

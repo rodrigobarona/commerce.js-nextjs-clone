@@ -65,26 +65,10 @@ let instancePromise: Promise<CommerceInstance> | null = null
 
 function create(): Promise<CommerceInstance> {
   const config = getCommerceConfig()
-
-  switch (config.adapter) {
-    case 'platform':
-      return createPlatformAdapter({
-        connectionString: config.databaseUrl,
-        currency: config.currency,
-      })
-    case 'medusa':
-    case 'salla':
-      // The registry is intentionally pluggable: drop in @prood/adapter-*
-      // here to swap the backing platform without touching the data layer.
-      throw new Error(
-        `COMMERCE_ADAPTER='${config.adapter}' is not wired in this app yet. ` +
-          `Add the corresponding adapter package and register it in adapter.ts.`,
-      )
-    default: {
-      const exhaustive: never = config.adapter
-      throw new Error(`Unknown COMMERCE_ADAPTER: ${String(exhaustive)}`)
-    }
-  }
+  return createPlatformAdapter({
+    connectionString: config.databaseUrl,
+    currency: config.currency,
+  })
 }
 
 /** Get the shared commerce instance (adapter + admin), creating it lazily. */

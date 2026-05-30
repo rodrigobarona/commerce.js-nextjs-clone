@@ -42,6 +42,14 @@ export {
   seedDrizzle,
   DEMO_ORG_ID,
 } from './database/index.js'
+export {
+  ensureCustomerForAuthUser,
+  ensureGuestCustomer,
+  resolveCustomerIdForAuthUser,
+  linkAuthUserToCustomer,
+} from './customers/identity.js'
+export { lookupTenantByHost } from './tenant/lookup.js'
+export { countProducts, countOrdersThisMonth } from './database/index.js'
 export type { DrizzleDatabase } from './database/drizzle/client.js'
 
 // Drizzle schema (for raw queries)
@@ -52,23 +60,3 @@ export { createCartDomain } from './domains/cart.js'
 export { createCheckoutDomain } from './domains/checkout.js'
 export { createCatalogDomain } from './domains/catalog.js'
 export { createOrdersDomain } from './domains/orders.js'
-export { createProfileDomain } from './domains/profile.js'
-
-// Profile queries (direct access for Cloud Identity API routes)
-export {
-  findProfileById,
-  findProfileByEmail,
-  findProfileByPhone,
-  createProfile,
-  updateProfile,
-  deleteProfile,
-  findProfileAddresses,
-  findProfilePaymentMethods,
-  findProfileMerchantLinks,
-  upsertProfileMerchantLink,
-  createOtpCode,
-  findActiveOtpCode,
-  markOtpVerified,
-  incrementOtpAttempts,
-  deleteExpiredOtpCodes,
-} from './database/index.js'

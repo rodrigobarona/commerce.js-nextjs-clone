@@ -133,8 +133,7 @@ export async function migrateDrizzle(connectionString?: string) {
 
   await db.execute(sql`CREATE TABLE IF NOT EXISTS customers (
     id TEXT PRIMARY KEY DEFAULT gen_random_uuid(),
-    email TEXT NOT NULL UNIQUE,
-    password_hash TEXT NOT NULL,
+    auth_user_id TEXT,
     first_name TEXT,
     last_name TEXT,
     phone TEXT,
@@ -361,82 +360,6 @@ export async function migrateDrizzle(connectionString?: string) {
     reason_note TEXT
   )`)
 
-  await db.execute(sql`CREATE TABLE IF NOT EXISTS admin_users (
-    id TEXT PRIMARY KEY DEFAULT gen_random_uuid(),
-    email TEXT NOT NULL UNIQUE,
-    password_hash TEXT NOT NULL,
-    name TEXT,
-    role TEXT NOT NULL DEFAULT 'admin',
-    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
-    updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
-  )`)
-
-  // Profile tables — cross-merchant buyer identity
-  await db.execute(sql`CREATE TABLE IF NOT EXISTS profiles (
-    id TEXT PRIMARY KEY DEFAULT gen_random_uuid(),
-    email TEXT UNIQUE,
-    phone TEXT UNIQUE,
-    first_name TEXT,
-    last_name TEXT,
-    preferences JSONB,
-    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
-    updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
-  )`)
-
-  await db.execute(sql`CREATE TABLE IF NOT EXISTS profile_addresses (
-    id TEXT PRIMARY KEY DEFAULT gen_random_uuid(),
-    profile_id TEXT NOT NULL REFERENCES profiles(id) ON DELETE CASCADE,
-    label TEXT,
-    first_name TEXT NOT NULL,
-    last_name TEXT NOT NULL,
-    phone TEXT,
-    street TEXT NOT NULL,
-    street2 TEXT,
-    city TEXT NOT NULL,
-    state TEXT,
-    country TEXT NOT NULL,
-    postal_code TEXT,
-    district TEXT,
-    national_address TEXT,
-    additional_number TEXT,
-    last_used_at TIMESTAMPTZ,
-    created_at TIMESTAMPTZ NOT NULL DEFAULT now()
-  )`)
-
-  await db.execute(sql`CREATE TABLE IF NOT EXISTS profile_payment_methods (
-    id TEXT PRIMARY KEY DEFAULT gen_random_uuid(),
-    profile_id TEXT NOT NULL REFERENCES profiles(id) ON DELETE CASCADE,
-    provider TEXT NOT NULL,
-    type TEXT NOT NULL,
-    last4 TEXT NOT NULL,
-    brand TEXT,
-    expiry_month INTEGER,
-    expiry_year INTEGER,
-    provider_token TEXT,
-    billing_address JSONB,
-    last_used_at TIMESTAMPTZ,
-    created_at TIMESTAMPTZ NOT NULL DEFAULT now()
-  )`)
-
-  await db.execute(sql`CREATE TABLE IF NOT EXISTS profile_merchant_links (
-    profile_id TEXT NOT NULL REFERENCES profiles(id) ON DELETE CASCADE,
-    merchant_id TEXT NOT NULL,
-    adapter_customer_id TEXT,
-    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
-    PRIMARY KEY (profile_id, merchant_id)
-  )`)
-
-  await db.execute(sql`CREATE TABLE IF NOT EXISTS profile_otp_codes (
-    id TEXT PRIMARY KEY DEFAULT gen_random_uuid(),
-    profile_id TEXT NOT NULL REFERENCES profiles(id) ON DELETE CASCADE,
-    code TEXT NOT NULL,
-    channel TEXT NOT NULL DEFAULT 'email',
-    expires_at TIMESTAMPTZ NOT NULL,
-    verified BOOLEAN NOT NULL DEFAULT false,
-    attempts INTEGER NOT NULL DEFAULT 0,
-    created_at TIMESTAMPTZ NOT NULL DEFAULT now()
-  )`)
-
   // Integrations — stores provider credentials per tenant
   await db.execute(sql`CREATE TABLE IF NOT EXISTS integrations (
     provider TEXT PRIMARY KEY,
@@ -458,8 +381,6 @@ export async function migrateDrizzle(connectionString?: string) {
  *
  * Reference/identity tables are intentionally excluded:
  * - `countries` is shared reference data.
- * - `admin_users` predates the org model (superseded by Better Auth members).
- * - `profiles*` are cross-merchant buyer identity by design.
  */
 const TENANT_TABLES = [
   'categories',
@@ -554,6 +475,13 @@ export async function applyTenantIsolation(db: {
   await db.execute(
     sql.raw(
       `ALTER TABLE integrations ADD PRIMARY KEY (provider, organization_id)`,
+    ),
+  )
+
+  await db.execute(
+    sql.raw(
+      `CREATE UNIQUE INDEX IF NOT EXISTS customers_org_auth_user_idx ` +
+        `ON customers (organization_id, auth_user_id) WHERE auth_user_id IS NOT NULL`,
     ),
   )
 }

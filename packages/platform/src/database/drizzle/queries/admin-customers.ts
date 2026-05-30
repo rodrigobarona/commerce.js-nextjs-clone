@@ -2,9 +2,13 @@
 // Drizzle: Admin customer queries
 // ---------------------------------------------------------------------------
 
-import { eq, sql, like, or, desc } from 'drizzle-orm'
+import { eq, sql } from 'drizzle-orm'
 import { getDb } from '../client.js'
 import * as schema from '../schema/index.js'
+
+export type AdminCustomerRow = typeof schema.customers.$inferSelect & {
+  userEmail: string | null
+}
 
 export async function adminFindAllCustomers(opts: {
   limit: number
@@ -12,38 +16,69 @@ export async function adminFindAllCustomers(opts: {
   search?: string
 }) {
   const db = getDb()
+  const search = opts.search?.trim()
+  const searchClause = search
+    ? sql`AND (
+        c.first_name ILIKE ${`%${search}%`}
+        OR c.last_name ILIKE ${`%${search}%`}
+        OR u.email ILIKE ${`%${search}%`}
+      )`
+    : sql``
 
-  const condition = opts.search
-    ? or(
-        like(schema.customers.email, `%${opts.search}%`),
-        like(schema.customers.firstName, `%${opts.search}%`),
-        like(schema.customers.lastName, `%${opts.search}%`),
-      )
-    : undefined
+  const rows = await db.execute(sql`
+    SELECT c.*, u.email AS user_email
+    FROM customers c
+    LEFT JOIN "user" u ON c.auth_user_id = u.id
+    WHERE true ${searchClause}
+    ORDER BY c.created_at DESC
+    LIMIT ${opts.limit} OFFSET ${opts.offset}
+  `)
 
-  const [rows, countResult] = await Promise.all([
-    db.select().from(schema.customers)
-      .where(condition)
-      .orderBy(desc(schema.customers.createdAt))
-      .limit(opts.limit)
-      .offset(opts.offset),
-    db.select({ count: sql<number>`count(*)` })
-      .from(schema.customers)
-      .where(condition),
-  ])
+  const countResult = await db.execute(sql`
+    SELECT count(*)::int AS count
+    FROM customers c
+    LEFT JOIN "user" u ON c.auth_user_id = u.id
+    WHERE true ${searchClause}
+  `)
 
-  return { rows, total: countResult[0]?.count ?? 0 }
+  const mapped = (rows.rows as Record<string, unknown>[]).map(mapAdminCustomerRow)
+  const total = (countResult.rows[0] as { count: number })?.count ?? 0
+  return { rows: mapped, total }
+}
+
+function mapAdminCustomerRow(row: Record<string, unknown>): AdminCustomerRow {
+  return {
+    id: String(row.id),
+    authUserId: row.auth_user_id ? String(row.auth_user_id) : null,
+    firstName: row.first_name ? String(row.first_name) : null,
+    lastName: row.last_name ? String(row.last_name) : null,
+    phone: row.phone ? String(row.phone) : null,
+    defaultAddressId: row.default_address_id ? String(row.default_address_id) : null,
+    createdAt: row.created_at as Date,
+    updatedAt: row.updated_at as Date,
+    userEmail: row.user_email ? String(row.user_email) : null,
+  } as AdminCustomerRow
+}
+
+export async function adminFindCustomerById(id: string): Promise<AdminCustomerRow | null> {
+  const db = getDb()
+  const result = await db.execute(sql`
+    SELECT c.*, u.email AS user_email
+    FROM customers c
+    LEFT JOIN "user" u ON c.auth_user_id = u.id
+    WHERE c.id = ${id}
+    LIMIT 1
+  `)
+  const row = result.rows[0] as Record<string, unknown> | undefined
+  return row ? mapAdminCustomerRow(row) : null
 }
 
 export async function adminDeleteCustomer(id: string) {
-  await getDb().delete(schema.customers)
-    .where(eq(schema.customers.id, id))
+  await getDb().delete(schema.customers).where(eq(schema.customers.id, id))
 }
 
 export async function countCustomers() {
   const db = getDb()
-  const [result] = await db
-    .select({ count: sql<number>`count(*)` })
-    .from(schema.customers)
+  const [result] = await db.select({ count: sql<number>`count(*)` }).from(schema.customers)
   return result?.count ?? 0
 }

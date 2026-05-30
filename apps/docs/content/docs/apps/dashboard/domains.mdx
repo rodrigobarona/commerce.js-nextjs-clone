@@ -120,10 +120,13 @@ export async function removeDomain(domainId: string) {
 
 ## Local development
 
-Custom domains are not required for local dev. Use:
+Custom domains are not required for local dev:
 
-- `DEFAULT_TENANT_ORG_ID=org_demo` — serves demo store at `localhost:3000`
-- `/etc/hosts` entry for subdomain testing: `127.0.0.1 acme.localhost`
+1. Run `pnpm db:setup` and copy the seeded organization id into `DEFAULT_TENANT_ORG_ID`
+2. Access [http://localhost:3000](http://localhost:3000)
+3. For subdomain testing: `/etc/hosts` entry + `NEXT_PUBLIC_PLATFORM_DOMAIN`
+
+Plan limits: Free includes **one** custom domain; enforcement runs in `addDomainAction`.
 
 ## Related pages
 

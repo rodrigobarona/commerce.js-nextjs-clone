@@ -21,7 +21,7 @@ export interface ProviderMeta {
 }
 
 export const providerRegistry: ProviderMeta[] = [
-  // ---- Payment ----
+  // Payment providers only — notifications/analytics ship when runtime exists.
   {
     id: "stripe",
     name: "Stripe",
@@ -60,45 +60,6 @@ export const providerRegistry: ProviderMeta[] = [
       { key: "mbKey", label: "Multibanco key", type: "text", required: false },
       { key: "mbWayKey", label: "MB WAY key", type: "text", required: false },
       { key: "ccKey", label: "Credit card key", type: "text", required: false },
-    ],
-  },
-  // ---- Notification ----
-  {
-    id: "resend",
-    name: "Resend",
-    type: "notification",
-    description:
-      "Transactional email — order confirmations, shipping updates, and receipts.",
-    docsUrl: "https://resend.com/docs",
-    fields: [
-      { key: "apiKey", label: "API key", type: "password", required: true, placeholder: "re_..." },
-      { key: "fromEmail", label: "From email", type: "text", required: true, placeholder: "orders@yourbrand.com" },
-      { key: "fromName", label: "From name", type: "text", required: false, placeholder: "Your Brand" },
-    ],
-  },
-  {
-    id: "smtp",
-    name: "SMTP",
-    type: "notification",
-    description: "Send transactional email through any SMTP server.",
-    fields: [
-      { key: "host", label: "Host", type: "text", required: true, placeholder: "smtp.example.com" },
-      { key: "port", label: "Port", type: "text", required: true, placeholder: "587" },
-      { key: "user", label: "Username", type: "text", required: true },
-      { key: "pass", label: "Password", type: "password", required: true },
-      { key: "from", label: "From address", type: "text", required: true, placeholder: "orders@yourbrand.com" },
-    ],
-  },
-  // ---- Analytics ----
-  {
-    id: "ga4",
-    name: "Google Analytics 4",
-    type: "analytics",
-    description:
-      "Automatic GA4 tracking for page views, add-to-cart, and purchase events.",
-    docsUrl: "https://developers.google.com/analytics",
-    fields: [
-      { key: "measurementId", label: "Measurement ID", type: "text", required: true, placeholder: "G-XXXXXXXXXX" },
     ],
   },
 ]

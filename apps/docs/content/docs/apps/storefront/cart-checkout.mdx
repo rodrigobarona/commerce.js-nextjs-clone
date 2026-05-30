@@ -73,46 +73,30 @@ The `/checkout` page renders `CheckoutFlow` which collects:
 
 `app/checkout/actions.ts` → `startCheckout()`:
 
+1. PUT shipping and billing addresses on the cart via the Commerce API
+2. Select the first available shipping method
+3. `POST /v1/carts/{id}/place-order` — creates order with internal `customerId` (guest UUID or logged-in buyer)
+4. `POST` checkout app `/api/sessions` with `orderId`, `customerId`, amount, `tenantId`, and `returnUrl` (no email in Redis metadata)
+5. Redirect client to `checkoutUrl` from the session response
+
+Email for payment (Stripe receipt) is collected at the checkout app pay boundary, not stored in the Redis session snapshot.
+
 ```ts
-'use server'
-
-export async function startCheckout(formData: CheckoutFormData) {
-  const api = getCommerceApi()
-  const cartId = await getCartIdFromCookie()
-
-  // 1. Set customer info and addresses on cart
-  await api.POST('/carts/{id}/shipping-address', { ... })
-  await api.POST('/carts/{id}/shipping-method', { ... })
-
-  // 2. Place order via API
-  const { order } = await api.POST('/carts/{id}/place-order')
-
-  // 3. Create checkout session on checkout app
-  const session = await fetch(`${CHECKOUT_URL}/api/sessions`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'x-checkout-secret': CHECKOUT_API_SECRET,
-    },
-    body: JSON.stringify({
-      orderId: order.id,
-      amount: order.totals.grandTotal,
-      currency: order.currency,
-      tenantId: await resolveTenantId(),
-      returnUrl: `${STOREFRONT_URL}/order-confirmation?order=${order.id}`,
-      customerInfo: { ... },
-      fulfillment: 'shipping',
-    }),
-  })
-
-  // 4. Redirect to payment page
-  redirect(`${CHECKOUT_URL}/pay/${session.id}`)
-}
+body: JSON.stringify({
+  orderId: order.id,
+  customerId: order.customerId,
+  amount: priceToMajorAmount(order.totals.total),
+  currency: order.totals.total.currency,
+  tenantId,
+  returnUrl: `${storefrontOrigin}/order-confirmation?orderId=${order.id}`,
+  providerId,
+  fulfillment: "none",
+})
 ```
 
 ### Step 3 — Payment (checkout app)
 
-The customer is redirected to `apps/checkout/pay/{sessionId}`. See [Checkout app](/docs/apps/checkout) for payment UI details.
+The customer is redirected to `apps/checkout/c/{sessionId}`. See [Checkout app](/docs/apps/checkout) for payment UI details.
 
 ### Step 4 — Return to storefront
 

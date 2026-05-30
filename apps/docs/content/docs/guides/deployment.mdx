@@ -12,7 +12,7 @@ Prood deploys as **separate Vercel projects** sharing a single Neon Postgres dat
 | `prood.com` | Marketing (`apps/web`) |
 | `dashboard.prood.com` | Merchant admin |
 | `api.prood.com` | Commerce API |
-| `pay.prood.com` | Hosted checkout |
+| `checkout.prood.com` | Hosted checkout |
 | `docs.prood.com` | Documentation |
 | `{slug}.prood.app` | Storefront (wildcard on storefront project) |
 | `shop.client.com` | Store custom domain (per merchant) |
@@ -26,7 +26,7 @@ flowchart TB
   subgraph vercel [Vercel projects]
     SF[storefront<br/>*.prood.app]
     DB[dashboard<br/>dashboard.prood.com]
-    CHK[checkout<br/>pay.prood.com]
+    CHK[checkout<br/>checkout.prood.com]
     API[api<br/>api.prood.com]
     DOCS[docs<br/>docs.prood.com]
     WEB[web<br/>prood.com]
@@ -108,7 +108,7 @@ DATABASE_URL=postgresql://...
 COMMERCE_API_URL=https://api.prood.com/v1
 BETTER_AUTH_SECRET=<same as API>
 BETTER_AUTH_URL=https://storefront.example.com
-CHECKOUT_URL=https://pay.prood.com
+CHECKOUT_URL=https://checkout.prood.com
 CHECKOUT_API_SECRET=<same as API>
 DEFAULT_TENANT_ORG_ID=          # leave empty for multi-tenant
 NEXT_PUBLIC_PLATFORM_DOMAIN=prood.app
@@ -129,7 +129,7 @@ Custom domains are added per-merchant via the dashboard Domains page.
 UPSTASH_REDIS_REST_URL=https://...
 UPSTASH_REDIS_REST_TOKEN=...
 CHECKOUT_API_SECRET=<same as API>
-CHECKOUT_URL=https://pay.prood.com
+CHECKOUT_URL=https://checkout.prood.com
 COMMERCE_API_URL=https://api.prood.com/v1
 STOREFRONT_URL=https://storefront.example.com
 NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_live_...
@@ -137,7 +137,7 @@ STRIPE_SECRET_KEY=sk_live_...
 # Payment provider keys as fallbacks
 ```
 
-Configure payment webhooks to: `https://pay.prood.com/api/webhooks/{provider}/{orgId}`
+Configure payment webhooks to: `https://checkout.prood.com/api/webhooks/{provider}/{orgId}`
 
 ## Step 5 — Deploy the dashboard
 

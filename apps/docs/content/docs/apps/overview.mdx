@@ -69,7 +69,7 @@ In production, each app is a **separate Vercel project** sharing the same Neon d
 | --- | --- | --- |
 | Storefront | Per-merchant domains + subdomains | Tenant resolved from Host |
 | Dashboard | Single admin URL (e.g. `admin.example.com`) | Org switching in session |
-| Checkout | Single checkout URL (e.g. `pay.example.com`) | Shared across all tenants |
+| Checkout | Single checkout URL (e.g. `checkout.example.com`) | Shared across all tenants |
 | API | Single API URL (e.g. `api.example.com`) | All callers hit one origin |
 | Docs | `docs.example.com` | Static + OpenAPI |
 

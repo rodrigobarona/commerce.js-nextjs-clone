@@ -12,8 +12,9 @@ export interface SessionMeta {
   returnUrl: string | null
   cancelUrl: string | null
   webhookUrl: string | null
-  /** Organization (tenant) whose payment credentials back this session. */
   tenantId?: string | null
+  orderId?: string | null
+  customerId?: string | null
 }
 
 export interface StoredSession {

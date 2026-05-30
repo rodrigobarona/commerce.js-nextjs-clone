@@ -27,7 +27,7 @@ Prood uses a **Vercel-style split** between the company domain and tenant store 
 | `prood.com` | `apps/web` | Marketing |
 | `dashboard.prood.com` | `apps/dashboard` | Merchant admin |
 | `api.prood.com` | `apps/api` | Commerce API |
-| `pay.prood.com` | `apps/checkout` | Hosted checkout |
+| `checkout.prood.com` | `apps/checkout` | Hosted checkout (`/c/{sessionId}`) |
 | `docs.prood.com` | `apps/docs` | Documentation |
 | `{slug}.prood.app` | `apps/storefront` | Free store subdomain (automatic) |
 | `shop.client.com` | `apps/storefront` | Optional store custom domain |

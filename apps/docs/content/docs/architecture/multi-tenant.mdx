@@ -12,7 +12,7 @@ Prood runs as a **white-label, multi-tenant commerce platform**: one deployment 
 | `prood.com` | Marketing | N/A |
 | `dashboard.prood.com` | Merchant admin | Session `activeOrganizationId` |
 | `api.prood.com` | Commerce API | Session / API key / forwarded store `Host` |
-| `pay.prood.com` | Hosted checkout | `tenantId` on checkout session |
+| `checkout.prood.com` | Hosted checkout (`/c/{sessionId}`) | `tenantId` on checkout session |
 | `{slug}.prood.app` | Storefront | Host → org slug or custom domain |
 | `shop.client.com` | Storefront | Verified `tenant_domain` row |
 
@@ -43,9 +43,9 @@ The storefront resolves the active tenant in `apps/storefront/lib/tenant.ts`:
 
 1. **Custom domain** — lookup verified row in `tenant_domain` table
 2. **Subdomain** — `{slug}.{NEXT_PUBLIC_PLATFORM_DOMAIN}` → `organization.slug`
-3. **Fallback** — `DEFAULT_TENANT_ORG_ID` (seeded demo store `org_demo`)
+3. **Fallback** — `DEFAULT_TENANT_ORG_ID` (local dev only; set explicitly after seed)
 
-In **production**, an unmatched host returns `notFound()`. In **development**, the fallback serves the demo store so local work does not require DNS setup.
+In **production**, an unmatched host returns `notFound()`. In **development**, set `DEFAULT_TENANT_ORG_ID` to your seeded organization id.
 
 ### Per-tenant caching
 

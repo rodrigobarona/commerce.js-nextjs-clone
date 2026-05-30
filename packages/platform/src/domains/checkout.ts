@@ -91,7 +91,14 @@ export function createCheckoutDomain(currency: string) {
       return cartDomain.getCart(cartId)
     },
 
-    async placeOrder(cartId: string, options?: { status?: string; keepCart?: boolean }): Promise<Order> {
+    async placeOrder(
+      cartId: string,
+      options?: { status?: string; keepCart?: boolean; customerId?: string },
+    ): Promise<Order> {
+      if (options?.customerId) {
+        await updateCart(cartId, { customerId: options.customerId })
+      }
+
       const cart = await cartDomain.getCart(cartId)
 
       if (cart.items.length === 0) {

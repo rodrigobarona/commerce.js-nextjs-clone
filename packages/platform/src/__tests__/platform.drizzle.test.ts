@@ -37,9 +37,7 @@ async function cleanDatabase() {
     product_tags, product_categories, product_attributes, product_option_values, product_options, product_variants, product_images, products,
     categories,
     customer_addresses, customers,
-    brands, countries, store_info,
-    profile_otp_codes, profile_merchant_links, profile_payment_methods, profile_addresses, profiles,
-    admin_users
+    brands, countries, store_info
   CASCADE`)
 }
 

@@ -1,9 +1,11 @@
 import type { AgentSession } from "@better-auth/agent-auth"
+import { assertFeature } from "@prood/commerce"
 import { CommerceError } from "@prood/types"
 import { eq } from "drizzle-orm"
 import { getAuth } from "@/lib/auth"
 import { authDb } from "@/lib/auth/db"
 import { member } from "@/lib/auth/schema"
+import { getOrganizationLimits } from "@/lib/org-plan"
 import { lookupTenantByHost } from "@/lib/tenant-db"
 import type { ApiCaller, ApiScope } from "@/lib/auth-tenant"
 
@@ -58,6 +60,11 @@ export async function resolveCallerFromHeaders(
           "FORBIDDEN"
         )
       }
+      const limits = await getOrganizationLimits(orgId)
+      assertFeature(
+        limits.agentAuthEnabled,
+        "Agent Auth requires a Grow plan or higher",
+      )
       const scopes = scopesFromAgentSession(agentSession)
       if (scopes.length === 0) {
         throw new CommerceError("Agent has no active capability grants", "FORBIDDEN")
@@ -79,9 +86,17 @@ export async function resolveCallerFromHeaders(
         "FORBIDDEN"
       )
     }
+    const scopes = metadata.scopes ?? ["storefront"]
+    const limits = await getOrganizationLimits(metadata.organizationId)
+    if (scopes.includes("admin") && !limits.apiWriteEnabled) {
+      throw new CommerceError(
+        "Write access requires a Grow plan or higher",
+        "FORBIDDEN",
+      )
+    }
     return {
       orgId: metadata.organizationId,
-      scopes: metadata.scopes ?? ["storefront"],
+      scopes,
       via: "api-key",
     }
   }
@@ -89,15 +104,32 @@ export async function resolveCallerFromHeaders(
   const session = await getAuth().api.getSession({ headers: headerList })
   const sessionOrgId = session?.session.activeOrganizationId
   if (sessionOrgId) {
-    return { orgId: sessionOrgId, scopes: ["admin", "storefront"], via: "session" }
+    return {
+      orgId: sessionOrgId,
+      scopes: ["admin", "storefront"],
+      via: "session",
+      userId: session.user.id,
+    }
   }
 
   const host = headerList.get("host")?.split(":")[0]?.toLowerCase()
   if (host) {
     const hostOrgId = await lookupTenantByHost(host, PLATFORM_DOMAIN)
     if (hostOrgId) {
-      return { orgId: hostOrgId, scopes: ["storefront"], via: "host" }
+      return {
+        orgId: hostOrgId,
+        scopes: ["storefront"],
+        via: session?.user ? "session" : "host",
+        userId: session?.user?.id,
+      }
     }
+  }
+
+  if (session?.user) {
+    throw new CommerceError(
+      "Session is not bound to a store organization",
+      "FORBIDDEN",
+    )
   }
 
   return null

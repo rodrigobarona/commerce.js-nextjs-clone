@@ -139,8 +139,8 @@ export const checkout = {
     ),
   setShippingMethod: (orgId: string, cartId: string, methodId: string) =>
     setShippingMethod(cartId, methodId, orgId),
-  placeOrder: async (orgId: string, cartId: string) => {
-    const order = await placeOrder(cartId, orgId)
+  placeOrder: async (orgId: string, cartId: string, customerId?: string) => {
+    const order = await placeOrder(cartId, orgId, customerId)
     revalidateProducts(orgId)
     return order
   },
@@ -187,7 +187,7 @@ export const webhooks = {
 
 export const orders = {
   get: (orgId: string, id: string) => getOrder(id, orgId),
-  list: (orgId: string, params?: PaginationParams) =>
+  list: (orgId: string, params?: PaginationParams & { customerId?: string }) =>
     getCustomerOrders(params, orgId),
 }
 

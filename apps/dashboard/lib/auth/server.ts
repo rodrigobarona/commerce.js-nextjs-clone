@@ -28,9 +28,6 @@ function resolveBetterAuthEnv(defaultBaseUrl: string) {
  * Postgres database (same tables as the storefront) plus the organization
  * plugin. Each organization models one tenant store; merchants belong to one or
  * more organizations and switch the active one to administer that store.
- *
- * To swap the provider (WorkOS / Clerk), implement the same `getSession()` seam
- * in `./index.ts`; pages and components only depend on that seam.
  */
 function createAuth() {
   const { baseURL, secret } = resolveBetterAuthEnv("http://localhost:3002")

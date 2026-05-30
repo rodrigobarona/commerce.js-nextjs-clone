@@ -10,7 +10,7 @@ export const siteConfig = {
   platformHosts: {
     dashboard: "dashboard.prood.com",
     api: "api.prood.com",
-    checkout: "pay.prood.com",
+    checkout: "checkout.prood.com",
     docs: "docs.prood.com",
   },
   url: process.env.NEXT_PUBLIC_WEB_URL ?? "http://localhost:3001",
@@ -205,7 +205,7 @@ export const techStack = [
 ] as const
 
 export const pricingDisclaimer =
-  "Processing fees are paid to your provider (Stripe, Easypay, etc.). Prood does not charge a fee on your sales at launch. Plan limits below reflect upcoming subscriptions—we’ll announce before billing goes live."
+  "Processing fees are paid to your provider (Stripe, Easypay, etc.). Prood does not charge a fee on your sales. Plan limits are enforced at runtime; paid subscriptions via Stripe are coming soon."
 
 export function formatStoreHost(slug: string) {
   return `${slug}.${siteConfig.storeDomain}`

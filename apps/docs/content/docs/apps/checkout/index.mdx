@@ -20,9 +20,9 @@ sequenceDiagram
   SF->>CHK: POST /api/sessions
   CHK->>CHK: Create CheckoutSession
   CHK->>REDIS: Save snapshot
-  CHK-->>SF: payUrl
+  CHK-->>SF: checkoutUrl
 
-  Note over CHK: Customer visits /pay/{id}
+  Note over CHK: Customer visits /c/{id}
   CHK->>REDIS: loadSession()
   CHK->>PP: Rebuild provider with tenant credentials
   CHK->>PP: submitPayment()
@@ -45,7 +45,7 @@ sequenceDiagram
 | Route | Purpose |
 | --- | --- |
 | `/` | Landing / entry page |
-| `/pay/[id]` | Payment UI |
+| `/c/[id]` | Payment UI |
 | `/confirm/[id]` | Post-3DS / async confirmation |
 | `/success/[id]` | Success page → redirect to storefront |
 
@@ -60,7 +60,6 @@ See [Sessions](/docs/apps/checkout/sessions) for API route details.
 | `CHECKOUT_API_SECRET` | Yes | Protects session creation API |
 | `CHECKOUT_URL` | Yes | Public checkout base URL |
 | `COMMERCE_API_URL` | Yes | Webhook forwarding target |
-| `STOREFRONT_URL` | Yes | Post-payment redirect |
 | `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` | Stripe | Client-side Stripe key |
 | Payment provider env vars | Per provider | Fallback credentials |
 

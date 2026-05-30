@@ -26,10 +26,10 @@ export interface Address {
   isDefault: boolean
 }
 
-/** Customer entity */
+/** Customer entity — email joined from Better Auth at read boundaries when needed */
 export interface Customer {
   id: Id
-  email: string
+  email: Maybe<string>
   firstName: Maybe<string>
   lastName: Maybe<string>
   phone: Maybe<string>

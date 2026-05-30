@@ -54,7 +54,7 @@ In the dashboard → Integrations → Stripe:
 Configure in Stripe Dashboard → Webhooks:
 
 ```
-URL: https://pay.example.com/api/webhooks/stripe/{orgId}
+URL: https://checkout.example.com/api/webhooks/stripe/{orgId}
 Events: payment_intent.succeeded, payment_intent.payment_failed, charge.refunded
 ```
 
@@ -92,7 +92,7 @@ Dashboard → Integrations → Easypay:
 Configure in Easypay merchant panel:
 
 ```
-URL: https://pay.example.com/api/webhooks/easypay/{orgId}
+URL: https://checkout.example.com/api/webhooks/easypay/{orgId}
 ```
 
 ## Ifthenpay setup
@@ -120,14 +120,14 @@ Dashboard → Integrations → Ifthenpay — enter each key separately.
 Configure callback URL in Ifthenpay backoffice:
 
 ```
-URL: https://pay.example.com/api/webhooks/ifthenpay/{orgId}
+URL: https://checkout.example.com/api/webhooks/ifthenpay/{orgId}
 ```
 
 ## How credentials flow at runtime
 
 ```mermaid
 flowchart TB
-  PAY["Checkout /pay/{sessionId}"]
+  PAY["Checkout /c/{sessionId}"]
   LOAD[loadSession]
   TENANT["tenantId from snapshot"]
   CFG[loadIntegrationConfig]

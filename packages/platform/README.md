@@ -1,13 +1,12 @@
 # @prood/platform
 
-The built-in Prood commerce engine — a fully functional eCommerce backend powered by SQLite. Zero external APIs, zero configuration, batteries included.
+The built-in Prood commerce engine — tenant-scoped Postgres (Neon) with Drizzle ORM and row-level security. No external commerce SaaS required.
 
-## When to Use
+## When to use
 
-- **Development and testing** — instant local commerce backend without external services
-- **Prototyping** — build and demo storefronts with real data flows
-- **Embedded commerce** — self-contained eCommerce for desktop apps, edge deployments, or single-tenant setups
-- **Reference implementation** — see how a `CommerceAdapter` is built end-to-end
+- **Production storefronts** — multi-tenant catalog, cart, checkout, and orders on Neon
+- **Development** — same schema as production via `pnpm db:setup`
+- **Reference implementation** — full `CommerceAdapter` + admin API
 
 ## Installation
 
@@ -15,142 +14,65 @@ The built-in Prood commerce engine — a fully functional eCommerce backend powe
 pnpm add @prood/platform @prood/types
 ```
 
-## Quick Start
+## Quick start
 
 ```typescript
-import { initDatabase, createPlatformAdapter, seedDrizzle } from '@prood/platform'
+import { initDrizzle, migrateDrizzle, seedDrizzle, createPlatformAdapter } from '@prood/platform'
 
-// 1. Initialize the database (auto-creates all tables)
-initDatabase({ driver: 'drizzle' })
+// 1. Connect to Neon
+initDrizzle(process.env.DATABASE_URL!)
+await migrateDrizzle(process.env.DATABASE_URL!)
+await seedDrizzle()
 
-// 2. Optionally seed with demo data
-seedDrizzle()
+// 2. Create the adapter (scoped per request via withTenant)
+const { adapter } = createPlatformAdapter({ currency: 'EUR' })
 
-// 3. Create the adapter
-const adapter = createPlatformAdapter({ currency: 'SAR' })
-
-// 4. Use it — same interface as any CommerceAdapter
+// 3. Use the CommerceAdapter interface
 const products = await adapter.getProducts({ limit: 10 })
 const cart = await adapter.createCart()
-const brands = await adapter.getBrands()
-const summary = await adapter.getReviewSummary('prod-1')
 ```
 
-### With the orchestration engine
+In apps, prefer `@prood/commerce` (`getAdapter()`, `withTenant(orgId, fn)`) rather than calling the platform directly.
 
-```typescript
-import { createCommerce } from '@prood/core'
-import { initDatabase, createPlatformAdapter, seedDrizzle } from '@prood/platform'
+## Database
 
-initDatabase({ driver: 'drizzle' })
-seedDrizzle()
+| Concern | Implementation |
+| --- | --- |
+| Driver | `@neondatabase/serverless` + Drizzle |
+| Tenancy | `app.current_org_id` session variable + RLS on tenant tables |
+| Migrations | `packages/platform/src/database/drizzle/migrate.ts` via `pnpm db:setup` |
+| Auth tables | Better Auth (`user`, `session`, `organization`, …) in the same database |
 
-const commerce = createCommerce({
-  adapter: createPlatformAdapter({ currency: 'SAR' }),
-})
+## Customer identity
 
-const products = await commerce.getProducts({ query: 'shirt' })
-```
+Commerce buyers are referenced by **internal UUID** (`customers.id`). Better Auth linkage is `customers.auth_user_id` only — email lives in Better Auth and is joined at read time for merchant UI. See [Privacy & data](/docs/architecture/privacy-data).
 
-## Implemented Domains
+## Implemented domains
 
-| Domain | Methods | Status |
-|---|---|---|
-| **Catalog** | `getProduct`, `getProducts`, `getCategories` | ✅ |
-| **Cart** | `createCart`, `getCart`, `addToCart`, `updateCartItem`, `removeFromCart`, `applyCoupon`, `removeCoupon` | ✅ |
-| **Checkout** | `getShippingMethods`, `setShippingAddress`, `setBillingAddress`, `setShippingMethod`, `getPaymentMethods`, `setPaymentMethod`, `placeOrder` | ✅ |
-| **Orders** | `createOrder`, `getOrder`, `getCustomerOrders`, `getOrderStatuses`, `updateOrderStatus`, `cancelOrder`, `duplicateOrder`, `getOrderHistory` | ✅ |
-| **Customers** | `login`, `register`, `getCustomer`, `updateCustomer`, `logout`, `forgotPassword`, `resetPassword`, `getAddresses`, `addAddress`, `updateAddress`, `deleteAddress` | ✅ |
-| **Store** | `getStoreInfo` | ✅ |
-| **Brands** | `getBrands` | ✅ |
-| **Countries** | `getCountries` | ✅ |
-| **Wishlist** | `getWishlist`, `addToWishlist`, `removeFromWishlist` | ✅ |
-| **Reviews** | `getProductReviews`, `getReviewSummary`, `submitReview` | ✅ |
-| **Promotions** | `getActivePromotions`, `validateCoupon` | ✅ |
-| **Returns** | `createReturn`, `getReturn`, `getReturns`, `getOrderReturns`, `cancelReturn` | ✅ |
+| Domain | Status |
+| --- | --- |
+| Catalog, cart, checkout, orders | ✅ |
+| Customers (addresses; auth via Better Auth) | ✅ |
+| Store, brands, countries, wishlist, reviews, promotions, returns | ✅ |
+| Wholesale, auctions, rentals, gift-cards, locations | Not supported (`NOT_SUPPORTED`) |
 
-### Not Yet Implemented
-
-These domains throw `NOT_SUPPORTED` errors:
-
-`wholesale` · `auctions` · `rentals` · `gift-cards` · `locations`
-
-## Database Drivers
-
-The platform supports two database drivers, both backed by SQLite:
-
-| Driver | ORM | Best For |
-|---|---|---|
-| `drizzle` (default) | Drizzle ORM | Lightweight, zero-codegen, fast startup |
-| `prisma` | Prisma Client | Teams already using Prisma, migration tooling |
-
-```typescript
-// Drizzle (default) — synchronous, file-based
-initDatabase({ driver: 'drizzle' })
-
-// Prisma — async, requires prisma generate
-await initDatabase({ driver: 'prisma' })
-```
-
-Both drivers share identical query interfaces and produce identical results — the test suite runs against both.
-
-## Seed Data
-
-The `seedDrizzle()` and `seedPrisma()` functions populate the database with demo data:
-
-| Data | Records |
-|---|---|
-| Store info | 1 (Prood Demo Store, SAR, en/ar) |
-| Categories | 3 (Clothing, Electronics, Accessories) |
-| Products | 3 (T-Shirt, Earbuds, Leather Bag) |
-| Product images | 3 |
-| Product variants | 3 (S/M/L for T-Shirt) |
-| Brands | 3 (Prood Essentials, TechWave, Artisan Leather) |
-| Countries | 6 (SA, AE, KW, BH, OM, QA) |
-| Reviews | 6 (across all 3 products, ratings 3–5) |
-
-## Architecture
-
-```
-platform/
-├── src/
-│   ├── adapter.ts              # createPlatformAdapter() entry point
-│   ├── domains/                # Domain implementations
-│   │   ├── catalog.ts          # Products, categories, search
-│   │   ├── cart.ts             # Cart CRUD, coupon application
-│   │   ├── checkout.ts         # Shipping, payment, order placement
-│   │   ├── orders.ts           # Order management and status
-│   │   ├── customers.ts        # Auth, profiles, addresses
-│   │   ├── store.ts            # Store metadata
-│   │   ├── brands.ts           # Brand listing
-│   │   ├── countries.ts        # Country listing
-│   │   ├── wishlist.ts         # Favorites
-│   │   ├── reviews.ts          # Ratings and reviews
-│   │   ├── promotions.ts       # Discounts and coupons
-│   │   ├── returns.ts          # Return requests
-│   │   └── not-supported.ts    # Stub domains (501)
-│   ├── database/
-│   │   ├── drizzle/            # Drizzle ORM driver
-│   │   │   ├── schema/         # Table definitions
-│   │   │   ├── queries/        # Query functions
-│   │   │   ├── migrate.ts      # Auto-migration
-│   │   │   └── seed.ts         # Demo data
-│   │   └── prisma/             # Prisma driver (mirrors Drizzle)
-│   └── __tests__/              # Test suite (runs against both drivers)
-```
-
-## Testing
+## Scripts
 
 ```bash
-# Run all platform tests
-pnpm vitest run
-
-# Watch mode
-pnpm vitest
+pnpm db:migrate      # Run migrations
+pnpm db:migrate:seed # Migrate + seed demo org
 ```
 
-The test suite runs 46 tests against each driver (92 total), covering all implemented domains including seed data validation, CRUD operations, pagination, and error handling.
+From repo root: `pnpm db:setup` (migrate + seed with `ADMIN_EMAIL` / `ADMIN_PASSWORD`).
 
-## License
+## Package layout
 
-[MIT](../../LICENSE)
+```
+packages/platform/src/
+├── adapter.ts           # createPlatformAdapter
+├── admin/               # Dashboard admin API
+├── customers/identity.ts
+├── database/drizzle/    # Schema, queries, migrate, seed
+├── domains/             # Catalog, cart, checkout, orders, …
+└── tenant/lookup.ts     # Host → organization resolution
+```

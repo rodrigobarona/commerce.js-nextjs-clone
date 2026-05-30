@@ -47,7 +47,7 @@ When you submit, the server action `startCheckout()` in `apps/storefront/app/che
 
 1. Calls the API `POST /v1/carts/{id}/place-order` to create an order
 2. Creates a checkout session on `apps/checkout` via `POST /api/sessions`
-3. Redirects the browser to `http://localhost:3004/pay/{sessionId}`
+3. Redirects the browser to `http://localhost:3004/c/{sessionId}`
 
 ## Step 4 — Complete payment
 
@@ -84,7 +84,7 @@ sequenceDiagram
   C->>SF: startCheckout()
   SF->>API: POST place-order
   SF->>CHK: POST /api/sessions
-  C->>CHK: /pay/{id}
+  C->>CHK: /c/{id}
   CHK->>PP: Process payment
   PP->>CHK: Webhook
   CHK->>API: Forward webhook

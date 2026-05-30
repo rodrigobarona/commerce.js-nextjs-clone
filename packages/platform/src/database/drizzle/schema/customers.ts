@@ -1,13 +1,15 @@
 // ---------------------------------------------------------------------------
-// Customers schema — customers and address book
+// Customers schema — tenant-scoped commerce profiles (no credentials / email)
+// ---------------------------------------------------------------------------
+// Auth lives in Better Auth `user`. Link via auth_user_id only on this table.
+// Commerce references buyers by customers.id (internal UUID) everywhere else.
 // ---------------------------------------------------------------------------
 
-import { pgTable, text, boolean, timestamp } from 'drizzle-orm/pg-core'
+import { boolean, pgTable, text, timestamp } from 'drizzle-orm/pg-core'
 
 export const customers = pgTable('customers', {
   id: text('id').primaryKey().$defaultFn(() => crypto.randomUUID()),
-  email: text('email').notNull().unique(),
-  passwordHash: text('password_hash').notNull(),
+  authUserId: text('auth_user_id'),
   firstName: text('first_name'),
   lastName: text('last_name'),
   phone: text('phone'),

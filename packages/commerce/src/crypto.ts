@@ -13,27 +13,24 @@ const PREFIX = 'enc:v1:'
 const IV_LENGTH = 12
 const TAG_LENGTH = 16
 
-const keySource =
-  process.env.INTEGRATION_ENCRYPTION_KEY ?? process.env.BETTER_AUTH_SECRET
+const keySource = process.env.INTEGRATION_ENCRYPTION_KEY
 
 let derivedKey: Buffer | null | undefined
 
-/** Derive a stable 32-byte key from the configured secret, or null if unset. */
-function getKey(): Buffer | null {
-  if (derivedKey !== undefined) return derivedKey
-  derivedKey = keySource
-    ? scryptSync(keySource, 'commercejs.integration.v1', 32) // legacy salt — do not change (breaks existing encrypted configs)
-    : null
+function getKey(): Buffer {
+  if (derivedKey !== undefined && derivedKey) return derivedKey
+  if (!keySource) {
+    throw new Error(
+      'INTEGRATION_ENCRYPTION_KEY is required to encrypt integration credentials',
+    )
+  }
+  derivedKey = scryptSync(keySource, 'commercejs.integration.v1', 32)
   return derivedKey
 }
 
-/**
- * Encrypt a secret value (AES-256-GCM). Returns plaintext unchanged when no
- * encryption key is configured (dev), so callers don't have to branch.
- */
 export function encryptSecret(plaintext: string): string {
+  if (!plaintext) return plaintext
   const key = getKey()
-  if (!key || !plaintext) return plaintext
   const iv = randomBytes(IV_LENGTH)
   const cipher = createCipheriv('aes-256-gcm', key, iv)
   const enc = Buffer.concat([cipher.update(plaintext, 'utf8'), cipher.final()])
@@ -43,9 +40,10 @@ export function encryptSecret(plaintext: string): string {
 
 /** Decrypt a value produced by {@link encryptSecret}; passes plaintext through. */
 export function decryptSecret(value: string): string {
-  if (!value.startsWith(PREFIX)) return value
+  if (!value.startsWith(PREFIX)) {
+    throw new Error('Integration config value is not encrypted')
+  }
   const key = getKey()
-  if (!key) return value
   try {
     const raw = Buffer.from(value.slice(PREFIX.length), 'base64')
     const iv = raw.subarray(0, IV_LENGTH)

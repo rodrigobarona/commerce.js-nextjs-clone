@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server"
 import { requireCaller } from "@/lib/auth-tenant"
 import { admin } from "@/lib/commerce-service"
+import { assertCanCreateProduct } from "@/lib/enforcement"
 import { adminListQuery, createProductBody } from "@/lib/schemas"
 import { readBody, readQuery } from "@/lib/validate"
 import { errorResponse } from "@/lib/api"
@@ -18,6 +19,7 @@ export async function GET(req: Request) {
 export async function POST(req: Request) {
   try {
     const { orgId } = await requireCaller("admin")
+    await assertCanCreateProduct(orgId)
     const input = await readBody(req, createProductBody)
     return NextResponse.json(await admin.createProduct(orgId, input), { status: 201 })
   } catch (err) {

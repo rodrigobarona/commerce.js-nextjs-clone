@@ -36,10 +36,11 @@ export {
 
 // Customers
 export {
-  findCustomerByEmail,
+  findCustomerByAuthUserId,
   findCustomerById,
   createCustomer,
   updateCustomer,
+  linkCustomerAuthUser,
   findAddresses,
   findAddressById,
   createAddress,
@@ -54,6 +55,7 @@ export {
   createOrderHistory,
   findOrderById,
   findOrders,
+  countOrdersForCustomer,
   findOrderItems,
   findOrderHistory,
   updateOrder,
@@ -165,6 +167,7 @@ export {
   updateOrderTracking,
   countOrdersByStatus,
   countOrders,
+  countOrdersThisMonth,
   sumOrderRevenue,
   findRecentOrders,
 } from './admin-orders.js'
@@ -173,6 +176,7 @@ export {
 export {
   adminFindAllCustomers,
   adminFindAllCustomers as findAllCustomers,
+  adminFindCustomerById,
   adminDeleteCustomer,
   adminDeleteCustomer as deleteCustomerById,
   countCustomers,
@@ -183,40 +187,4 @@ export {
   adminUpdateStoreInfo,
   adminUpdateStoreInfo as updateStoreInfo,
 } from './admin-store.js'
-
-// Admin — Users
-export {
-  findAdminByEmail,
-  findAdminById,
-  createAdminUser,
-  updateAdminUser,
-  deleteAdminUser,
-  findAllAdminUsers,
-  countAdminUsers,
-} from './admin-users.js'
-
-// Profiles (cross-merchant buyer identity)
-export {
-  createProfile,
-  findProfileById,
-  findProfileByEmail,
-  findProfileByPhone,
-  updateProfile,
-  deleteProfile,
-  findProfileAddresses,
-  findProfileAddressById,
-  createProfileAddress,
-  updateProfileAddress,
-  deleteProfileAddress,
-  findProfilePaymentMethods,
-  createProfilePaymentMethod,
-  deleteProfilePaymentMethod,
-  findProfileMerchantLinks,
-  upsertProfileMerchantLink,
-  createOtpCode,
-  findActiveOtpCode,
-  markOtpVerified,
-  incrementOtpAttempts,
-  deleteExpiredOtpCodes,
-} from './profiles.js'
 

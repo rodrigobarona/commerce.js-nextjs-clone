@@ -39,6 +39,7 @@ export async function POST(
     const paymentSession = await session.submitPayment({
       sourceToken: body.sourceToken,
       idempotencyKey: body.idempotencyKey,
+      customerId: meta.customerId ?? undefined,
       metadata: body.metadata,
     })
 

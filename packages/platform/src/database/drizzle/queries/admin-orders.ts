@@ -11,6 +11,17 @@ export async function countOrders(): Promise<number> {
   return Number(result[0]?.count ?? 0)
 }
 
+/** Orders created in the current UTC calendar month (plan enforcement). */
+export async function countOrdersThisMonth(): Promise<number> {
+  const now = new Date()
+  const monthStart = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), 1))
+  const result = await getDb()
+    .select({ count: sql<number>`count(*)` })
+    .from(schema.orders)
+    .where(gte(schema.orders.createdAt, monthStart))
+  return Number(result[0]?.count ?? 0)
+}
+
 export async function adminFindAllOrders(opts: {
   limit: number
   offset: number

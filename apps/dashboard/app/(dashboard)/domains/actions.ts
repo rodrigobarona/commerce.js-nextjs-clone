@@ -1,11 +1,15 @@
 "use server"
 
 import { revalidatePath } from "next/cache"
+import { getEntitlements } from "@prood/billing"
+import { assertLimit } from "@prood/commerce"
 import { requireActiveOrg } from "@/lib/admin"
+import { getActiveOrganizationPlan } from "@/lib/billing"
 import {
   createDomainRow,
   deleteDomainRow,
   findDomain,
+  listDomains,
   setDomainVerified,
 } from "@/lib/domains"
 import {
@@ -17,6 +21,15 @@ import {
 
 export async function addDomainAction(domain: string): Promise<void> {
   const orgId = await requireActiveOrg()
+  const plan = await getActiveOrganizationPlan()
+  const limits = getEntitlements(plan?.planId ?? "free")
+  const domains = await listDomains(orgId)
+  assertLimit(
+    domains.length,
+    limits.maxCustomDomains,
+    "Custom domain limit reached for your plan. Upgrade to add more domains.",
+  )
+
   const normalized = domain.toLowerCase().trim()
   await addProjectDomain(normalized)
   await createDomainRow(orgId, normalized)

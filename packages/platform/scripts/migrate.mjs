@@ -9,9 +9,8 @@
 
 import { migrateDrizzle, initDrizzle, getDrizzleDb, seedDrizzle } from '../dist/index.js'
 
-const url = process.env.DATABASE_URL || process.env.NUXT_DATABASE_URL
+const url = process.env.DATABASE_URL
 if (!url) {
-  // Gracefully skip if no DB URL — don't break the build
   console.log('ℹ️  DATABASE_URL not set — skipping migrations')
   process.exit(0)
 }

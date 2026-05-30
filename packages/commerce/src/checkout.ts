@@ -81,8 +81,14 @@ export async function setPaymentMethod(
 
 // ---- Orders ----
 
-export async function placeOrder(cartId: string, tenantId?: string): Promise<Order> {
-  return runScoped(tenantId, async () => (await getAdapter()).placeOrder(cartId))
+export async function placeOrder(
+  cartId: string,
+  tenantId?: string,
+  customerId?: string,
+): Promise<Order> {
+  return runScoped(tenantId, async () =>
+    (await getAdapter()).placeOrder(cartId, customerId ? { customerId } : undefined),
+  )
 }
 
 export async function getOrder(orderId: string, tenantId?: string): Promise<Order> {
@@ -90,7 +96,7 @@ export async function getOrder(orderId: string, tenantId?: string): Promise<Orde
 }
 
 export async function getCustomerOrders(
-  params?: PaginationParams,
+  params?: PaginationParams & { customerId?: string },
   tenantId?: string,
 ): Promise<PaginatedResult<Order>> {
   return runScoped(tenantId, async () => (await getAdapter()).getCustomerOrders(params))

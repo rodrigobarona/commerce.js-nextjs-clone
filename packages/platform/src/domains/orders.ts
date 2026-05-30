@@ -125,12 +125,18 @@ export function createOrdersDomain(currency: string) {
       return mapOrder(row)
     },
 
-    async getCustomerOrders(params?: PaginationParams): Promise<PaginatedResult<Order>> {
+    async getCustomerOrders(
+      params?: PaginationParams & { customerId?: string },
+    ): Promise<PaginatedResult<Order>> {
       const page = params?.page ?? 1
       const perPage = params?.perPage ?? 20
       const offset = (page - 1) * perPage
 
-      const rows = await findOrders({ limit: perPage, offset })
+      if (!params?.customerId) {
+        return { items: [], total: 0, page, perPage, hasMore: false }
+      }
+
+      const rows = await findOrders({ limit: perPage, offset, customerId: params.customerId })
       const orders = await Promise.all(rows.map(mapOrder))
 
       return {

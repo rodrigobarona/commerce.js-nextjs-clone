@@ -239,9 +239,15 @@ importers:
       '@neondatabase/serverless':
         specifier: 'catalog:'
         version: 1.1.0
+      '@prood/billing':
+        specifier: workspace:*
+        version: link:../../packages/billing
       '@prood/commerce':
         specifier: workspace:*
         version: link:../../packages/commerce
+      '@prood/platform':
+        specifier: workspace:*
+        version: link:../../packages/platform
       '@prood/types':
         specifier: workspace:*
         version: link:../../packages/types
@@ -522,6 +528,9 @@ importers:
       '@prood/api-client':
         specifier: workspace:*
         version: link:../../packages/api-client
+      '@prood/platform':
+        specifier: workspace:*
+        version: link:../../packages/platform
       '@prood/types':
         specifier: workspace:*
         version: link:../../packages/types

@@ -24,10 +24,6 @@ function resolveBetterAuthEnv(defaultBaseUrl: string) {
 
 /**
  * Better Auth instance — email/password on Neon Postgres via Drizzle.
- *
- * This is the default auth provider. To swap to WorkOS AuthKit or Clerk,
- * implement the same `getSession()` seam in `./index.ts` behind an
- * `AUTH_PROVIDER` switch; pages and components only depend on that seam.
  */
 function createAuth() {
   const { baseURL, secret } = resolveBetterAuthEnv("http://localhost:3000")

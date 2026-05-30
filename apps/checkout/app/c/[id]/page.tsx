@@ -2,10 +2,10 @@ import type { Metadata } from "next"
 import { PaymentPageClient } from "@/components/payment-page-client"
 
 export const metadata: Metadata = {
-  title: "Pay",
+  title: "Checkout",
 }
 
-export default async function PayPage({
+export default async function CheckoutSessionPage({
   params,
 }: {
   params: Promise<{ id: string }>

@@ -93,9 +93,6 @@ export async function createPlatformAdapter(config: PlatformConfig = {}): Promis
   // Build the admin API
   const admin = createAdminAPI(currency)
 
-  // Seed the initial admin from env vars if no admins exist yet
-  await admin.auth.seedInitialAdmin()
-
   const adapter = {
     name: 'prood',
     capabilities: ['catalog', 'cart', 'checkout', 'orders', 'customers', 'store', 'brands', 'countries', 'wishlist', 'reviews', 'promotions', 'returns'] as AdapterDomain[],
@@ -121,7 +118,8 @@ export async function createPlatformAdapter(config: PlatformConfig = {}): Promis
     setShippingMethod: checkout.setShippingMethod,
     getPaymentMethods: checkout.getPaymentMethods,
     setPaymentMethod: checkout.setPaymentMethod,
-    placeOrder: checkout.placeOrder,
+    placeOrder: (cartId: string, options?: { customerId?: string }) =>
+      checkout.placeOrder(cartId, options),
 
     // ---- Customers ----
     login: customers.login,

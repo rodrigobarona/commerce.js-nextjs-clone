@@ -5,44 +5,52 @@
 import type { Customer, Address, PaginatedResult } from '@prood/types'
 import type { AdminListParams } from './types.js'
 import {
-  findCustomerById,
+  adminFindAllCustomers,
+  adminFindCustomerById,
+  adminDeleteCustomer,
   findAddresses,
-  findAllCustomers,
-  deleteCustomerById,
 } from '../database/index.js'
 
-function mapAddress(row: any): Address {
+function mapAddress(row: Record<string, unknown>): Address {
   return {
-    id: row.id,
-    firstName: row.firstName,
-    lastName: row.lastName,
-    phone: row.phone ?? null,
-    street: row.street,
-    street2: row.street2 ?? null,
-    city: row.city,
-    state: row.state ?? null,
-    country: row.country,
-    postalCode: row.postalCode ?? null,
-    district: row.district ?? null,
-    nationalAddress: row.nationalAddress ?? null,
-    additionalNumber: row.additionalNumber ?? null,
-    isDefault: Boolean(row.isDefault),
+    id: String(row.id),
+    firstName: String(row.firstName ?? row.first_name),
+    lastName: String(row.lastName ?? row.last_name),
+    phone: (row.phone as string | null) ?? null,
+    street: String(row.street),
+    street2: (row.street2 as string | null) ?? null,
+    city: String(row.city),
+    state: (row.state as string | null) ?? null,
+    country: String(row.country),
+    postalCode: (row.postalCode as string | null) ?? (row.postal_code as string | null) ?? null,
+    district: (row.district as string | null) ?? null,
+    nationalAddress: (row.nationalAddress as string | null) ?? (row.national_address as string | null) ?? null,
+    additionalNumber: (row.additionalNumber as string | null) ?? (row.additional_number as string | null) ?? null,
+    isDefault: Boolean(row.isDefault ?? row.is_default),
   }
 }
 
-async function mapCustomer(row: any): Promise<Customer> {
+async function mapCustomer(row: {
+  id: string
+  firstName?: string | null
+  lastName?: string | null
+  phone?: string | null
+  defaultAddressId?: string | null
+  createdAt: Date | string
+  updatedAt: Date | string
+  userEmail?: string | null
+}): Promise<Customer> {
   const addresses = await findAddresses(row.id)
-
   return {
     id: row.id,
-    email: row.email,
+    email: row.userEmail ?? null,
     firstName: row.firstName ?? null,
     lastName: row.lastName ?? null,
     phone: row.phone ?? null,
     addresses: addresses.map(mapAddress),
     defaultAddressId: row.defaultAddressId ?? null,
-    createdAt: row.createdAt,
-    updatedAt: row.updatedAt,
+    createdAt: row.createdAt instanceof Date ? row.createdAt.toISOString() : String(row.createdAt),
+    updatedAt: row.updatedAt instanceof Date ? row.updatedAt.toISOString() : String(row.updatedAt),
   }
 }
 
@@ -53,7 +61,7 @@ export function createAdminCustomersDomain() {
       const perPage = params?.perPage ?? 20
       const offset = (page - 1) * perPage
 
-      const { rows, total } = await findAllCustomers({
+      const { rows, total } = await adminFindAllCustomers({
         search: params?.search,
         limit: perPage,
         offset,
@@ -71,15 +79,15 @@ export function createAdminCustomersDomain() {
     },
 
     async getCustomer(id: string): Promise<Customer> {
-      const row = await findCustomerById(id)
+      const row = await adminFindCustomerById(id)
       if (!row) throw new Error(`Customer not found: ${id}`)
       return mapCustomer(row)
     },
 
     async deleteCustomer(id: string): Promise<void> {
-      const row = await findCustomerById(id)
+      const row = await adminFindCustomerById(id)
       if (!row) throw new Error(`Customer not found: ${id}`)
-      await deleteCustomerById(id)
+      await adminDeleteCustomer(id)
     },
   }
 }

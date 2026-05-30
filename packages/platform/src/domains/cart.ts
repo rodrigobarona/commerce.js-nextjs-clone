@@ -59,7 +59,7 @@ export function createCartDomain(currency: string) {
 
     // Look up stored shipping method price
     // Shipping rates are defined here to keep cart domain self-contained
-    const shippingRates: Record<string, number> = { standard: 20, express: 35 }
+    const shippingRates: Record<string, number> = { standard: 15, express: 35 }
     const shippingMethodId = cartRow.shippingMethodId ?? null
     const shippingAmount = shippingMethodId ? (shippingRates[shippingMethodId] ?? 0) : 0
 

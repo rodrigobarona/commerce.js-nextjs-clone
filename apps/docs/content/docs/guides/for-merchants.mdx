@@ -23,10 +23,9 @@ Prood is built for anyone who wants to **sell products online** without assembli
 
 | Capability | Status |
 | --- | --- |
-| Platform subscription billing (paid plans) | Planned |
-| Dashboard enforcement of plan limits | Planned |
+| Platform subscription billing (Stripe Checkout) | Planned |
 | Analytics dashboard | Placeholder UI |
-| Resend, SMTP, GA4 runtime | UI only today |
+| Resend, SMTP, GA4 runtime | Not in provider UI until runtime ships |
 | Fine-grained member permissions | Planned |
 
 ## Typical first hour
@@ -50,7 +49,7 @@ Pricing on [prood.com/pricing](https://prood.com/pricing) describes intended tie
 | **Scale** | $79/mo | Unlimited products & orders, 10 seats, priority support |
 | **Agency** | Custom | 10+ stores, dedicated support |
 
-Subscription billing in the dashboard is not live yet—limits are informational until enforcement rolls out. See [Billing](/docs/apps/dashboard/index#billing) in the dashboard docs.
+Subscription billing in the dashboard is not live yet—limits are **enforced at runtime** on Free (products, orders, domains, seats, API write, Agent Auth). See [Plans & entitlements](/docs/billing/plans).
 
 ## Related
 

@@ -19,14 +19,14 @@ DATABASE_URL="postgresql://user:password@host/db?sslmode=require"
 
 | Variable | Required | Used by | Description |
 | --- | --- | --- | --- |
-| `DEFAULT_TENANT_ORG_ID` | Dev | Storefront, API | Fallback org when host-based tenant resolution fails. Default: `org_demo`. Unset in production → unmatched hosts return 404. |
+| `DEFAULT_TENANT_ORG_ID` | Dev | Storefront, API | Fallback org when host-based tenant resolution fails. Set to seeded org id after `pnpm db:setup`. Unset in production → unmatched hosts return 404. |
 | `NEXT_PUBLIC_PLATFORM_DOMAIN` | Prod | Storefront, Dashboard, API | Apex for merchant storefront subdomains only (`{slug}.prood.app`). Platform services run on `prood.com`. Example: `prood.app`. |
 
 ## Commerce engine
 
 | Variable | Default | Description |
 | --- | --- | --- |
-| `COMMERCE_ADAPTER` | `platform` | Adapter backend. Built-in: `platform` (Neon + Drizzle). Seams exist for `medusa` and `salla`. |
+| `COMMERCE_ADAPTER` | `platform` | Built-in Neon + Drizzle engine (only supported adapter). |
 | `COMMERCE_CURRENCY` | `EUR` | Default store currency (ISO 4217). |
 
 ## Storage
@@ -49,8 +49,7 @@ Uploaded files are namespaced per tenant: `org/<orgId>/…` via `uploadForTenant
 | Variable | Required | Used by | Description |
 | --- | --- | --- | --- |
 | `BETTER_AUTH_SECRET` | Yes (prod) | All auth apps | Session signing secret. Generate: `openssl rand -base64 32` |
-| `BETTER_AUTH_URL` | Yes | Storefront, Dashboard, API | Public base URL for auth callbacks. Storefront default: `http://localhost:3000`. Dashboard: `http://localhost:3002`. API: `http://localhost:3005`. |
-| `AUTH_PROVIDER` | `better-auth` | Storefront | Auth seam for future WorkOS / Clerk swap. |
+| `BETTER_AUTH_URL` | Yes | Storefront, Dashboard, API | Public base URL **per deployed app** for auth callbacks. Storefront: `http://localhost:3000`. Dashboard: `http://localhost:3002`. API: `http://localhost:3005`. |
 
 ### Seed credentials
 
@@ -98,7 +97,6 @@ Per-tenant credentials configured in the dashboard **override** these env fallba
 | --- | --- | --- |
 | `CHECKOUT_URL` | Yes | Public URL of `apps/checkout`. Storefront redirects here after order placement. Default: `http://localhost:3004` |
 | `CHECKOUT_API_SECRET` | Yes | Shared secret between storefront and checkout. Sent as `x-checkout-secret` header. Generate: `openssl rand -base64 32` |
-| `STOREFRONT_URL` | Yes | Public storefront URL for post-payment redirects. Default: `http://localhost:3000` |
 | `COMMERCE_API_URL` | Yes | API base for webhook forwarding. Default: `http://localhost:3005/v1` |
 
 ## Upstash Redis
@@ -134,7 +132,7 @@ Optional for local dev; required for custom domain provisioning in production:
 
 | Variable | Description |
 | --- | --- |
-| `INTEGRATION_ENCRYPTION_KEY` | AES-256-GCM key for encrypting provider credentials in `integration_config`. Falls back to `BETTER_AUTH_SECRET`. Set a dedicated key in production. |
+| `INTEGRATION_ENCRYPTION_KEY` | Yes | AES-256-GCM key for encrypting provider credentials in `integration_config`. Required — no fallback. Generate: `openssl rand -base64 32` |
 
 ## Marketing site
 

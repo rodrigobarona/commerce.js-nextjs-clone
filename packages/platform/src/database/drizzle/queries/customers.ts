@@ -2,12 +2,15 @@
 // Drizzle: Customer queries
 // ---------------------------------------------------------------------------
 
-import { eq } from 'drizzle-orm'
+import { eq, isNotNull } from 'drizzle-orm'
 import { getDb } from '../client.js'
 import * as schema from '../schema/index.js'
 
-export async function findCustomerByEmail(email: string) {
-  const [row] = await getDb().select().from(schema.customers).where(eq(schema.customers.email, email))
+export async function findCustomerByAuthUserId(authUserId: string) {
+  const [row] = await getDb()
+    .select()
+    .from(schema.customers)
+    .where(eq(schema.customers.authUserId, authUserId))
   return row ?? null
 }
 
@@ -17,29 +20,45 @@ export async function findCustomerById(id: string) {
 }
 
 export async function createCustomer(data: {
-  id: string
-  email: string
-  passwordHash: string
+  id?: string
+  authUserId?: string | null
   firstName?: string | null
   lastName?: string | null
   phone?: string | null
-  createdAt?: string | Date
-  updatedAt?: string | Date
 }) {
-  await getDb().insert(schema.customers).values(data as any)
+  const id = data.id ?? crypto.randomUUID()
+  await getDb().insert(schema.customers).values({
+    id,
+    authUserId: data.authUserId ?? null,
+    firstName: data.firstName ?? null,
+    lastName: data.lastName ?? null,
+    phone: data.phone ?? null,
+  } as typeof schema.customers.$inferInsert)
+  return id
 }
 
-export async function updateCustomer(id: string, data: Record<string, any>) {
-  await getDb().update(schema.customers).set(data as any).where(eq(schema.customers.id, id))
+export async function updateCustomer(id: string, data: Record<string, unknown>) {
+  await getDb()
+    .update(schema.customers)
+    .set({ ...data, updatedAt: new Date() } as typeof schema.customers.$inferInsert)
+    .where(eq(schema.customers.id, id))
+}
+
+export async function linkCustomerAuthUser(customerId: string, authUserId: string) {
+  await updateCustomer(customerId, { authUserId })
 }
 
 export async function findAddresses(customerId: string) {
-  return getDb().select().from(schema.customerAddresses)
+  return getDb()
+    .select()
+    .from(schema.customerAddresses)
     .where(eq(schema.customerAddresses.customerId, customerId))
 }
 
 export async function findAddressById(addressId: string) {
-  const [row] = await getDb().select().from(schema.customerAddresses)
+  const [row] = await getDb()
+    .select()
+    .from(schema.customerAddresses)
     .where(eq(schema.customerAddresses.id, addressId))
   return row ?? null
 }
@@ -61,15 +80,24 @@ export async function createAddress(data: {
   additionalNumber?: string | null
   isDefault?: boolean
 }) {
-  await getDb().insert(schema.customerAddresses).values(data as any)
+  await getDb().insert(schema.customerAddresses).values(data as typeof schema.customerAddresses.$inferInsert)
 }
 
-export async function updateAddress(addressId: string, data: Record<string, any>) {
-  await getDb().update(schema.customerAddresses).set(data as any)
+export async function updateAddress(addressId: string, data: Record<string, unknown>) {
+  await getDb()
+    .update(schema.customerAddresses)
+    .set(data as typeof schema.customerAddresses.$inferInsert)
     .where(eq(schema.customerAddresses.id, addressId))
 }
 
 export async function deleteAddress(addressId: string) {
-  await getDb().delete(schema.customerAddresses)
-    .where(eq(schema.customerAddresses.id, addressId))
+  await getDb().delete(schema.customerAddresses).where(eq(schema.customerAddresses.id, addressId))
+}
+
+export async function countCustomersWithAuthUser() {
+  const rows = await getDb()
+    .select({ id: schema.customers.id })
+    .from(schema.customers)
+    .where(isNotNull(schema.customers.authUserId))
+  return rows.length
 }

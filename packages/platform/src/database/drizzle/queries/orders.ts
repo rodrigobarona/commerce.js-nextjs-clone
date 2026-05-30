@@ -23,11 +23,23 @@ export async function findOrderById(orderId: string) {
   return row ?? null
 }
 
-export async function findOrders(opts: { limit: number; offset: number }) {
-  return getDb().select().from(schema.orders)
-    .orderBy(desc(schema.orders.createdAt))
-    .limit(opts.limit)
-    .offset(opts.offset)
+export async function findOrders(opts: { limit: number; offset: number; customerId?: string }) {
+  const base = getDb().select().from(schema.orders).orderBy(desc(schema.orders.createdAt))
+  if (opts.customerId) {
+    return base
+      .where(eq(schema.orders.customerId, opts.customerId))
+      .limit(opts.limit)
+      .offset(opts.offset)
+  }
+  return base.limit(opts.limit).offset(opts.offset)
+}
+
+export async function countOrdersForCustomer(customerId: string) {
+  const rows = await getDb()
+    .select({ id: schema.orders.id })
+    .from(schema.orders)
+    .where(eq(schema.orders.customerId, customerId))
+  return rows.length
 }
 
 export async function findOrderItems(orderId: string) {

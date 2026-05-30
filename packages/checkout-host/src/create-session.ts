@@ -1,6 +1,7 @@
 import 'server-only'
 import { CheckoutSession, type CheckoutChannel, type CheckoutFulfillment } from '@prood/checkout'
 import { getPaymentProvider, getTenantPaymentConfig } from '@prood/commerce'
+import { buildCheckoutSessionUrl, resolveCheckoutBaseUrl } from './checkout-url'
 import { saveSession, type SessionMeta } from './session-store'
 
 let counter = 0
@@ -16,6 +17,8 @@ export interface CreateSessionInput {
   returnUrl?: string
   cancelUrl?: string
   providerId?: string
+  /** Commerce customer UUID — stored in session meta, not PII */
+  customerId?: string
   customerInfo?: {
     email: string
     firstName?: string
@@ -44,8 +47,8 @@ export async function createCheckoutSession(input: CreateSessionInput): Promise<
   const provider = getPaymentProvider(providerId, tenantConfig)
   const kind = 'cs'
   const sessionId = generateId(kind)
-  const checkoutUrl = process.env.CHECKOUT_URL ?? 'http://localhost:3004'
-  const webhookUrl = `${checkoutUrl}/api/webhooks/${providerId}/${input.tenantId ?? '_'}`
+  const checkoutBaseUrl = resolveCheckoutBaseUrl()
+  const webhookUrl = `${checkoutBaseUrl}/api/webhooks/${providerId}/${input.tenantId ?? '_'}`
 
   const session = new CheckoutSession({
     paymentProvider: provider,
@@ -76,6 +79,8 @@ export async function createCheckoutSession(input: CreateSessionInput): Promise<
     cancelUrl: input.cancelUrl ?? null,
     webhookUrl,
     tenantId: input.tenantId ?? null,
+    orderId: input.orderId ?? null,
+    customerId: input.customerId ?? null,
   }
 
   const snapshot = session.toSnapshot()
@@ -92,8 +97,8 @@ export async function createPaymentLink(input: CreateSessionInput): Promise<Crea
   const provider = getPaymentProvider(providerId, tenantConfig)
   const kind = 'pl'
   const sessionId = generateId(kind)
-  const checkoutUrl = process.env.CHECKOUT_URL ?? 'http://localhost:3004'
-  const webhookUrl = `${checkoutUrl}/api/webhooks/${providerId}/${input.tenantId ?? '_'}`
+  const checkoutBaseUrl = resolveCheckoutBaseUrl()
+  const webhookUrl = `${checkoutBaseUrl}/api/webhooks/${providerId}/${input.tenantId ?? '_'}`
 
   const session = new CheckoutSession({
     paymentProvider: provider,
@@ -124,11 +129,13 @@ export async function createPaymentLink(input: CreateSessionInput): Promise<Crea
     cancelUrl: input.cancelUrl ?? null,
     webhookUrl,
     tenantId: input.tenantId ?? null,
+    orderId: input.orderId ?? null,
+    customerId: input.customerId ?? null,
   }
 
   const snapshot = session.toSnapshot()
   await saveSession(sessionId, snapshot, meta)
 
-  const url = `${checkoutUrl}/pay/${sessionId}`
+  const url = buildCheckoutSessionUrl(checkoutBaseUrl, sessionId)
   return { sessionId, providerId, publishableKey, snapshot, url }
 }

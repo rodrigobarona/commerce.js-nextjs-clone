@@ -18,6 +18,8 @@ export * from './crypto'
 export * from './storage'
 export * from './errors'
 export * from './revalidate'
+export * from './customer-identity'
+export * from './enforcement'
 
 // Re-export the unified domain model for convenience (includes the
 // CommerceError class + isCommerceError guard as runtime values).
