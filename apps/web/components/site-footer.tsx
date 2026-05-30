@@ -32,8 +32,8 @@ export function SiteFooter() {
           <div className="space-y-5">
             <Logo />
             <p className="max-w-[22rem] text-[15px] leading-7 text-muted-foreground">
-              {siteConfig.tagline}. Launch free with a custom domain, run on your own payment keys,
-              and upgrade when volume, team, or automation need it—not to go live.
+              {siteConfig.tagline}. Start free on your domain, connect payments with your keys, and
+              upgrade when the business needs more—not to open the doors.
             </p>
           </div>
 
@@ -69,7 +69,7 @@ export function SiteFooter() {
         </div>
 
         <div className="mt-16 flex flex-col gap-2 border-t border-border/50 pt-8 text-[13px] text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
-          <p>© 2026 Prood. No platform fee on your sales at launch.</p>
+          <p>© 2026 Prood. We don&apos;t take a cut of your sales.</p>
           <p className="text-[12px]">hello@prood.com</p>
         </div>
       </div>

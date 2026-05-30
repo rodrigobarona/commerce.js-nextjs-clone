@@ -11,9 +11,9 @@ export function CheckoutMock({ className }: { className?: string }) {
           <span className="text-[13px] font-medium">Order total</span>
           <span className="font-display text-[16px] font-medium tracking-[-0.02em]">€86.00</span>
         </div>
-        <div className="rounded-xl border border-border/80 bg-muted/25 p-4 shadow-sm">
+        <div className="rounded-md border border-border/80 bg-muted/25 p-4">
           <div className="flex items-center gap-3">
-            <div className="flex size-9 items-center justify-center rounded-lg border border-border bg-card shadow-sm">
+            <div className="flex size-9 items-center justify-center rounded-md border border-border bg-card">
               <CreditCardIcon className="size-4 text-brand" weight="duotone" />
             </div>
             <div>
@@ -22,7 +22,7 @@ export function CheckoutMock({ className }: { className?: string }) {
             </div>
           </div>
         </div>
-        <div className="flex h-10 items-center justify-center gap-2 rounded-xl bg-foreground text-[13px] font-medium text-background shadow-sm">
+        <div className="flex h-10 items-center justify-center gap-2 rounded-md bg-foreground text-[13px] font-medium text-background">
           Pay €86.00
         </div>
         <p className="flex items-center justify-center gap-1.5 text-center text-[11px] text-muted-foreground">

@@ -11,7 +11,7 @@ export function StorefrontCatalogMock({ className }: { className?: string }) {
       <div className="border-b border-border/50 bg-card px-4 py-3.5" aria-hidden>
         <div className="flex items-center justify-between">
           <span className="text-[13px] font-semibold tracking-[-0.02em]">Acme Store</span>
-          <span className="inline-flex items-center gap-1.5 rounded-full border border-border bg-muted/40 px-2.5 py-1 text-[11px] font-medium shadow-sm">
+          <span className="inline-flex items-center gap-1.5 rounded-md border border-border bg-muted/40 px-2.5 py-1 text-[11px] font-medium">
             <ShoppingCartIcon className="size-3 text-brand" weight="bold" />
             2 items
           </span>
@@ -22,7 +22,7 @@ export function StorefrontCatalogMock({ className }: { className?: string }) {
           <div
             key={product.name}
             className={cn(
-              "group overflow-hidden rounded-xl border border-border/70 bg-card transition-shadow",
+              "group overflow-hidden rounded-md border border-border/70 bg-card",
               index === 0 && "ring-1 ring-brand/15"
             )}
           >

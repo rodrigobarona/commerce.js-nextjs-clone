@@ -34,7 +34,7 @@ export function MultiStoreMock({ className }: { className?: string }) {
               </div>
             </div>
             {i === 0 ? (
-              <span className="shrink-0 rounded-full bg-brand/12 px-2 py-0.5 text-[10px] font-medium text-brand ring-1 ring-brand/20">
+              <span className="shrink-0 rounded-sm bg-brand/12 px-2 py-0.5 text-[10px] font-medium text-brand">
                 Active
               </span>
             ) : null}

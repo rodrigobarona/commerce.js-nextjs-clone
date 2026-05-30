@@ -19,7 +19,7 @@ export function DomainsMock({ className }: { className?: string }) {
               <p className="text-[11px] text-muted-foreground">Subdomain · included</p>
             </div>
           </div>
-          <span className="shrink-0 rounded-full bg-brand/12 px-2 py-0.5 text-[10px] font-medium text-brand ring-1 ring-brand/20">
+          <span className="shrink-0 rounded-sm bg-brand/12 px-2 py-0.5 text-[10px] font-medium text-brand">
             Live
           </span>
         </li>
@@ -35,7 +35,7 @@ export function DomainsMock({ className }: { className?: string }) {
           </div>
           <span
             className={cn(
-              "shrink-0 rounded-full bg-muted px-2 py-0.5 text-[10px] font-medium text-muted-foreground"
+              "shrink-0 rounded-sm bg-muted px-2 py-0.5 text-[10px] font-medium text-muted-foreground"
             )}
           >
             SSL

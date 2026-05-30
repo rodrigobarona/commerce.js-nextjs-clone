@@ -1,4 +1,5 @@
 {
-  "extends": "@prood/typescript-config/base.json"
+  "extends": "@prood/typescript-config/base.json",
+  "files": []
 }
 

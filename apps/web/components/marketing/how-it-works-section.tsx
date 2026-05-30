@@ -14,8 +14,8 @@ export function HowItWorksSection() {
         <SectionHeader
           align="center"
           eyebrow="How it works"
-          title="From signup to first sale in three steps"
-          description="Most merchants are live on a subdomain in under an hour. Add your custom domain when you are ready—it's included on Free."
+          title="Three steps to your first order"
+          description="Most stores are live on a subdomain within an hour. Connect your domain when you want—it's on Free."
         />
 
         <ol className="mt-14 grid gap-10 lg:grid-cols-3">

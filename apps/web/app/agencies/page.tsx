@@ -14,25 +14,25 @@ import { agencyHighlights, siteConfig } from "@/lib/site"
 export const metadata: Metadata = {
   title: "For agencies",
   description:
-    "Launch and manage multiple client stores on Prood—isolated tenants, per-client domains and payments, and team access per store.",
+    "Launch client stores on Prood—isolated data, per-client domains and payments, and team access without sharing logins.",
 }
 
 const agencyWorkflow = [
   {
-    title: "Spin up a client store",
-    description: "Register a new organization per client. Each gets an instant subdomain and isolated catalog.",
+    title: "Create the client store",
+    description: "One organization per client. Subdomain and catalog ready immediately.",
   },
   {
-    title: "Configure their stack",
-    description: "Set products, connect the client's Stripe or regional provider, and invite their team.",
+    title: "Wire their stack",
+    description: "Products, the client's Stripe or regional provider, and invites for their team.",
   },
   {
-    title: "Go live on their domain",
-    description: "Use the platform subdomain for staging; attach shop.client.com when the client is ready.",
+    title: "Ship on their domain",
+    description: "Stage on a subdomain. Point shop.client.com when they sign off.",
   },
   {
-    title: "Operate at scale",
-    description: "Agency plan supports 10+ stores with unlimited products and dedicated support.",
+    title: "Run the portfolio",
+    description: "Agency plan covers 10+ stores, unlimited catalog, and a direct support line.",
   },
 ] as const
 
@@ -45,13 +45,13 @@ export default function AgenciesPage() {
             <div>
               <SectionHeader
                 eyebrow="For agencies"
-                title="Modern commerce infrastructure for every client"
-                description="Stop rebuilding storefronts and checkout for each engagement. Prood gives each client a real store—with data isolation, their own payments, and domains you control from one workflow."
+                title="Client stores without the rebuild"
+                description="Stop stitching checkout and admin for every engagement. Each client gets isolation, their own payments, and a domain you control from one workflow."
               />
               <div className="mt-10 flex flex-wrap gap-3">
                 <Button variant="brand" size="lg" asChild>
                   <Link href={siteConfig.registerUrl}>
-                    Start with a client store
+                    Start a client store
                     <ArrowRightIcon data-icon="inline-end" aria-hidden />
                   </Link>
                 </Button>
@@ -82,8 +82,8 @@ export default function AgenciesPage() {
         <SectionContainer>
           <SectionHeader
             eyebrow="Workflow"
-            title="How agencies use Prood"
-            description="A repeatable flow from new client to live storefront—documented in our agency guide."
+            title="From kickoff to live URL"
+            description="A repeatable playbook—documented in our agency guide."
           />
           <ol className="mt-12 grid gap-6 sm:grid-cols-2">
             {agencyWorkflow.map((step, index) => (
@@ -102,20 +102,14 @@ export default function AgenciesPage() {
           <SectionHeader
             align="center"
             eyebrow="Agency plan"
-            title="Built for portfolios of stores"
-            description="The Agency tier includes 10+ isolated stores, unlimited products and orders, and dedicated support."
+            title="Built for many stores"
+            description="Ten or more isolated clients, unlimited products and orders, dedicated support."
           />
           <div className="mt-12 flex justify-center">
             <div className="w-full max-w-md">
               <PricingCardsGrid tiers={[getMarketingTier("agency", "monthly")]} />
             </div>
           </div>
-          <p className="mx-auto mt-8 max-w-lg text-center text-[14px] text-muted-foreground">
-            Need more than ten stores or custom terms?{" "}
-            <Link href="mailto:hello@prood.com" className="text-foreground hover:underline">
-              Contact us
-            </Link>
-          </p>
         </SectionContainer>
       </SectionShell>
 

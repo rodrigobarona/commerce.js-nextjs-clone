@@ -28,7 +28,7 @@ export function DashboardSection() {
         </BentoGrid>
 
         <div className="mt-10">
-          <Button variant="brand" className="rounded-lg" asChild>
+          <Button variant="brand" asChild>
             <Link href={siteConfig.registerUrl}>Create your store</Link>
           </Button>
         </div>

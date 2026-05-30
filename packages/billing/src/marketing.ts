@@ -253,51 +253,51 @@ export function getFreeMarketingTier(): MarketingTier {
 
 export const pricingFaqs = [
   {
-    question: "Is the Free plan really free?",
+    question: "Is Free actually free?",
     answer:
-      "Yes. Run a live store on your Prood subdomain or connect one custom domain, accept payments through your own Stripe or regional provider accounts, and manage products and orders with no Prood subscription fee.",
+      "Yes. You get a live store, one custom domain, your subdomain, and checkout with your own payment accounts. There is no Prood subscription on Free.",
   },
   {
-    question: "Why is custom domain included on Free?",
+    question: "Why include a custom domain on Free?",
     answer:
-      "We want you to look on-brand from day one. Free includes one verified custom domain plus your subdomain. Need more domains or higher volume? Upgrade to Grow or Scale when billing goes live.",
+      "Your brand should not wait for a paid plan. Free includes one verified custom domain plus your subdomain. Add more domains or higher limits when you upgrade.",
   },
   {
-    question: "Do you charge transaction fees on my sales?",
+    question: "Does Prood take a cut of my sales?",
     answer:
-      "No platform fee on your sales at launch. Stripe, Easypay, Ifthenpay, and other providers charge their own processing fees directly to you—we do not add a Prood surcharge on top.",
+      "Not at launch. Stripe, Easypay, Ifthenpay, and other providers charge their own processing fees. Prood does not add a platform surcharge on top.",
   },
   {
-    question: "When will paid plans and billing be available?",
+    question: "When do paid plans bill?",
     answer:
-      "You can start on Free today. Subscription billing in the dashboard will roll out soon—limits below reflect what each plan will include. We will grandfather existing stores where noted in our rollout docs.",
+      "Start on Free now. Subscriptions in the dashboard are coming soon—the limits on this page show what each plan will include. We will give existing stores clear notice before anything is enforced.",
   },
   {
-    question: "What is Agent Auth and why is it on Grow?",
+    question: "What is Agent Auth?",
     answer:
-      "Agent Auth lets AI assistants and automation act on your store through approved capabilities—the same operations as the dashboard API, with merchant approval for sensitive changes. It is included from Grow because it is built for teams automating at scale.",
+      "A way for AI assistants and automation to use the same API as your dashboard—with your approval before anything sensitive changes. It ships on Grow and above for teams that automate at scale.",
   },
   {
-    question: "What happens if I exceed Free limits?",
+    question: "What if I hit Free limits?",
     answer:
-      "Before billing launches, limits are informational. When enforcement begins, we will warn you in the dashboard and offer an upgrade path—we will not silently block orders without notice for existing stores.",
+      "Limits are informational until billing launches. When enforcement starts, you will see warnings in the dashboard and a path to upgrade—we will not cut off orders without notice.",
   },
 ] as const
 
 export const pricingTrustPoints = [
   {
-    title: "No Prood fee on your sales",
+    title: "Your sales stay yours",
     description:
-      "At launch you pay your payment provider only. Unlike platforms that add a surcharge when you use third-party gateways, Prood does not take a cut of your GMV.",
+      "At launch you only pay your payment provider. No Prood fee layered on every order.",
   },
   {
-    title: "Bring your own payment keys",
+    title: "Your payment accounts",
     description:
-      "Connect Stripe, Easypay, or Ifthenpay per store. Credentials stay encrypted per organization—ideal for agencies with client-owned accounts.",
+      "Connect Stripe, Easypay, or Ifthenpay per store. Keys are encrypted per organization—ideal for agencies billing client merchants.",
   },
   {
-    title: "Upgrade when limits bite, not at launch",
+    title: "Pay for growth, not launch",
     description:
-      "Custom domain and live checkout are on Free. Grow adds team seats, Agent Auth, and higher catalog volume—the things you need once the store is real.",
+      "Domain, checkout, and catalog are on Free. Upgrade for volume, seats, and Agent Auth when the store earns it.",
   },
 ] as const

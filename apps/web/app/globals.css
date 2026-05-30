@@ -77,7 +77,7 @@
     --chart-3: oklch(0.439 0 0);
     --chart-4: oklch(0.371 0 0);
     --chart-5: oklch(0.269 0 0);
-    --radius: 0.625rem;
+    --radius: 0.5rem;
     --sidebar: oklch(0.985 0 0);
     --sidebar-foreground: oklch(0.145 0 0);
     --sidebar-primary: oklch(0.205 0 0);
@@ -87,8 +87,8 @@
     --sidebar-border: oklch(0.922 0 0);
     --sidebar-ring: oklch(0.708 0 0);
     --surface-elevated: oklch(0.985 0.002 106);
-    --marketing-shadow: 0 1px 2px oklch(0.2 0.02 106 / 4%), 0 12px 40px oklch(0.2 0.02 106 / 6%);
-    --marketing-shadow-lg: 0 2px 8px oklch(0.2 0.02 106 / 5%), 0 24px 64px oklch(0.2 0.02 106 / 8%);
+    --marketing-shadow: 0 1px 2px oklch(0.2 0.02 106 / 3%);
+    --marketing-shadow-lg: 0 1px 3px oklch(0.2 0.02 106 / 4%);
 }
 
 .dark {
@@ -223,21 +223,17 @@
 
   .marketing-panel {
     border: 1px solid oklch(from var(--border) l c h / 90%);
-    border-radius: var(--radius-xl);
+    border-radius: var(--radius-lg);
     background: var(--card);
-    box-shadow: var(--marketing-shadow);
+    box-shadow: none;
   }
 
   .marketing-panel-interactive {
-    transition:
-      border-color 0.2s ease,
-      box-shadow 0.2s ease,
-      transform 0.2s ease;
+    transition: border-color 0.2s ease;
   }
 
   .marketing-panel-interactive:hover {
-    border-color: oklch(from var(--foreground) l c h / 12%);
-    box-shadow: var(--marketing-shadow-lg);
+    border-color: oklch(from var(--foreground) l c h / 14%);
   }
 
   .marketing-mock-chrome {
@@ -271,15 +267,13 @@
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
-    border-radius: 9999px;
+    border-radius: var(--radius-md);
     border: 1px solid oklch(from var(--border) l c h / 90%);
-    background: oklch(from var(--card) l c h / 90%);
-    padding: 0.375rem 0.875rem 0.375rem 0.625rem;
+    background: oklch(from var(--muted) l c h / 40%);
+    padding: 0.375rem 0.75rem 0.375rem 0.625rem;
     font-size: 13px;
     font-weight: 500;
     color: var(--muted-foreground);
-    box-shadow: 0 1px 2px oklch(from var(--foreground) l c h / 4%);
-    backdrop-filter: blur(8px);
   }
 
   .marketing-badge-dot {
@@ -287,7 +281,6 @@
     height: 0.375rem;
     border-radius: 9999px;
     background: var(--brand);
-    box-shadow: 0 0 0 3px oklch(from var(--brand) l c h / 18%);
   }
 
   .marketing-mock-frame {
@@ -298,15 +291,15 @@
   .marketing-mock-frame::before {
     content: "";
     position: absolute;
-    inset: 10% 5% -8%;
+    inset: 8% 4% -6%;
     z-index: -1;
     border-radius: 50%;
     background: radial-gradient(
-      ellipse 80% 60% at 50% 40%,
-      oklch(from var(--brand) l c h / 12%),
-      transparent 70%
+      ellipse 70% 50% at 50% 45%,
+      oklch(from var(--brand) l c h / 5%),
+      transparent 72%
     );
-    filter: blur(28px);
+    filter: blur(20px);
   }
 
   .marketing-mock-frame-featured::after {
@@ -316,9 +309,7 @@
     z-index: 1;
     pointer-events: none;
     border-radius: inherit;
-    box-shadow:
-      inset 0 1px 0 oklch(from var(--foreground) l c h / 6%),
-      0 0 0 1px oklch(from var(--border) l c h / 50%);
+    box-shadow: inset 0 1px 0 oklch(from var(--foreground) l c h / 4%);
   }
 
   .marketing-value-icon {
@@ -327,11 +318,10 @@
     height: 2.25rem;
     align-items: center;
     justify-content: center;
-    border-radius: var(--radius-lg);
+    border-radius: var(--radius-md);
     border: 1px solid oklch(from var(--border) l c h / 90%);
     background: oklch(from var(--card) l c h / 100%);
     color: var(--brand);
-    box-shadow: 0 1px 2px oklch(from var(--foreground) l c h / 4%);
   }
 
   .marketing-stat-value {
@@ -360,30 +350,16 @@
 
   .marketing-cta-panel {
     position: relative;
-    border-radius: var(--radius-2xl);
+    border-radius: var(--radius-lg);
     border: 1px solid oklch(from var(--border) l c h / 90%);
-    background: linear-gradient(
-      165deg,
-      oklch(from var(--card) l c h / 100%) 0%,
-      oklch(from var(--muted) l c h / 35%) 100%
-    );
-    box-shadow: var(--marketing-shadow-lg);
-  }
-
-  .marketing-cta-panel::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    border-radius: inherit;
-    pointer-events: none;
-    box-shadow: inset 0 1px 0 oklch(from var(--foreground) l c h / 5%);
+    background: oklch(from var(--muted) l c h / 25%);
+    box-shadow: none;
   }
 
   .marketing-chip {
     border: 1px solid oklch(from var(--border) l c h / 90%);
-    border-radius: 9999px;
-    background: oklch(from var(--card) l c h / 95%);
-    box-shadow: 0 1px 2px oklch(from var(--foreground) l c h / 4%);
+    border-radius: var(--radius-md);
+    background: var(--card);
   }
 
   .marketing-list-divider > li + li {

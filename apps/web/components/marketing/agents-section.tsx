@@ -5,7 +5,7 @@ import { AgentAuthMock } from "@/components/marketing/mocks/agent-auth-mock"
 import { SplitShowcase } from "@/components/marketing/split-showcase"
 import { SectionContainer, SectionHeader, SectionShell } from "@/components/marketing/section"
 import { Button } from "@/components/ui/button"
-import { agentExamples, siteConfig } from "@/lib/site"
+import { agentExamples } from "@/lib/site"
 
 export function AgentsSection({ compact = false }: { compact?: boolean }) {
   if (compact) {
@@ -15,8 +15,8 @@ export function AgentsSection({ compact = false }: { compact?: boolean }) {
           <SplitShowcase
             reverse
             eyebrow="AI & automation"
-            title="Your team can include AI assistants"
-            description="On Grow and above, approved agents use the same API as your dashboard—with merchant approval for sensitive changes."
+            title="Let assistants help—after you approve"
+            description="On Grow and above, agents use the same API as your team. Sensitive changes wait for your sign-off."
             visual={<AgentAuthMock />}
           >
             <ul className="space-y-3 text-[14px] leading-7 text-muted-foreground">
@@ -27,8 +27,8 @@ export function AgentsSection({ compact = false }: { compact?: boolean }) {
               ))}
             </ul>
             <div className="mt-8 flex flex-wrap gap-3">
-              <Button variant="outline" className="rounded-lg" asChild>
-                <Link href="/ai">Learn about AI on Prood</Link>
+              <Button variant="outline" asChild>
+                <Link href="/ai">How AI works on Prood</Link>
               </Button>
             </div>
           </SplitShowcase>
@@ -42,8 +42,8 @@ export function AgentsSection({ compact = false }: { compact?: boolean }) {
       <SectionContainer>
         <SectionHeader
           eyebrow="AI & automation"
-          title="Commerce your humans and agents can share"
-          description="Agent Auth, MCP, and REST on Grow plans and above—scoped per store with approval for mutations."
+          title="Humans and agents, same store"
+          description="REST, MCP, and Agent Auth on Grow and above—scoped per store, with approval before anything critical changes."
         />
         <div className="mt-12 max-w-xl">
           <MockFrame>

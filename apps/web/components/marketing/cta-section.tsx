@@ -10,11 +10,11 @@ export function CtaSection() {
     <SectionShell variant="glow">
       <SectionContainer className="relative py-24 md:py-32">
         <div className="marketing-cta-panel mx-auto max-w-4xl px-6 py-16 text-center sm:px-12 sm:py-20">
-          <p className="section-eyebrow">Ready when you are</p>
-          <h2 className="section-title mx-auto mt-4 max-w-2xl">Start selling on Prood today</h2>
+          <p className="section-eyebrow">Get started</p>
+          <h2 className="section-title mx-auto mt-4 max-w-2xl">Open your store in minutes</h2>
           <p className="section-description mx-auto mt-4 max-w-xl">
-            Create your store, add products, and connect payments—all free to start. Custom domain
-            included on Free. Upgrade when you need more volume, team seats, or Agent Auth.
+            Free plan, your domain, your payment keys. Upgrade when orders, team size, or automation
+            need more headroom.
           </p>
 
           <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
@@ -24,12 +24,7 @@ export function CtaSection() {
                 <ArrowRightIcon data-icon="inline-end" aria-hidden />
               </Link>
             </Button>
-            <Button
-              size="lg"
-              variant="outline"
-              className="rounded-full border-border/80 bg-card/80 shadow-sm backdrop-blur-sm"
-              asChild
-            >
+            <Button size="lg" variant="outline" asChild>
               <Link href={`${siteConfig.docsUrl}/docs/guides/for-merchants`}>Merchant guide</Link>
             </Button>
           </div>

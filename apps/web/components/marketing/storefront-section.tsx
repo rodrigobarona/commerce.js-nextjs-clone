@@ -45,7 +45,7 @@ export function StorefrontSection() {
         </BentoGrid>
 
         <div className="mt-10 flex flex-wrap gap-3">
-          <Button variant="outline" className="rounded-lg" asChild>
+          <Button variant="outline" asChild>
             <Link href={siteConfig.storefrontUrl} target="_blank" rel="noopener noreferrer">
               View demo storefront
             </Link>

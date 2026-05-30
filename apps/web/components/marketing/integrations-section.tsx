@@ -18,12 +18,12 @@ export function IntegrationsSection({ compact = false }: { compact?: boolean }) 
           <>
             <SectionHeader
               eyebrow="Integrations"
-              title="Payments that work on day one"
-              description="Stripe, Easypay, and Ifthenpay are live per store. Your keys, your provider fees—no Prood surcharge."
+              title="Payments wired on day one"
+              description="Stripe, Easypay, and Ifthenpay run per store with your keys. You pay the processor—Prood does not add a sales fee at launch."
             />
             <ProviderLogoRow providers={liveProviders} className="mt-8" />
             <div className="mt-10 flex flex-wrap gap-3">
-              <Button variant="outline" className="rounded-lg" asChild>
+              <Button variant="outline" asChild>
                 <Link href="/integrations">All integrations</Link>
               </Button>
             </div>
@@ -31,13 +31,13 @@ export function IntegrationsSection({ compact = false }: { compact?: boolean }) 
         ) : (
           <SplitShowcase
             eyebrow="Integrations"
-            title="Your providers, configured per store"
-            description="No shared platform payment keys. Each merchant connects their own accounts from the dashboard—encrypted at rest."
+            title="Each store connects its own accounts"
+            description="No shared platform keys. Merchants add Stripe or regional providers from the dashboard—credentials encrypted per organization."
             visual={<IntegrationsMock />}
           >
             <ProviderLogoRow providers={liveProviders} />
             <div className="mt-8 flex flex-wrap gap-3">
-              <Button variant="outline" className="rounded-lg" asChild>
+              <Button variant="outline" asChild>
                 <Link href={`${siteConfig.docsUrl}/docs/guides/payment-integration`}>
                   Payment setup guide
                 </Link>
@@ -60,14 +60,11 @@ function ProviderLogoRow({
   return (
     <div className={cn("flex flex-wrap gap-2", className)}>
       {providers.map((provider) => (
-        <span
-          key={provider.name}
-          className="marketing-chip px-3 py-1.5 text-[13px] font-medium"
-        >
+        <span key={provider.name} className="marketing-chip px-3 py-1.5 text-[13px] font-medium">
           {provider.name}
         </span>
       ))}
-      <span className="rounded-full border border-dashed border-border/80 bg-transparent px-3 py-1.5 text-[13px] text-muted-foreground">
+      <span className="rounded-md border border-dashed border-border/80 px-3 py-1.5 text-[13px] text-muted-foreground">
         More coming soon
       </span>
     </div>

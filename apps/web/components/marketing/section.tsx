@@ -100,7 +100,7 @@ export function MarketingCard({
   return (
     <article
       className={cn(
-        geometric ? "geo-card p-6 md:p-8" : "surface-card rounded-2xl p-6 md:p-8",
+        geometric ? "geo-card p-6 md:p-8" : "surface-card rounded-lg p-6 md:p-8",
         hover && "surface-card-hover transition-[border-color,background-color,box-shadow] duration-300",
         className
       )}

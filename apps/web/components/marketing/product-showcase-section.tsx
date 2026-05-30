@@ -14,18 +14,18 @@ export function ProductShowcaseSection() {
         <SectionHeader
           align="center"
           eyebrow="Product"
-          title="Storefront and dashboard, built to work together"
-          description="Customers shop on your domain. You run catalog, orders, and payments from one admin—no duct-taped plugins."
+          title="Storefront and dashboard, one product"
+          description="Shoppers stay on your domain. You manage catalog, orders, and payments in one admin—no plugin patchwork."
         />
 
         <div className="mt-16 space-y-20 md:mt-20 md:space-y-28">
           <SplitShowcase
             eyebrow="Storefront"
-            title="A real shop on your subdomain or custom domain"
-            description="Catalog, cart, checkout, and customer accounts out of the box. Share your URL and take orders the same day you sign up."
+            title="A shop customers recognize"
+            description="Catalog, cart, checkout, and accounts included. Share your link and take orders the day you sign up."
             visual={<StorefrontCatalogMock />}
           >
-            <Button variant="outline" className="rounded-lg" asChild>
+            <Button variant="outline" asChild>
               <Link href={siteConfig.storefrontUrl} target="_blank" rel="noopener noreferrer">
                 View demo storefront
               </Link>
@@ -35,11 +35,11 @@ export function ProductShowcaseSection() {
           <SplitShowcase
             reverse
             eyebrow="Dashboard"
-            title="Orders and catalog in one calm admin"
-            description="Fulfill orders, manage inventory, connect payments, and invite your team—scoped to one store with Postgres isolation."
+            title="Everything to run the store"
+            description="Fulfill orders, adjust inventory, connect payments, and invite your team—each store isolated in Postgres."
             visual={<OrdersTableMock />}
           >
-            <Button variant="brand" className="rounded-lg" asChild>
+            <Button variant="brand" asChild>
               <Link href={siteConfig.registerUrl}>Create your store</Link>
             </Button>
           </SplitShowcase>

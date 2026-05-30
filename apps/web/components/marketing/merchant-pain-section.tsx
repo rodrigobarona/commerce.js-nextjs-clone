@@ -7,20 +7,20 @@ export function MerchantPainSection() {
       <SectionContainer>
         <SectionHeader
           align="center"
-          eyebrow="Less admin. More selling."
-          title="Stop paying the complexity tax"
-          description="Modern platforms give you the precious things early—then charge when volume, team, or automation actually matter."
+          eyebrow="Time back to selling"
+          title="Less setup. More revenue."
+          description="Most platforms make you pay twice—once in subscriptions, again in fees and hours lost to configuration."
         />
 
         <div className="mt-14 grid gap-6 lg:grid-cols-2 lg:gap-8">
           <div className="marketing-panel p-6 md:p-8">
-            <h3 className="text-[15px] font-semibold text-muted-foreground">Without a focused stack</h3>
+            <h3 className="text-[15px] font-semibold text-muted-foreground">The usual stack</h3>
             <ul className="marketing-list-divider mt-6">
               {merchantPainItems.map((item) => (
                 <li key={item.title}>
                   <div className="flex flex-wrap items-baseline justify-between gap-2">
                     <p className="text-[15px] font-semibold tracking-[-0.02em]">{item.title}</p>
-                    <p className="rounded-md bg-destructive/8 px-2 py-0.5 font-mono text-[11px] text-destructive/90">
+                    <p className="rounded-sm bg-destructive/8 px-2 py-0.5 font-mono text-[11px] text-destructive/90">
                       {item.timeCost}
                     </p>
                   </div>
@@ -30,14 +30,14 @@ export function MerchantPainSection() {
             </ul>
           </div>
 
-          <div className="marketing-panel border-brand/25 bg-gradient-to-br from-brand/8 via-card to-card p-6 shadow-[var(--marketing-shadow)] md:p-8">
+          <div className="marketing-panel border-brand/20 bg-brand/5 p-6 md:p-8">
             <h3 className="text-[15px] font-semibold">With Prood</h3>
             <ul className="marketing-list-divider mt-6">
               {merchantGainItems.map((item) => (
                 <li key={item.title}>
                   <div className="flex flex-wrap items-baseline justify-between gap-2">
                     <p className="text-[15px] font-semibold tracking-[-0.02em]">{item.title}</p>
-                    <p className="rounded-md bg-brand/12 px-2 py-0.5 font-mono text-[11px] text-brand">
+                    <p className="rounded-sm bg-brand/12 px-2 py-0.5 font-mono text-[11px] text-brand">
                       {item.timeCost}
                     </p>
                   </div>

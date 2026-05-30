@@ -48,7 +48,7 @@ export function PricingTierCard({ tier }: { tier: MarketingTier }) {
           </li>
         ))}
       </ul>
-      <Button className="mt-8 w-full rounded-lg" variant={tier.highlighted ? "brand" : "outline"} asChild>
+      <Button className="mt-8 w-full" variant={tier.highlighted ? "brand" : "outline"} asChild>
         <Link href={tierCtaHref(tier)}>{tier.cta}</Link>
       </Button>
     </BentoCell>
@@ -75,7 +75,7 @@ export function PricingCardsGrid({ tiers }: { tiers: MarketingTier[] }) {
 
 export function PricingFreeBand({ tier }: { tier: MarketingTier }) {
   return (
-    <div className="marketing-panel rounded-2xl p-6 md:p-8">
+    <div className="marketing-panel p-6 md:p-8">
       <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
         <div className="max-w-2xl">
           <p className="font-mono text-[11px] font-medium tracking-wide text-brand uppercase">
@@ -94,7 +94,7 @@ export function PricingFreeBand({ tier }: { tier: MarketingTier }) {
             ))}
           </ul>
         </div>
-        <Button className="shrink-0 rounded-lg" variant="outline" size="lg" asChild>
+        <Button className="shrink-0" variant="outline" size="lg" asChild>
           <Link href={siteConfig.registerUrl}>{tier.cta}</Link>
         </Button>
       </div>
@@ -115,7 +115,7 @@ export function PricingComparisonTable() {
   const columns: PlanId[] = ["free", "grow", "scale", "agency"]
 
   return (
-    <div className="geo-frame overflow-hidden rounded-xl">
+    <div className="geo-frame overflow-hidden rounded-lg">
       <div className="overflow-x-auto">
         <table className="w-full min-w-[640px] border-collapse text-left text-[14px]">
           <thead>

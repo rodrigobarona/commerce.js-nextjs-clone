@@ -12,22 +12,22 @@ import { agentExamples, siteConfig } from "@/lib/site"
 export const metadata: Metadata = {
   title: "AI & agents",
   description:
-    "Let approved AI assistants operate your Prood store through Agent Auth and MCP—same API as the dashboard, with merchant approval for changes.",
+    "Approve AI assistants to work on your Prood store via Agent Auth and MCP—the same API as your dashboard, with sign-off before sensitive changes.",
 }
 
 const capabilities = [
   {
     title: "REST API",
-    description: "Every commerce operation exposed at /v1/* with OpenAPI 3.1 documentation.",
+    description: "Commerce operations at /v1/* with OpenAPI 3.1 docs—build what you need on top.",
   },
   {
     title: "MCP server",
-    description: "POST /mcp exposes tools that mirror REST operationIds for Claude and compatible clients.",
+    description: "Tools that mirror REST for Claude and compatible clients. One POST endpoint.",
   },
   {
     title: "Agent Auth",
     description:
-      "Register agents, request capabilities, and approve mutating actions—discovery at /.well-known/agent-configuration.",
+      "Register agents, grant capabilities, and approve mutations. Discovery at /.well-known/agent-configuration.",
   },
 ] as const
 
@@ -38,8 +38,8 @@ export default function AiPage() {
         <SectionContainer className="pt-24 md:pt-32">
           <SplitShowcase
             eyebrow="AI & automation"
-            title="Commerce your humans and agents can share"
-            description="Prood is a real store platform with APIs designed so assistants can help list orders, manage catalog, and automate workflows when you approve them. Available on Grow plans and above."
+            title="Your store, assistant-ready"
+            description="Prood is built for real commerce—not demos. Assistants can help with orders and catalog when you approve them. Available on Grow and above."
             visual={<AgentAuthMock />}
           >
             <div className="flex flex-wrap gap-3">
@@ -47,7 +47,7 @@ export default function AiPage() {
                 <Link href={siteConfig.registerUrl}>Start free</Link>
               </Button>
               <Button variant="outline" asChild>
-                <Link href={`${siteConfig.docsUrl}/docs/apps/api/mcp`}>MCP documentation</Link>
+                <Link href={`${siteConfig.docsUrl}/docs/apps/api/mcp`}>MCP docs</Link>
               </Button>
             </div>
           </SplitShowcase>
@@ -58,8 +58,8 @@ export default function AiPage() {
         <SectionContainer>
           <SectionHeader
             eyebrow="Capabilities"
-            title="Three ways to automate"
-            description="Use the surface that fits your stack—all scoped to your store with row-level security."
+            title="Pick how you integrate"
+            description="Same data model and security no matter which surface you use."
           />
           <div className="mt-12 grid gap-6 md:grid-cols-3">
             {capabilities.map((cap) => (
@@ -76,8 +76,8 @@ export default function AiPage() {
         <SectionContainer>
           <SectionHeader
             eyebrow="Examples"
-            title="What agents can do"
-            description="Read-only operations can auto-grant. Sensitive mutations require explicit approval."
+            title="What you can delegate"
+            description="Reads can be automatic. Writes wait for you."
           />
           <ul className="mt-10 space-y-6">
             {agentExamples.map((ex) => (

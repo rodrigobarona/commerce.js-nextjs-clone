@@ -18,10 +18,10 @@ export function IntegrationsMock({ className }: { className?: string }) {
             <span className="text-[13px] font-semibold tracking-[-0.02em]">{item.name}</span>
             <span
               className={cn(
-                "rounded-full px-2.5 py-0.5 text-[10px] font-medium ring-1",
+                "rounded-sm px-2.5 py-0.5 text-[10px] font-medium",
                 item.status === "Connected"
-                  ? "bg-brand/12 text-brand ring-brand/20"
-                  : "bg-muted text-muted-foreground ring-border/80"
+                  ? "bg-brand/12 text-brand"
+                  : "bg-muted text-muted-foreground"
               )}
             >
               {item.status}

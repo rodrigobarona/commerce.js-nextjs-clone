@@ -58,7 +58,7 @@ export function OrdersTableMock({ className }: { className?: string }) {
                   <td className="px-4 py-2.5">
                     <span
                       className={cn(
-                        "inline-flex rounded-full px-2 py-0.5 text-[10px] font-medium",
+                        "inline-flex rounded-sm px-2 py-0.5 text-[10px] font-medium",
                         statusStyles[order.status]
                       )}
                     >

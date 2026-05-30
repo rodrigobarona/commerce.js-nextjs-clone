@@ -38,7 +38,7 @@ export function MockFrame({
   return (
     <div
       className={cn(
-        "marketing-mock-frame rounded-2xl",
+        "marketing-mock-frame rounded-lg",
         featured && "marketing-mock-frame-featured",
         className
       )}

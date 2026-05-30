@@ -15,8 +15,8 @@ export function AgenciesTeaserSection() {
           <div>
             <SectionHeader
               eyebrow="For agencies"
-              title="Launch many client stores on one platform"
-              description="Each client gets isolated data, their own subdomain or domain, and their own payment credentials—without rebuilding infrastructure every time."
+              title="Every client gets a real store"
+              description="Spin up isolated tenants with their own catalog, payments, and domain—without rebuilding checkout for each project."
             />
             <ul className="mt-8 space-y-4">
               {agencyHighlights.map((item) => (
@@ -25,7 +25,7 @@ export function AgenciesTeaserSection() {
                 </li>
               ))}
             </ul>
-            <Button className="mt-8 rounded-lg" variant="brand" asChild>
+            <Button className="mt-8" variant="brand" asChild>
               <Link href="/agencies">
                 Agency plans
                 <ArrowRightIcon data-icon="inline-end" aria-hidden />

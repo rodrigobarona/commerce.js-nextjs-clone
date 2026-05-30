@@ -7,7 +7,7 @@ export function AgentAuthMock({ className }: { className?: string }) {
     <MockChrome title="Agent Auth" url="dashboard.prood.app/settings/api-keys" className={className}>
       <p className="sr-only">Example Agent Auth capability approval</p>
       <div className="space-y-3 p-4" aria-hidden>
-        <div className="rounded-xl border border-border/80 bg-muted/20 p-4 shadow-sm">
+        <div className="rounded-md border border-border/80 bg-muted/20 p-4">
           <div className="flex items-start gap-3">
             <div className="flex size-8 shrink-0 items-center justify-center rounded-lg border border-border bg-card">
               <RobotIcon className="size-4 text-brand" weight="duotone" />
@@ -18,7 +18,7 @@ export function AgentAuthMock({ className }: { className?: string }) {
                 catalog:write · orders:read
               </p>
               <div className="mt-3 flex gap-2">
-                <span className="rounded-md bg-brand px-2.5 py-1 text-[10px] font-medium text-brand-foreground shadow-sm">
+                <span className="rounded-sm bg-brand px-2.5 py-1 text-[10px] font-medium text-brand-foreground">
                   Approve
                 </span>
                 <span className="rounded-md border border-border bg-card px-2.5 py-1 text-[10px]">

@@ -29,13 +29,13 @@ export function HeroSection() {
           </p>
 
           <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
-            <Button size="lg" variant="brand" className="shadow-md" asChild>
+            <Button size="lg" variant="brand" asChild>
               <Link href={siteConfig.registerUrl}>
                 Start free
                 <ArrowRightIcon data-icon="inline-end" aria-hidden />
               </Link>
             </Button>
-            <Button size="lg" variant="outline" className="rounded-full border-border/80 bg-card/80 shadow-sm backdrop-blur-sm" asChild>
+            <Button size="lg" variant="outline" asChild>
               <Link href="#how-it-works">See how it works</Link>
             </Button>
           </div>

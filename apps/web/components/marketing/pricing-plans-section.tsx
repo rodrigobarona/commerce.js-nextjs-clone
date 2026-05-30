@@ -26,7 +26,7 @@ export function PricingPlansSection({ showFreeBand = true }: { showFreeBand?: bo
           Paid plans include a 14-day trial when billing launches.
         </p>
         <div
-          className="inline-flex items-center gap-2 rounded-full border border-border bg-muted/30 p-1"
+          className="inline-flex items-center gap-1 rounded-md border border-border bg-muted/30 p-1"
           role="group"
           aria-label="Billing interval"
         >
@@ -34,7 +34,7 @@ export function PricingPlansSection({ showFreeBand = true }: { showFreeBand?: bo
             type="button"
             onClick={() => setInterval("annual")}
             className={cn(
-              "rounded-full px-3 py-1.5 text-[13px] font-medium transition-colors",
+              "rounded-sm px-3 py-1.5 text-[13px] font-medium transition-colors",
               interval === "annual"
                 ? "bg-foreground text-background"
                 : "text-muted-foreground hover:text-foreground"
@@ -49,7 +49,7 @@ export function PricingPlansSection({ showFreeBand = true }: { showFreeBand?: bo
             type="button"
             onClick={() => setInterval("monthly")}
             className={cn(
-              "rounded-full px-3 py-1.5 text-[13px] font-medium transition-colors",
+              "rounded-sm px-3 py-1.5 text-[13px] font-medium transition-colors",
               interval === "monthly"
                 ? "bg-foreground text-background"
                 : "text-muted-foreground hover:text-foreground"
@@ -82,7 +82,7 @@ export function PricingPreviewCards() {
     <div className="space-y-8">
       <div className="flex justify-center">
         <div
-          className="inline-flex items-center gap-2 rounded-full border border-border bg-muted/30 p-1"
+          className="inline-flex items-center gap-1 rounded-md border border-border bg-muted/30 p-1"
           role="group"
           aria-label="Billing interval"
         >
@@ -90,7 +90,7 @@ export function PricingPreviewCards() {
             type="button"
             onClick={() => setInterval("annual")}
             className={cn(
-              "rounded-full px-3 py-1.5 text-[13px] font-medium transition-colors",
+              "rounded-sm px-3 py-1.5 text-[13px] font-medium transition-colors",
               interval === "annual"
                 ? "bg-foreground text-background"
                 : "text-muted-foreground hover:text-foreground"
@@ -102,7 +102,7 @@ export function PricingPreviewCards() {
             type="button"
             onClick={() => setInterval("monthly")}
             className={cn(
-              "rounded-full px-3 py-1.5 text-[13px] font-medium transition-colors",
+              "rounded-sm px-3 py-1.5 text-[13px] font-medium transition-colors",
               interval === "monthly"
                 ? "bg-foreground text-background"
                 : "text-muted-foreground hover:text-foreground"

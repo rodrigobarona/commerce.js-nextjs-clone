@@ -1,8 +1,8 @@
 export const siteConfig = {
   name: "Prood",
-  tagline: "Sell your products online",
+  tagline: "Sell online without the setup tax",
   description:
-    "Launch your store free with a custom domain, accept payments through your own Stripe or regional provider, and run everything from one dashboard—no Prood fee on your sales at launch.",
+    "Launch a real store on your domain, connect payments with your own keys, and run orders from one dashboard. No Prood cut on your sales.",
   platformDomainExample: "prood.app",
   url: process.env.NEXT_PUBLIC_WEB_URL ?? "http://localhost:3001",
   docsUrl: process.env.NEXT_PUBLIC_DOCS_URL ?? "http://localhost:3003",
@@ -14,45 +14,46 @@ export const siteConfig = {
 } as const
 
 export const siteAnnouncement = {
-  message: "Custom domain included on Free.",
+  message: "Your brand URL—included on Free.",
   href: "/pricing",
   linkLabel: "See plans",
 } as const
 
 export const heroCopy = {
-  badge: "No platform fee on your sales at launch",
-  title: "Launch your store free.",
-  titleAccent: "Pay when you outgrow limits.",
+  badge: "0% Prood fee on your sales",
+  title: "Your store, live today.",
+  titleAccent: "Upgrade when you need more.",
   subline:
-    "One custom domain on Free. Connect Stripe, Easypay, or Ifthenpay with your own keys—we do not take a cut of your GMV.",
-  trustLine: "Start free · Custom domain on Free · Subscription billing coming soon",
+    "Your brand, your URL—on Free. Connect Stripe, Easypay, or Ifthenpay with your keys—you keep what you earn, minus your processor.",
+  trustLine: "Free to start · Your brand URL included · Subscriptions rolling out soon",
 } as const
 
 export const valueStripItems = [
   {
-    title: "No Prood fee on sales",
+    title: "Keep your margin",
     description:
-      "Unlike platforms that surcharge third-party gateways, you pay your provider only—Stripe, Easypay, or Ifthenpay.",
+      "You pay your payment provider directly. Prood does not take a cut of your sales.",
   },
   {
-    title: "Bring your own payment keys",
-    description: "Credentials are encrypted per store. Ideal for agencies with client-owned merchant accounts.",
+    title: "Your keys, your accounts",
+    description:
+      "Stripe and regional providers connect per store. Credentials stay encrypted—built for agencies with client-owned merchants.",
   },
   {
-    title: "Custom domain on Free",
+    title: "Look professional from day one",
     description:
-      "Your subdomain is instant. Connect one verified custom domain without upgrading just to look on-brand.",
+      "Subdomain goes live instantly. Connect your brand URL on Free—no paid plan required to look professional.",
   },
 ] as const
 
 export const marketingStats = [
-  { label: "Custom domains on Free", value: "1 included" },
-  { label: "Platform fee on GMV", value: "0% at launch" },
-  { label: "Typical time to first sale", value: "Under 1 hour" },
+  { label: "Your brand URL", value: "Included on Free" },
+  { label: "Prood fee on sales", value: "0%" },
+  { label: "Typical time to first order", value: "Under an hour" },
 ] as const
 
 export const logoCloudPlaceholder = {
-  headline: "Built for merchants who want a real store—not a plugin maze",
+  headline: "For merchants who want a store—not a stack of plugins",
   names: [] as string[],
 } as const
 
@@ -66,19 +67,19 @@ export const navLinks = [
 
 export const pillars = [
   {
-    title: "Launch fast",
+    title: "Go live fast",
     description:
-      "Sign up, add products, and your store is live on yourname.prood.app. Connect Stripe or regional payment providers and start selling in under an hour.",
+      "Sign up, add products, share your URL. Most merchants run a test checkout the same afternoon.",
   },
   {
-    title: "Run simply",
+    title: "Run one calm admin",
     description:
-      "A clean dashboard for products, orders, customers, team invites, and per-store integrations—no plugins maze or legacy admin panels.",
+      "Catalog, orders, customers, payments, and domains in one place—no app store, no theme surgery.",
   },
   {
-    title: "Grow without limits",
+    title: "Scale on your terms",
     description:
-      "Your custom domain is included on Free. Upgrade for higher volume, team seats, and Agent Auth when you are ready to scale.",
+      "Stay on Free while it fits. Move to Grow for team seats, higher limits, and Agent Auth when the business asks for it.",
   },
 ] as const
 
@@ -86,102 +87,102 @@ export const howItWorksSteps = [
   {
     step: "01",
     title: "Create your store",
-    description: "Register with email and store name. Your organization and subdomain are ready immediately.",
+    description: "Email, store name, done. Your organization and subdomain are ready in minutes.",
   },
   {
     step: "02",
-    title: "Add products & payments",
-    description: "Publish your catalog and connect Stripe, Easypay, or Ifthenpay with your own keys—encrypted per store.",
+    title: "Add catalog and payments",
+    description: "Publish products and connect Stripe, Easypay, or Ifthenpay—encrypted per store, your accounts only.",
   },
   {
     step: "03",
     title: "Sell on your URL",
-    description: "Share yourname.prood.app or connect one custom domain on Free. Checkout and orders sync to your dashboard.",
+    description: "Share your subdomain or connect your domain on Free. Orders land in your dashboard as they come in.",
   },
 ] as const
 
 export const dashboardFeatures = [
   {
     title: "Products & catalog",
-    description: "Variants, options, images, categories, and inventory in one place.",
+    description: "Variants, images, categories, and inventory in one workflow.",
   },
   {
     title: "Orders & customers",
-    description: "Fulfill orders, process refunds, and view customer history.",
+    description: "Fulfill, refund, and see purchase history without switching tools.",
   },
   {
     title: "Integrations",
-    description: "Payment providers per store—no shared keys across merchants.",
+    description: "Payment providers per store—never shared keys across merchants.",
   },
   {
     title: "Domains & team",
-    description: "Subdomain on day one; one custom domain on Free; team and Agent Auth on paid plans.",
+    description: "Subdomain on day one, custom domain on Free, team and agents on paid plans.",
   },
 ] as const
 
 export const agentExamples = [
   {
-    title: "List and fulfill orders",
-    description: "Agents query orders and update status through the same API as your dashboard.",
+    title: "Orders",
+    description: "List, filter, and update fulfillment the same way your team does in the dashboard.",
   },
   {
-    title: "Manage catalog",
-    description: "Create or update products and inventory with merchant-approved capabilities.",
+    title: "Catalog",
+    description: "Create and adjust products and stock when you approve write access.",
   },
   {
-    title: "Safe by design",
-    description: "Row-level security per store; mutating actions require explicit approval in Agent Auth.",
+    title: "Guardrails",
+    description: "Every store is isolated. Sensitive changes wait for your explicit approval in Agent Auth.",
   },
 ] as const
 
 export const agencyHighlights = [
   {
-    title: "Many stores, one platform",
-    description: "Each client is an isolated organization with its own catalog, payments, and domain.",
+    title: "One platform, many clients",
+    description: "Each client is its own organization—separate catalog, payments, and data.",
   },
   {
-    title: "Per-client domains",
-    description: "Automatic subdomains plus custom domains and SSL for every brand you launch.",
+    title: "Their domain, their checkout",
+    description: "Staging on a subdomain, production on shop.client.com with SSL handled for you.",
   },
   {
-    title: "Team per store",
-    description: "Invite client stakeholders as admins or members without sharing credentials.",
+    title: "Invite without sharing passwords",
+    description: "Give clients admin or member access per store while your agency keeps control.",
   },
 ] as const
 
 export const merchantPainItems = [
   {
-    title: "Plugin sprawl & setup drag",
-    timeCost: "4+ hours / week",
-    description: "Themes, apps, and checkout patches before you can reliably sell.",
+    title: "Weeks of setup before the first sale",
+    timeCost: "4+ hrs / week",
+    description: "Themes, apps, and checkout tweaks stacked on top of each other.",
   },
   {
-    title: "Hidden platform surcharges",
-    timeCost: "Adds up on every order",
-    description: "Extra fees when you use Stripe or PayPal instead of the platform’s own payments.",
+    title: "Extra fees on every order",
+    timeCost: "Adds up fast",
+    description: "Penalties for using Stripe or PayPal instead of the platform’s own payments.",
   },
   {
-    title: "Domain & branding friction",
-    timeCost: "Days to go live",
-    description: "Paying extra for a custom domain before the store even feels yours.",
+    title: "Paying to look credible",
+    timeCost: "Days delayed",
+    description: "Custom domains and branding locked behind plans before the store feels real.",
   },
 ] as const
 
 export const merchantGainItems = [
   {
-    title: "Live store in one session",
-    timeCost: "~30–60 minutes",
-    description: "Subdomain, catalog, and checkout—ready for a test order the same day.",
+    title: "Live store in one sitting",
+    timeCost: "~30–60 min",
+    description: "Subdomain, catalog, and checkout ready for a real test order today.",
   },
   {
-    title: "Transparent economics",
+    title: "Clear economics",
     timeCost: "0% Prood fee",
-    description: "Your payment provider bills you directly. No GMV surcharge at launch.",
+    description: "Your processor bills you. Prood does not take a cut of your orders.",
   },
   {
-    title: "Grow into automation",
-    timeCost: "When you need it",
-    description: "Agent Auth and full API on Grow—after volume and team needs show up.",
+    title: "Automation when you’re ready",
+    timeCost: "On Grow+",
+    description: "Agent Auth and full API after volume and team needs show up—not on day one.",
   },
 ] as const
 
@@ -195,4 +196,4 @@ export const techStack = [
 ] as const
 
 export const pricingDisclaimer =
-  "Payment processing fees go to your provider (Stripe, Easypay, etc.). Prood does not take a cut of your sales at launch. Subscription billing in the dashboard is coming soon—limits below show what each plan will include."
+  "Processing fees are paid to your provider (Stripe, Easypay, etc.). Prood does not charge a fee on your sales at launch. Plan limits below reflect upcoming subscriptions—we’ll announce before billing goes live."

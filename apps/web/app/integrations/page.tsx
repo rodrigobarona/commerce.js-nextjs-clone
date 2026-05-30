@@ -11,7 +11,7 @@ import { siteConfig } from "@/lib/site"
 export const metadata: Metadata = {
   title: "Integrations",
   description:
-    "Connect Stripe, Easypay, Ifthenpay, and more per store on Prood. Credentials encrypted and scoped to each merchant—no Prood fee on your sales.",
+    "Connect Stripe, Easypay, Ifthenpay, and more per store. Your keys, encrypted per merchant—no Prood fee on sales at launch.",
 }
 
 export default function IntegrationsPage() {
@@ -24,8 +24,8 @@ export default function IntegrationsPage() {
           <SectionHeader
             align="center"
             eyebrow="Integrations"
-            title="Your providers, configured per store"
-            description="No shared platform payment keys. Each merchant connects their own accounts from the dashboard—encrypted at rest. You pay your provider directly; Prood does not surcharge your GMV at launch."
+            title="Your processors, per store"
+            description="Each merchant connects their own accounts from the dashboard. Credentials stay encrypted. You pay the processor—Prood does not add a sales fee at launch."
           />
           <p className="mx-auto mt-6 max-w-2xl text-center text-[14px] text-muted-foreground">
             Categories: {integrationCategories.join(", ")}.{" "}
@@ -44,11 +44,11 @@ export default function IntegrationsPage() {
       <SectionShell variant="muted">
         <SectionContainer>
           <MarketingCard>
-            <h3 className="text-[16px] font-semibold">Why BYO payment keys matter</h3>
+            <h3 className="text-[16px] font-semibold">Why we ask for your keys</h3>
             <p className="mt-3 text-[14px] leading-7 text-muted-foreground">
-              Many commerce platforms add an extra fee when you use Stripe or PayPal instead of their
-              in-house payments. Prood lets you connect your existing merchant accounts per store—ideal
-              for agencies and brands that already have provider relationships.
+              Platforms often punish you for using Stripe or PayPal directly. Prood connects your
+              existing merchant accounts per store—so agencies and brands keep the relationships they
+              already have.
             </p>
           </MarketingCard>
           <div className="mt-8 grid gap-4 sm:grid-cols-3">

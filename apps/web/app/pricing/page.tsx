@@ -13,7 +13,7 @@ import { pricingDisclaimer } from "@/lib/site"
 export const metadata: Metadata = {
   title: "Pricing",
   description:
-    "Launch your store free on Prood with a custom domain. Upgrade for higher volume, team seats, and AI agent automation—no platform fee on your sales.",
+    "Start free with your custom domain. Upgrade for volume, team seats, and AI automation—no Prood fee on your sales at launch.",
 }
 
 export default function PricingPage() {
@@ -24,8 +24,8 @@ export default function PricingPage() {
           <SectionHeader
             align="center"
             eyebrow="Pricing"
-            title="Launch your store free. Pay when you outgrow limits."
-            description="No Prood fee on your sales at launch. You pay your payment provider directly. Custom domain included on Free—upgrade for volume, team, and AI automation."
+            title="Free to launch. Paid when you need more."
+            description="Your processor handles fees. Prood does not charge a sales fee at launch. Custom domain on Free—upgrade for volume, team, and Agent Auth."
             className="font-display"
           />
           <p className="mx-auto mt-6 max-w-2xl text-center text-[13px] leading-6 text-muted-foreground">
@@ -41,8 +41,8 @@ export default function PricingPage() {
         <SectionContainer>
           <SectionHeader
             eyebrow="Compare"
-            title="Full feature comparison"
-            description="See exactly what changes when you move from Free to Grow, Scale, or Agency."
+            title="Plan by plan"
+            description="What you get on Free, and what unlocks on Grow, Scale, and Agency."
           />
           <div className="mt-12">
             <PricingComparisonTable />
@@ -54,8 +54,8 @@ export default function PricingPage() {
         <SectionContainer>
           <SectionHeader
             eyebrow="Why Prood"
-            title="Transparent pricing, no surprise platform fees"
-            description="We align with how modern platforms earn trust—generous launch tier, clear limits, and upgrades when you actually need them."
+            title="Pricing you can explain to your CFO"
+            description="A generous free tier, published limits, and upgrades tied to real needs—not launch day."
           />
           <div className="mt-10">
             <PricingTrustSection />
@@ -68,7 +68,7 @@ export default function PricingPage() {
           <SectionHeader eyebrow="FAQ" title="Common questions" />
           <dl className="mt-12 space-y-8">
             {pricingFaqs.map((faq) => (
-              <div key={faq.question} className="surface-card rounded-2xl p-6 md:p-8">
+              <div key={faq.question} className="surface-card rounded-lg p-6 md:p-8">
                 <dt className="text-[16px] font-semibold tracking-[-0.02em]">{faq.question}</dt>
                 <dd className="mt-3 text-[14px] leading-7 text-muted-foreground">{faq.answer}</dd>
               </div>

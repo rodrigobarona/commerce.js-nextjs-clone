@@ -13,8 +13,8 @@ export function PricingPreviewSection() {
         <SectionHeader
           align="center"
           eyebrow="Pricing"
-          title="Start free. Upgrade when you grow."
-          description="Custom domain on Free. Pay for higher volume, team seats, and Agent Auth when billing goes live—not to launch your store."
+          title="Free to launch. Paid when you outgrow it."
+          description="Your domain and checkout are included on Free. Upgrade for volume, team seats, and Agent Auth—not to open the doors."
         />
 
         <p className="mx-auto mt-6 max-w-2xl text-center text-[13px] leading-6 text-muted-foreground">
